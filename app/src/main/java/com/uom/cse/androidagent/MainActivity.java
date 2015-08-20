@@ -1,16 +1,206 @@
 package com.uom.cse.androidagent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.uom.cse.androidagent.eventAdapters.CPUUsageInfoEventAdapter;
+import com.uom.cse.androidagent.eventAdapters.RAMUsageInfoEventAdapter;
+import com.uom.cse.androidagent.info.CPUUsageInfo;
+import com.uom.cse.androidagent.info.RAMUsageInfo;
+import com.uom.cse.androidagent.info.UsageInfoManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 public class MainActivity extends Activity {
 
+    private static Context context;
+    TextView textView;
+    TextView textView2;
+    public static Context getContext() {
+        return context;
+    }
+    public static Handler handler;
+    public static Handler handler2;
+    private Event generateEvent(){
+        //generate event between with event id between 4000 - 4010
+        ArrayList<Number> range = new ArrayList<>();
+        range.add(10);
+        range.add(25);
+        Variable eventId = new Variable("Usage",range);
+        Variable description = new Variable("Description","This is a sample event");
+
+        ArrayList<Variable> variables = new ArrayList<>();
+        variables.add(eventId);
+        variables.add(description);
+
+        Event event = new Event("CPU_Usage",variables);
+
+        return event;
+    }
+
+    private List<String> generateQueries(){
+        List<String> queries = new ArrayList<String>();
+        queries.add("insert into combinedEvent(avg_ram,avg_cpu) select avg( A." + RAMUsageInfo.VARIABLE_SHARED_MEMORY_USAGE + "), " +
+                " avg(B." + CPUUsageInfo.VARIABLE_CPU_USAGE + ") from "
+                + RAMUsageInfoEventAdapter.EVENT_NAME + ".win:time_batch(60) A, " + CPUUsageInfoEventAdapter.EVENT_NAME + ".win:time_batch(60) B " +
+                "where A." + RAMUsageInfo.VARIABLE_APPLICATION_LABEL +" = 'Facebook' and B." + CPUUsageInfo.VARIABLE_APPLICATION_LABEL +" = 'Facebook'");
+
+        return queries;
+    }
+
+    private Task generateTask(){
+
+        Event event = generateEvent();
+
+        List<Event> events = new ArrayList<Event>();
+        events.add(event);
+
+        Task task = new Task("aggregation task",generateQueries(),events);
+
+        return task;
+    }
+
+
+    //generate the events data
+    private ArrayList<Data> generateData()
+    {
+        //generate the task with the events and queries
+        Task task =  generateTask();
+
+        ArrayList<Data> collection = new ArrayList();
+        for (Event event : task.getEvents())
+        {
+            int count = 1000;
+            collection.addAll(Generator.make(count, event));
+        }
+        Collections.shuffle(collection);
+
+        return collection;
+    }
+
+    private void initiateAsper(){
+
+
+        Asper.addEvent(RAMUsageInfoEventAdapter.getSampleEvent());
+        Asper.addEvent(CPUUsageInfoEventAdapter.getSampleEvent());
+        List<String> queries = generateQueries();
+        // Register all queries
+        Asper.addQuery("Selectivity", queries.get(0),getContext());
+
+    }
+    UsageInfoManager infoManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
+        //initiate the asper environment
+        initiateAsper();
+        // get the event collection
+        ArrayList<Data> eventCollection = generateData();
+        //start the worker to feed the event the Asper
+        setContentView(R.layout.activity_main);
+        textView = (TextView)findViewById(R.id.myText);
+        textView2 = (TextView)findViewById(R.id.myText2);
+        context = this;
 
+
+        handler = new Handler() {
+
+            public void handleMessage(Message msg) {
+
+                String aResponse = msg.getData().getString("message");
+                textView.setText(textView.getText() + aResponse);
+
+            }
+        };
+
+        handler2 = new Handler() {
+
+            public void handleMessage(Message msg) {
+
+                String aResponse = msg.getData().getString("message");
+                textView2.setText(textView2.getText() + aResponse);
+
+            }
+        };
+
+//        UsageInfoManager infoManager = new UsageInfoManager(context){
+//
+//            ArrayList<Data> collection = new ArrayList<Data>();
+//            @Override
+//            public void RAMUsageCallBack(List<RAMUsageInfo> RAMUsageList) {
+//
+//                for(RAMUsageInfo info : RAMUsageList){
+//                    Event event = new RAMUsageInfoEventAdapter(info);
+//                    collection.add(Generator.make(event));
+//                }
+//
+//                Worker worker1 =new Worker("Worker 1",collection,getContext(),textView, handler);
+//                worker1.work();
+//            }
+//
+//        };
+//        infoManager.setRAMThreadInterval(100);
+//        infoManager.startMonitoringRAMUsage();
+//        Worker worker1 =new Worker("Worker 1",eventCollection,getContext(),textView, handler);
+//        worker1.start();
+
+        infoManager = new UsageInfoManager(context);
+
+        Thread feedingThread = new Thread(){
+            @Override
+            public void run() {
+                while(true) {
+                    List<CPUUsageInfo> cpuUsageInfo = infoManager.getCPUUsageInfo();
+
+                    ArrayList<Data> collection = new ArrayList<Data>();
+                    for(CPUUsageInfo info : cpuUsageInfo){
+                        //if("Facebook".equals(info.getApplicationLabel())) {
+                        Event event = new CPUUsageInfoEventAdapter(info);
+                        collection.add(Generator.make(event));
+                        //}
+                    }
+
+                    Worker worker1 =new Worker("Worker 1",collection,getContext(),textView, handler);
+                    worker1.work();
+                    collection.clear();
+                }
+            }
+        };
+
+        feedingThread.start();
+
+        Thread feedingThread2 = new Thread(){
+            @Override
+            public void run() {
+                while(true) {
+                    List<RAMUsageInfo> ramUsageInfo = infoManager.getRAMUsageInfo();
+
+                    ArrayList<Data> collection = new ArrayList<Data>();
+
+                    for (RAMUsageInfo info : ramUsageInfo){
+                        //if("Facebook".equals(info.getApplicationLabel())) {
+                        Event event = new RAMUsageInfoEventAdapter(info);
+                        collection.add(Generator.make(event));
+                        //}
+                    }
+                    Worker worker1 =new Worker("Worker 1",collection,getContext(),textView, handler);
+                    worker1.work();
+                    collection.clear();
+                }
+            }
+        };
+
+        feedingThread2.start();
     }
 
     @Override
