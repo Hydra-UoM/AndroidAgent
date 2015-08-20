@@ -1,4 +1,4 @@
-package info;
+package com.uom.cse.androidagent.info;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -18,7 +18,6 @@ import java.util.TreeMap;
  * Created by Nirushan on 7/22/2015.
  */
 public class UsageInfoManager {
-    //get application context
     private Context context;
     private long RAMThreadInterval = 200;
     private boolean RAMThreadFlag = true;

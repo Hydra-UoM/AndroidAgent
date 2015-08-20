@@ -1,4 +1,4 @@
-package info;
+package com.uom.cse.androidagent.info;
 
 /**
  * Created by Nirushan on 7/22/2015.

@@ -1,4 +1,4 @@
-package eventAdapters;
+package com.uom.cse.androidagent.eventAdapters;
 
 import com.uom.cse.androidagent.Event;
 import com.uom.cse.androidagent.Variable;
