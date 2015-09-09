@@ -14,7 +14,7 @@ import com.uom.cse.androidagent.eventAdapters.RAMUsageInfoEventAdapter;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
 import com.uom.cse.androidagent.info.UsageInfoManager;
-import com.uom.cse.androidagent.server.AndroidAgentServer;
+import com.uom.cse.androidagent.thriftServer.AndroidAgentServer;
 
 import java.util.ArrayList;
 import java.util.Collections;
