@@ -14,6 +14,7 @@ import com.uom.cse.androidagent.eventAdapters.RAMUsageInfoEventAdapter;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
 import com.uom.cse.androidagent.info.UsageInfoManager;
+import com.uom.cse.androidagent.server.AndroidAgentServer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -201,6 +202,8 @@ public class MainActivity extends Activity {
         };
 
         feedingThread2.start();
+        AndroidAgentServer server = new AndroidAgentServer(infoManager);
+        server.start();
     }
 
     @Override
