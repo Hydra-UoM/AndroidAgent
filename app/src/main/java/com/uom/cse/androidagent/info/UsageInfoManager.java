@@ -138,6 +138,69 @@ public class UsageInfoManager {
 
     }
 
+    public ArrayList<String> getRunningProcesses(){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        PackageManager packageManager = context.getPackageManager();
+
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+
+        ArrayList<String> result = new ArrayList<String>();
+
+        Map<Integer, String> pidMap = new TreeMap<Integer, String>();
+        for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+
+            String processName = "";
+            String packageName = runningAppProcessInfo.processName;
+
+            try {
+                // get application name
+                CharSequence c = packageManager.getApplicationLabel(packageManager.getApplicationInfo(runningAppProcessInfo.processName,
+                        PackageManager.GET_META_DATA));
+                processName = c.toString();
+            } catch (Exception e) {
+                //Name Not FOund Exception
+                processName = runningAppProcessInfo.processName;
+            }
+
+            String type = "None";
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND){
+                type = "Background process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE){
+                type = "Service";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE){
+                type = "Perceptible";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE){
+                type = "Visible process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+                type = "Foreground process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_EMPTY){
+                type = "Empty";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE){
+                type = "Gone";
+            }
+
+            String value = "";
+            value += " Process name : "+ processName +"\n";
+            value += (" Type of process: " + type + "\n");
+            value += (" Package name: " + packageName + "\n\n");
+            result.add(value);
+        }
+
+        return result;
+    }
+
     public List<CPUUsageInfo> getCPUUsageInfo(){
         List<CPUUsageInfo> cpuUsageInfo = new ArrayList<CPUUsageInfo>();
         try {
