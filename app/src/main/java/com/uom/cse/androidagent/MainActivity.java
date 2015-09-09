@@ -26,11 +26,13 @@ public class MainActivity extends Activity {
     private static Context context;
     TextView textView;
     TextView textView2;
+    TextView textView3;
     public static Context getContext() {
         return context;
     }
     public static Handler handler;
     public static Handler handler2;
+    public static Handler handler3;
     private Event generateEvent(){
         //generate event between with event id between 4000 - 4010
         ArrayList<Number> range = new ArrayList<>();
@@ -130,6 +132,16 @@ public class MainActivity extends Activity {
 
                 String aResponse = msg.getData().getString("message");
                 textView2.setText(textView2.getText() + aResponse);
+
+            }
+        };
+
+        handler3 = new Handler() {
+
+            public void handleMessage(Message msg) {
+
+                String aResponse = msg.getData().getString("message");
+                textView3.setText(aResponse);
 
             }
         };
