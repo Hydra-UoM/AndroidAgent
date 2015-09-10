@@ -113,6 +113,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         textView = (TextView)findViewById(R.id.myText);
         textView2 = (TextView)findViewById(R.id.myText2);
+        textView3 = (TextView)findViewById(R.id.myText3);
         context = this;
 
 
@@ -214,6 +215,7 @@ public class MainActivity extends Activity {
         };
 
         feedingThread2.start();
+
         AndroidAgentServer server = new AndroidAgentServer(infoManager);
         server.start();
     }
