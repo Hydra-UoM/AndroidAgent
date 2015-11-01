@@ -15,7 +15,7 @@ public class RegisterDeviceClient {
         try {
             TTransport transport;
 
-            transport = new TSocket("192.168.1.3", 9090);
+            transport = new TSocket("192.168.1.2", 9090);
             transport.open();
 
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -36,7 +36,7 @@ public class RegisterDeviceClient {
                 try {
                     TTransport transport;
 
-                    transport = new TSocket("192.168.1.3", 9091);
+                    transport = new TSocket("192.168.1.2", 9091);
                     transport.open();
 
                     TProtocol protocol = new TBinaryProtocol(transport);
