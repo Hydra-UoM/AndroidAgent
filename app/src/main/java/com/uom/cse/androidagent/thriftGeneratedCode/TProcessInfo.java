@@ -6,21 +6,31 @@
  */
 package com.uom.cse.androidagent.thriftGeneratedCode;
 
-import org.apache.thrift.TException;
-import org.apache.thrift.protocol.TTupleProtocol;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
-import org.apache.thrift.scheme.TupleScheme;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.HashMap;
+import org.apache.thrift.scheme.TupleScheme;
+import org.apache.thrift.protocol.TTupleProtocol;
+import org.apache.thrift.protocol.TProtocolException;
+import org.apache.thrift.EncodingUtils;
+import org.apache.thrift.TException;
+import org.apache.thrift.async.AsyncMethodCallback;
+import org.apache.thrift.server.AbstractNonblockingServer.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.EnumSet;
+import java.util.Collections;
+import java.util.BitSet;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings({"cast", "rawtypes", "serial", "unchecked"})
 public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProcessInfo._Fields>, java.io.Serializable, Cloneable, Comparable<TProcessInfo> {
@@ -28,6 +38,10 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
 
   private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField PACKAGE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("packageName", org.apache.thrift.protocol.TType.STRING, (short)2);
+  private static final org.apache.thrift.protocol.TField SHARED_RAMUSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("sharedRAMUsage", org.apache.thrift.protocol.TType.STRING, (short)3);
+  private static final org.apache.thrift.protocol.TField PROCESS_CPUUSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("processCPUUsage", org.apache.thrift.protocol.TType.STRING, (short)4);
+  private static final org.apache.thrift.protocol.TField INTERNET_USAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("internetUsage", org.apache.thrift.protocol.TType.STRING, (short)5);
+  private static final org.apache.thrift.protocol.TField PRIVATE_RAMUSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("privateRAMUsage", org.apache.thrift.protocol.TType.STRING, (short)6);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -37,11 +51,19 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
 
   public String name; // required
   public String packageName; // required
+  public String sharedRAMUsage; // required
+  public String processCPUUsage; // required
+  public String internetUsage; // required
+  public String privateRAMUsage; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     NAME((short)1, "name"),
-    PACKAGE_NAME((short)2, "packageName");
+    PACKAGE_NAME((short)2, "packageName"),
+    SHARED_RAMUSAGE((short)3, "sharedRAMUsage"),
+    PROCESS_CPUUSAGE((short)4, "processCPUUsage"),
+    INTERNET_USAGE((short)5, "internetUsage"),
+    PRIVATE_RAMUSAGE((short)6, "privateRAMUsage");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -60,6 +82,14 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
           return NAME;
         case 2: // PACKAGE_NAME
           return PACKAGE_NAME;
+        case 3: // SHARED_RAMUSAGE
+          return SHARED_RAMUSAGE;
+        case 4: // PROCESS_CPUUSAGE
+          return PROCESS_CPUUSAGE;
+        case 5: // INTERNET_USAGE
+          return INTERNET_USAGE;
+        case 6: // PRIVATE_RAMUSAGE
+          return PRIVATE_RAMUSAGE;
         default:
           return null;
       }
@@ -107,6 +137,14 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.PACKAGE_NAME, new org.apache.thrift.meta_data.FieldMetaData("packageName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.SHARED_RAMUSAGE, new org.apache.thrift.meta_data.FieldMetaData("sharedRAMUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.PROCESS_CPUUSAGE, new org.apache.thrift.meta_data.FieldMetaData("processCPUUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.INTERNET_USAGE, new org.apache.thrift.meta_data.FieldMetaData("internetUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.PRIVATE_RAMUSAGE, new org.apache.thrift.meta_data.FieldMetaData("privateRAMUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TProcessInfo.class, metaDataMap);
   }
@@ -116,11 +154,19 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
 
   public TProcessInfo(
     String name,
-    String packageName)
+    String packageName,
+    String sharedRAMUsage,
+    String processCPUUsage,
+    String internetUsage,
+    String privateRAMUsage)
   {
     this();
     this.name = name;
     this.packageName = packageName;
+    this.sharedRAMUsage = sharedRAMUsage;
+    this.processCPUUsage = processCPUUsage;
+    this.internetUsage = internetUsage;
+    this.privateRAMUsage = privateRAMUsage;
   }
 
   /**
@@ -133,6 +179,18 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     if (other.isSetPackageName()) {
       this.packageName = other.packageName;
     }
+    if (other.isSetSharedRAMUsage()) {
+      this.sharedRAMUsage = other.sharedRAMUsage;
+    }
+    if (other.isSetProcessCPUUsage()) {
+      this.processCPUUsage = other.processCPUUsage;
+    }
+    if (other.isSetInternetUsage()) {
+      this.internetUsage = other.internetUsage;
+    }
+    if (other.isSetPrivateRAMUsage()) {
+      this.privateRAMUsage = other.privateRAMUsage;
+    }
   }
 
   public TProcessInfo deepCopy() {
@@ -143,6 +201,10 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
   public void clear() {
     this.name = null;
     this.packageName = null;
+    this.sharedRAMUsage = null;
+    this.processCPUUsage = null;
+    this.internetUsage = null;
+    this.privateRAMUsage = null;
   }
 
   public String getName() {
@@ -193,6 +255,102 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     }
   }
 
+  public String getSharedRAMUsage() {
+    return this.sharedRAMUsage;
+  }
+
+  public TProcessInfo setSharedRAMUsage(String sharedRAMUsage) {
+    this.sharedRAMUsage = sharedRAMUsage;
+    return this;
+  }
+
+  public void unsetSharedRAMUsage() {
+    this.sharedRAMUsage = null;
+  }
+
+  /** Returns true if field sharedRAMUsage is set (has been assigned a value) and false otherwise */
+  public boolean isSetSharedRAMUsage() {
+    return this.sharedRAMUsage != null;
+  }
+
+  public void setSharedRAMUsageIsSet(boolean value) {
+    if (!value) {
+      this.sharedRAMUsage = null;
+    }
+  }
+
+  public String getProcessCPUUsage() {
+    return this.processCPUUsage;
+  }
+
+  public TProcessInfo setProcessCPUUsage(String processCPUUsage) {
+    this.processCPUUsage = processCPUUsage;
+    return this;
+  }
+
+  public void unsetProcessCPUUsage() {
+    this.processCPUUsage = null;
+  }
+
+  /** Returns true if field processCPUUsage is set (has been assigned a value) and false otherwise */
+  public boolean isSetProcessCPUUsage() {
+    return this.processCPUUsage != null;
+  }
+
+  public void setProcessCPUUsageIsSet(boolean value) {
+    if (!value) {
+      this.processCPUUsage = null;
+    }
+  }
+
+  public String getInternetUsage() {
+    return this.internetUsage;
+  }
+
+  public TProcessInfo setInternetUsage(String internetUsage) {
+    this.internetUsage = internetUsage;
+    return this;
+  }
+
+  public void unsetInternetUsage() {
+    this.internetUsage = null;
+  }
+
+  /** Returns true if field internetUsage is set (has been assigned a value) and false otherwise */
+  public boolean isSetInternetUsage() {
+    return this.internetUsage != null;
+  }
+
+  public void setInternetUsageIsSet(boolean value) {
+    if (!value) {
+      this.internetUsage = null;
+    }
+  }
+
+  public String getPrivateRAMUsage() {
+    return this.privateRAMUsage;
+  }
+
+  public TProcessInfo setPrivateRAMUsage(String privateRAMUsage) {
+    this.privateRAMUsage = privateRAMUsage;
+    return this;
+  }
+
+  public void unsetPrivateRAMUsage() {
+    this.privateRAMUsage = null;
+  }
+
+  /** Returns true if field privateRAMUsage is set (has been assigned a value) and false otherwise */
+  public boolean isSetPrivateRAMUsage() {
+    return this.privateRAMUsage != null;
+  }
+
+  public void setPrivateRAMUsageIsSet(boolean value) {
+    if (!value) {
+      this.privateRAMUsage = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case NAME:
@@ -211,6 +369,38 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       }
       break;
 
+    case SHARED_RAMUSAGE:
+      if (value == null) {
+        unsetSharedRAMUsage();
+      } else {
+        setSharedRAMUsage((String)value);
+      }
+      break;
+
+    case PROCESS_CPUUSAGE:
+      if (value == null) {
+        unsetProcessCPUUsage();
+      } else {
+        setProcessCPUUsage((String)value);
+      }
+      break;
+
+    case INTERNET_USAGE:
+      if (value == null) {
+        unsetInternetUsage();
+      } else {
+        setInternetUsage((String)value);
+      }
+      break;
+
+    case PRIVATE_RAMUSAGE:
+      if (value == null) {
+        unsetPrivateRAMUsage();
+      } else {
+        setPrivateRAMUsage((String)value);
+      }
+      break;
+
     }
   }
 
@@ -221,6 +411,18 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
 
     case PACKAGE_NAME:
       return getPackageName();
+
+    case SHARED_RAMUSAGE:
+      return getSharedRAMUsage();
+
+    case PROCESS_CPUUSAGE:
+      return getProcessCPUUsage();
+
+    case INTERNET_USAGE:
+      return getInternetUsage();
+
+    case PRIVATE_RAMUSAGE:
+      return getPrivateRAMUsage();
 
     }
     throw new IllegalStateException();
@@ -237,6 +439,14 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       return isSetName();
     case PACKAGE_NAME:
       return isSetPackageName();
+    case SHARED_RAMUSAGE:
+      return isSetSharedRAMUsage();
+    case PROCESS_CPUUSAGE:
+      return isSetProcessCPUUsage();
+    case INTERNET_USAGE:
+      return isSetInternetUsage();
+    case PRIVATE_RAMUSAGE:
+      return isSetPrivateRAMUsage();
     }
     throw new IllegalStateException();
   }
@@ -272,6 +482,42 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         return false;
     }
 
+    boolean this_present_sharedRAMUsage = true && this.isSetSharedRAMUsage();
+    boolean that_present_sharedRAMUsage = true && that.isSetSharedRAMUsage();
+    if (this_present_sharedRAMUsage || that_present_sharedRAMUsage) {
+      if (!(this_present_sharedRAMUsage && that_present_sharedRAMUsage))
+        return false;
+      if (!this.sharedRAMUsage.equals(that.sharedRAMUsage))
+        return false;
+    }
+
+    boolean this_present_processCPUUsage = true && this.isSetProcessCPUUsage();
+    boolean that_present_processCPUUsage = true && that.isSetProcessCPUUsage();
+    if (this_present_processCPUUsage || that_present_processCPUUsage) {
+      if (!(this_present_processCPUUsage && that_present_processCPUUsage))
+        return false;
+      if (!this.processCPUUsage.equals(that.processCPUUsage))
+        return false;
+    }
+
+    boolean this_present_internetUsage = true && this.isSetInternetUsage();
+    boolean that_present_internetUsage = true && that.isSetInternetUsage();
+    if (this_present_internetUsage || that_present_internetUsage) {
+      if (!(this_present_internetUsage && that_present_internetUsage))
+        return false;
+      if (!this.internetUsage.equals(that.internetUsage))
+        return false;
+    }
+
+    boolean this_present_privateRAMUsage = true && this.isSetPrivateRAMUsage();
+    boolean that_present_privateRAMUsage = true && that.isSetPrivateRAMUsage();
+    if (this_present_privateRAMUsage || that_present_privateRAMUsage) {
+      if (!(this_present_privateRAMUsage && that_present_privateRAMUsage))
+        return false;
+      if (!this.privateRAMUsage.equals(that.privateRAMUsage))
+        return false;
+    }
+
     return true;
   }
 
@@ -288,6 +534,26 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     list.add(present_packageName);
     if (present_packageName)
       list.add(packageName);
+
+    boolean present_sharedRAMUsage = true && (isSetSharedRAMUsage());
+    list.add(present_sharedRAMUsage);
+    if (present_sharedRAMUsage)
+      list.add(sharedRAMUsage);
+
+    boolean present_processCPUUsage = true && (isSetProcessCPUUsage());
+    list.add(present_processCPUUsage);
+    if (present_processCPUUsage)
+      list.add(processCPUUsage);
+
+    boolean present_internetUsage = true && (isSetInternetUsage());
+    list.add(present_internetUsage);
+    if (present_internetUsage)
+      list.add(internetUsage);
+
+    boolean present_privateRAMUsage = true && (isSetPrivateRAMUsage());
+    list.add(present_privateRAMUsage);
+    if (present_privateRAMUsage)
+      list.add(privateRAMUsage);
 
     return list.hashCode();
   }
@@ -316,6 +582,46 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     }
     if (isSetPackageName()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.packageName, other.packageName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetSharedRAMUsage()).compareTo(other.isSetSharedRAMUsage());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSharedRAMUsage()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sharedRAMUsage, other.sharedRAMUsage);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetProcessCPUUsage()).compareTo(other.isSetProcessCPUUsage());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetProcessCPUUsage()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.processCPUUsage, other.processCPUUsage);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetInternetUsage()).compareTo(other.isSetInternetUsage());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetInternetUsage()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.internetUsage, other.internetUsage);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPrivateRAMUsage()).compareTo(other.isSetPrivateRAMUsage());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPrivateRAMUsage()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.privateRAMUsage, other.privateRAMUsage);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -353,6 +659,38 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       sb.append("null");
     } else {
       sb.append(this.packageName);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("sharedRAMUsage:");
+    if (this.sharedRAMUsage == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.sharedRAMUsage);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("processCPUUsage:");
+    if (this.processCPUUsage == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.processCPUUsage);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("internetUsage:");
+    if (this.internetUsage == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.internetUsage);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("privateRAMUsage:");
+    if (this.privateRAMUsage == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.privateRAMUsage);
     }
     first = false;
     sb.append(")");
@@ -414,6 +752,38 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 3: // SHARED_RAMUSAGE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.sharedRAMUsage = iprot.readString();
+              struct.setSharedRAMUsageIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 4: // PROCESS_CPUUSAGE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.processCPUUsage = iprot.readString();
+              struct.setProcessCPUUsageIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 5: // INTERNET_USAGE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.internetUsage = iprot.readString();
+              struct.setInternetUsageIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 6: // PRIVATE_RAMUSAGE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.privateRAMUsage = iprot.readString();
+              struct.setPrivateRAMUsageIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -437,6 +807,26 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       if (struct.packageName != null) {
         oprot.writeFieldBegin(PACKAGE_NAME_FIELD_DESC);
         oprot.writeString(struct.packageName);
+        oprot.writeFieldEnd();
+      }
+      if (struct.sharedRAMUsage != null) {
+        oprot.writeFieldBegin(SHARED_RAMUSAGE_FIELD_DESC);
+        oprot.writeString(struct.sharedRAMUsage);
+        oprot.writeFieldEnd();
+      }
+      if (struct.processCPUUsage != null) {
+        oprot.writeFieldBegin(PROCESS_CPUUSAGE_FIELD_DESC);
+        oprot.writeString(struct.processCPUUsage);
+        oprot.writeFieldEnd();
+      }
+      if (struct.internetUsage != null) {
+        oprot.writeFieldBegin(INTERNET_USAGE_FIELD_DESC);
+        oprot.writeString(struct.internetUsage);
+        oprot.writeFieldEnd();
+      }
+      if (struct.privateRAMUsage != null) {
+        oprot.writeFieldBegin(PRIVATE_RAMUSAGE_FIELD_DESC);
+        oprot.writeString(struct.privateRAMUsage);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -463,19 +853,43 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       if (struct.isSetPackageName()) {
         optionals.set(1);
       }
-      oprot.writeBitSet(optionals, 2);
+      if (struct.isSetSharedRAMUsage()) {
+        optionals.set(2);
+      }
+      if (struct.isSetProcessCPUUsage()) {
+        optionals.set(3);
+      }
+      if (struct.isSetInternetUsage()) {
+        optionals.set(4);
+      }
+      if (struct.isSetPrivateRAMUsage()) {
+        optionals.set(5);
+      }
+      oprot.writeBitSet(optionals, 6);
       if (struct.isSetName()) {
         oprot.writeString(struct.name);
       }
       if (struct.isSetPackageName()) {
         oprot.writeString(struct.packageName);
       }
+      if (struct.isSetSharedRAMUsage()) {
+        oprot.writeString(struct.sharedRAMUsage);
+      }
+      if (struct.isSetProcessCPUUsage()) {
+        oprot.writeString(struct.processCPUUsage);
+      }
+      if (struct.isSetInternetUsage()) {
+        oprot.writeString(struct.internetUsage);
+      }
+      if (struct.isSetPrivateRAMUsage()) {
+        oprot.writeString(struct.privateRAMUsage);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, TProcessInfo struct) throws TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(2);
+      BitSet incoming = iprot.readBitSet(6);
       if (incoming.get(0)) {
         struct.name = iprot.readString();
         struct.setNameIsSet(true);
@@ -483,6 +897,22 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       if (incoming.get(1)) {
         struct.packageName = iprot.readString();
         struct.setPackageNameIsSet(true);
+      }
+      if (incoming.get(2)) {
+        struct.sharedRAMUsage = iprot.readString();
+        struct.setSharedRAMUsageIsSet(true);
+      }
+      if (incoming.get(3)) {
+        struct.processCPUUsage = iprot.readString();
+        struct.setProcessCPUUsageIsSet(true);
+      }
+      if (incoming.get(4)) {
+        struct.internetUsage = iprot.readString();
+        struct.setInternetUsageIsSet(true);
+      }
+      if (incoming.get(5)) {
+        struct.privateRAMUsage = iprot.readString();
+        struct.setPrivateRAMUsageIsSet(true);
       }
     }
   }
