@@ -2,6 +2,8 @@ package com.uom.cse.androidagent;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.uom.cse.androidagent.central_node_services.RegisterDeviceClient;
 import com.uom.cse.androidagent.eventAdapters.CPUUsageInfoEventAdapter;
 import com.uom.cse.androidagent.eventAdapters.RAMUsageInfoEventAdapter;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
@@ -97,14 +100,29 @@ public class MainActivity extends Activity {
         Asper.addEvent(CPUUsageInfoEventAdapter.getSampleEvent());
         List<String> queries = generateQueries();
         // Register all queries
-        Asper.addQuery("Selectivity", queries.get(0),getContext());
+        Asper.addQuery("Selectivity", queries.get(0), getContext());
 
     }
+
+    private void registerMe(){
+        RegisterDeviceClient.registerMeAsync("1234", "192.168.0.2", "Android");
+    }
+
+    private String getMACAddress(){
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wInfo = wifiManager.getConnectionInfo();
+        String macAddress = wInfo.getMacAddress();
+        return macAddress;
+    }
+
     UsageInfoManager infoManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+
+        registerMe();
+
         //initiate the asper environment
         initiateAsper();
         // get the event collection
