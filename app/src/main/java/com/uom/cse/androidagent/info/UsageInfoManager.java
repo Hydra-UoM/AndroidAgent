@@ -315,7 +315,7 @@ public class UsageInfoManager {
         return processName;
     }
 
-    public String batteryLevel(){
+    public String getBatteryLevel(){
 
         Intent intent  = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int    level   = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);

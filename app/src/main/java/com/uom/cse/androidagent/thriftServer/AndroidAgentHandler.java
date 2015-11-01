@@ -8,6 +8,7 @@ import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
 import com.uom.cse.androidagent.info.UsageInfoManager;
 import com.uom.cse.androidagent.thriftGeneratedCode.AndroidAgentService;
+import com.uom.cse.androidagent.thriftGeneratedCode.DeviceOverallInfo;
 import com.uom.cse.androidagent.thriftGeneratedCode.TProcessInfo;
 
 import org.apache.thrift.TException;
@@ -101,5 +102,38 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
     @Override
     public List<TProcessInfo> getInternetUsage() throws TException {
         return null;
+    }
+
+    @Override
+    public DeviceOverallInfo getOverallBasicInfo() throws TException {
+
+        DeviceOverallInfo overallInfo = new DeviceOverallInfo();
+
+        overallInfo.battery = infoManager.getBatteryLevel();
+        overallInfo.cpuUsage = infoManager.getCPUUsageInfo() + "";
+        overallInfo.ramFreeMemory = infoManager.getRamFreeSpace();
+        overallInfo.ramUsedMemory = infoManager.getRamUsedSpace();
+
+        return overallInfo;
+    }
+
+    @Override
+    public String getOverallCpuInfo() throws TException {
+        return this.infoManager.getCPUUsageInfo() + "";
+    }
+
+    @Override
+    public String getOverallRamFreeMemoryInfo() throws TException {
+        return this.infoManager.getRamFreeSpace();
+    }
+
+    @Override
+    public String getOverallRamUsedMemoryInfo() throws TException {
+        return this.infoManager.getRamUsedSpace();
+    }
+
+    @Override
+    public String getBattery() throws TException {
+        return this.infoManager.getBatteryLevel();
     }
 }
