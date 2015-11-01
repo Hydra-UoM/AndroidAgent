@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.TrafficStats;
 import android.os.BatteryManager;
 import android.util.Log;
 
@@ -382,6 +383,90 @@ public class UsageInfoManager {
 
     }
 
+    private List<Processinfo> getprocessinfo(){
 
+        List<CPUUsageInfo> processCPUdetails = getCPUUsageInfo();
+
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        PackageManager pm = context.getPackageManager();
+        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+        activityManager.getMemoryInfo(memoryInfo);
+
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+        String value="";
+        Map<Integer, String> pidMap = new TreeMap<Integer, String>();
+        List<Processinfo> processinfoList = new ArrayList<>();
+        for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+
+            String processName = "";
+            String packageName = runningAppProcessInfo.processName;
+
+            try {
+                // get application name
+                CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(runningAppProcessInfo.processName, PackageManager.GET_META_DATA));
+                processName = c.toString();
+            } catch (Exception e) {
+                //Name Not FOund Exception
+                processName = runningAppProcessInfo.processName;
+            }
+
+            String type = "None";
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND){
+                type = "Background process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE){
+                type = "Service";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE){
+                type = "Perceptible";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE){
+                type = "Visible process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+                type = "Foreground process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_EMPTY){
+                type = "Empty";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE){
+                type = "Gone";
+            }
+
+
+            int pids[] = new int[1];
+            pids[0] = runningAppProcessInfo.pid;
+            android.os.Debug.MemoryInfo[] memoryInfoArray = activityManager.getProcessMemoryInfo(pids);
+
+            Processinfo processinfo = new Processinfo();
+
+            for(android.os.Debug.MemoryInfo pidMemoryInfo: memoryInfoArray)
+            {
+                processinfo.setProcessName(processName);
+                processinfo.setPrivateMemoryUsage(pidMemoryInfo.getTotalPrivateDirty() + "kB");
+                processinfo.setSharedMemoryUsage(pidMemoryInfo.getTotalSharedDirty() + "kB");
+                processinfo.setType(type);
+                processinfo.setPackageName(packageName);
+                processinfo.setPid(String.valueOf(runningAppProcessInfo.pid));
+            }
+            for(CPUUsageInfo cpuUsageInfo : processCPUdetails){
+                if(cpuUsageInfo.getPid() == runningAppProcessInfo.pid){
+                    processinfo.setCpuUsage(String.valueOf(cpuUsageInfo.getCpuUsage())+"%");
+                }
+            }
+            long received = TrafficStats.getUidRxBytes(runningAppProcessInfo.uid)/ 1048576L;
+            long send   = TrafficStats.getUidTxBytes(runningAppProcessInfo.uid)/ 1048576L;
+            processinfo.setReceivedData(String.valueOf(received)+"MB");
+            processinfo.setSentData(String.valueOf(send)+"MB");
+            processinfoList.add(processinfo);
+        }
+        return processinfoList;
+    }
 
 }
