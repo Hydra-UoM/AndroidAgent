@@ -2,12 +2,16 @@ package com.uom.cse.androidagent.info;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.BatteryManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -309,6 +313,73 @@ public class UsageInfoManager {
             }
         }
         return processName;
+    }
+
+    public String batteryLevel(){
+
+        Intent intent  = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int    level   = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        int    scale   = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+        int    percent = (level*100)/scale;
+        return String.valueOf(percent) + "%";
+
+    }
+
+    public ActivityManager.MemoryInfo getTotalMemorySize() {
+
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+        long availableMegs = (mi.totalMem-mi.availMem) / 1048576L;
+        return mi;
+    }
+
+    public String getRamUsedSpace(){
+       return (getTotalMemorySize().totalMem - getTotalMemorySize().availMem) / 1048576L + "MB";
+    }
+
+    public String getRamFreeSpace(){
+        return getTotalMemorySize().availMem / 1048576L + "MB";
+    }
+
+    public String getRamSize(){
+        return getTotalMemorySize().totalMem / 1048576L + "MB";
+    }
+
+    private float getCPUUsage() {
+
+        try {
+            RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
+            String load = reader.readLine();
+
+            String[] toks = load.split(" +");  // Split on one or more spaces
+
+            long idle1 = Long.parseLong(toks[4]);
+            long cpu1 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[5])
+                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
+
+            try {
+                Thread.sleep(360);
+            } catch (Exception e) {}
+
+            reader.seek(0);
+            load = reader.readLine();
+            reader.close();
+
+            toks = load.split(" +");
+
+            long idle2 = Long.parseLong(toks[4]);
+            long cpu2 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[5])
+                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
+
+            return (float)(cpu2 - cpu1) / ((cpu2 + idle2) - (cpu1 + idle1));
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return 0;
+
     }
 
 }

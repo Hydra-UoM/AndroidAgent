@@ -7,6 +7,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.Formatter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -95,7 +96,6 @@ public class MainActivity extends Activity {
 
     private void initiateAsper(){
 
-
         Asper.addEvent(RAMUsageInfoEventAdapter.getSampleEvent());
         Asper.addEvent(CPUUsageInfoEventAdapter.getSampleEvent());
         List<String> queries = generateQueries();
@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
     }
 
     private void registerMe(){
-        RegisterDeviceClient.registerMeAsync("1234", "192.168.0.2", "Android");
+        RegisterDeviceClient.registerMeAsync(getMACAddress(), getIPAddress(), "Android");
     }
 
     private String getMACAddress(){
@@ -113,6 +113,13 @@ public class MainActivity extends Activity {
         WifiInfo wInfo = wifiManager.getConnectionInfo();
         String macAddress = wInfo.getMacAddress();
         return macAddress;
+    }
+
+    private String getIPAddress(){
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wInfo = wifiManager.getConnectionInfo();
+        String ipAddress = Formatter.formatIpAddress(wInfo.getIpAddress());
+        return ipAddress;
     }
 
     UsageInfoManager infoManager;
