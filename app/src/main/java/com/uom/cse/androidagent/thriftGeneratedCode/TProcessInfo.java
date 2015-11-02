@@ -40,8 +40,11 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
   private static final org.apache.thrift.protocol.TField PACKAGE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("packageName", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField SHARED_RAMUSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("sharedRAMUsage", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField PROCESS_CPUUSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("processCPUUsage", org.apache.thrift.protocol.TType.STRING, (short)4);
-  private static final org.apache.thrift.protocol.TField INTERNET_USAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("internetUsage", org.apache.thrift.protocol.TType.STRING, (short)5);
-  private static final org.apache.thrift.protocol.TField PRIVATE_RAMUSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("privateRAMUsage", org.apache.thrift.protocol.TType.STRING, (short)6);
+  private static final org.apache.thrift.protocol.TField SENT_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("sentData", org.apache.thrift.protocol.TType.STRING, (short)5);
+  private static final org.apache.thrift.protocol.TField RECEIVE_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("receiveData", org.apache.thrift.protocol.TType.STRING, (short)6);
+  private static final org.apache.thrift.protocol.TField PRIVATE_RAMUSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("privateRAMUsage", org.apache.thrift.protocol.TType.STRING, (short)7);
+  private static final org.apache.thrift.protocol.TField PID_FIELD_DESC = new org.apache.thrift.protocol.TField("pid", org.apache.thrift.protocol.TType.STRING, (short)8);
+  private static final org.apache.thrift.protocol.TField TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("type", org.apache.thrift.protocol.TType.STRING, (short)9);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -53,8 +56,11 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
   public String packageName; // required
   public String sharedRAMUsage; // required
   public String processCPUUsage; // required
-  public String internetUsage; // required
+  public String sentData; // required
+  public String receiveData; // required
   public String privateRAMUsage; // required
+  public String pid; // required
+  public String type; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -62,8 +68,11 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     PACKAGE_NAME((short)2, "packageName"),
     SHARED_RAMUSAGE((short)3, "sharedRAMUsage"),
     PROCESS_CPUUSAGE((short)4, "processCPUUsage"),
-    INTERNET_USAGE((short)5, "internetUsage"),
-    PRIVATE_RAMUSAGE((short)6, "privateRAMUsage");
+    SENT_DATA((short)5, "sentData"),
+    RECEIVE_DATA((short)6, "receiveData"),
+    PRIVATE_RAMUSAGE((short)7, "privateRAMUsage"),
+    PID((short)8, "pid"),
+    TYPE((short)9, "type");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -86,10 +95,16 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
           return SHARED_RAMUSAGE;
         case 4: // PROCESS_CPUUSAGE
           return PROCESS_CPUUSAGE;
-        case 5: // INTERNET_USAGE
-          return INTERNET_USAGE;
-        case 6: // PRIVATE_RAMUSAGE
+        case 5: // SENT_DATA
+          return SENT_DATA;
+        case 6: // RECEIVE_DATA
+          return RECEIVE_DATA;
+        case 7: // PRIVATE_RAMUSAGE
           return PRIVATE_RAMUSAGE;
+        case 8: // PID
+          return PID;
+        case 9: // TYPE
+          return TYPE;
         default:
           return null;
       }
@@ -141,9 +156,15 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.PROCESS_CPUUSAGE, new org.apache.thrift.meta_data.FieldMetaData("processCPUUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.INTERNET_USAGE, new org.apache.thrift.meta_data.FieldMetaData("internetUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.SENT_DATA, new org.apache.thrift.meta_data.FieldMetaData("sentData", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.RECEIVE_DATA, new org.apache.thrift.meta_data.FieldMetaData("receiveData", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.PRIVATE_RAMUSAGE, new org.apache.thrift.meta_data.FieldMetaData("privateRAMUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.PID, new org.apache.thrift.meta_data.FieldMetaData("pid", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.TYPE, new org.apache.thrift.meta_data.FieldMetaData("type", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TProcessInfo.class, metaDataMap);
@@ -157,16 +178,22 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     String packageName,
     String sharedRAMUsage,
     String processCPUUsage,
-    String internetUsage,
-    String privateRAMUsage)
+    String sentData,
+    String receiveData,
+    String privateRAMUsage,
+    String pid,
+    String type)
   {
     this();
     this.name = name;
     this.packageName = packageName;
     this.sharedRAMUsage = sharedRAMUsage;
     this.processCPUUsage = processCPUUsage;
-    this.internetUsage = internetUsage;
+    this.sentData = sentData;
+    this.receiveData = receiveData;
     this.privateRAMUsage = privateRAMUsage;
+    this.pid = pid;
+    this.type = type;
   }
 
   /**
@@ -185,11 +212,20 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     if (other.isSetProcessCPUUsage()) {
       this.processCPUUsage = other.processCPUUsage;
     }
-    if (other.isSetInternetUsage()) {
-      this.internetUsage = other.internetUsage;
+    if (other.isSetSentData()) {
+      this.sentData = other.sentData;
+    }
+    if (other.isSetReceiveData()) {
+      this.receiveData = other.receiveData;
     }
     if (other.isSetPrivateRAMUsage()) {
       this.privateRAMUsage = other.privateRAMUsage;
+    }
+    if (other.isSetPid()) {
+      this.pid = other.pid;
+    }
+    if (other.isSetType()) {
+      this.type = other.type;
     }
   }
 
@@ -203,8 +239,11 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     this.packageName = null;
     this.sharedRAMUsage = null;
     this.processCPUUsage = null;
-    this.internetUsage = null;
+    this.sentData = null;
+    this.receiveData = null;
     this.privateRAMUsage = null;
+    this.pid = null;
+    this.type = null;
   }
 
   public String getName() {
@@ -303,27 +342,51 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     }
   }
 
-  public String getInternetUsage() {
-    return this.internetUsage;
+  public String getSentData() {
+    return this.sentData;
   }
 
-  public TProcessInfo setInternetUsage(String internetUsage) {
-    this.internetUsage = internetUsage;
+  public TProcessInfo setSentData(String sentData) {
+    this.sentData = sentData;
     return this;
   }
 
-  public void unsetInternetUsage() {
-    this.internetUsage = null;
+  public void unsetSentData() {
+    this.sentData = null;
   }
 
-  /** Returns true if field internetUsage is set (has been assigned a value) and false otherwise */
-  public boolean isSetInternetUsage() {
-    return this.internetUsage != null;
+  /** Returns true if field sentData is set (has been assigned a value) and false otherwise */
+  public boolean isSetSentData() {
+    return this.sentData != null;
   }
 
-  public void setInternetUsageIsSet(boolean value) {
+  public void setSentDataIsSet(boolean value) {
     if (!value) {
-      this.internetUsage = null;
+      this.sentData = null;
+    }
+  }
+
+  public String getReceiveData() {
+    return this.receiveData;
+  }
+
+  public TProcessInfo setReceiveData(String receiveData) {
+    this.receiveData = receiveData;
+    return this;
+  }
+
+  public void unsetReceiveData() {
+    this.receiveData = null;
+  }
+
+  /** Returns true if field receiveData is set (has been assigned a value) and false otherwise */
+  public boolean isSetReceiveData() {
+    return this.receiveData != null;
+  }
+
+  public void setReceiveDataIsSet(boolean value) {
+    if (!value) {
+      this.receiveData = null;
     }
   }
 
@@ -348,6 +411,54 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
   public void setPrivateRAMUsageIsSet(boolean value) {
     if (!value) {
       this.privateRAMUsage = null;
+    }
+  }
+
+  public String getPid() {
+    return this.pid;
+  }
+
+  public TProcessInfo setPid(String pid) {
+    this.pid = pid;
+    return this;
+  }
+
+  public void unsetPid() {
+    this.pid = null;
+  }
+
+  /** Returns true if field pid is set (has been assigned a value) and false otherwise */
+  public boolean isSetPid() {
+    return this.pid != null;
+  }
+
+  public void setPidIsSet(boolean value) {
+    if (!value) {
+      this.pid = null;
+    }
+  }
+
+  public String getType() {
+    return this.type;
+  }
+
+  public TProcessInfo setType(String type) {
+    this.type = type;
+    return this;
+  }
+
+  public void unsetType() {
+    this.type = null;
+  }
+
+  /** Returns true if field type is set (has been assigned a value) and false otherwise */
+  public boolean isSetType() {
+    return this.type != null;
+  }
+
+  public void setTypeIsSet(boolean value) {
+    if (!value) {
+      this.type = null;
     }
   }
 
@@ -385,11 +496,19 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       }
       break;
 
-    case INTERNET_USAGE:
+    case SENT_DATA:
       if (value == null) {
-        unsetInternetUsage();
+        unsetSentData();
       } else {
-        setInternetUsage((String)value);
+        setSentData((String)value);
+      }
+      break;
+
+    case RECEIVE_DATA:
+      if (value == null) {
+        unsetReceiveData();
+      } else {
+        setReceiveData((String)value);
       }
       break;
 
@@ -398,6 +517,22 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         unsetPrivateRAMUsage();
       } else {
         setPrivateRAMUsage((String)value);
+      }
+      break;
+
+    case PID:
+      if (value == null) {
+        unsetPid();
+      } else {
+        setPid((String)value);
+      }
+      break;
+
+    case TYPE:
+      if (value == null) {
+        unsetType();
+      } else {
+        setType((String)value);
       }
       break;
 
@@ -418,11 +553,20 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     case PROCESS_CPUUSAGE:
       return getProcessCPUUsage();
 
-    case INTERNET_USAGE:
-      return getInternetUsage();
+    case SENT_DATA:
+      return getSentData();
+
+    case RECEIVE_DATA:
+      return getReceiveData();
 
     case PRIVATE_RAMUSAGE:
       return getPrivateRAMUsage();
+
+    case PID:
+      return getPid();
+
+    case TYPE:
+      return getType();
 
     }
     throw new IllegalStateException();
@@ -443,10 +587,16 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       return isSetSharedRAMUsage();
     case PROCESS_CPUUSAGE:
       return isSetProcessCPUUsage();
-    case INTERNET_USAGE:
-      return isSetInternetUsage();
+    case SENT_DATA:
+      return isSetSentData();
+    case RECEIVE_DATA:
+      return isSetReceiveData();
     case PRIVATE_RAMUSAGE:
       return isSetPrivateRAMUsage();
+    case PID:
+      return isSetPid();
+    case TYPE:
+      return isSetType();
     }
     throw new IllegalStateException();
   }
@@ -500,12 +650,21 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         return false;
     }
 
-    boolean this_present_internetUsage = true && this.isSetInternetUsage();
-    boolean that_present_internetUsage = true && that.isSetInternetUsage();
-    if (this_present_internetUsage || that_present_internetUsage) {
-      if (!(this_present_internetUsage && that_present_internetUsage))
+    boolean this_present_sentData = true && this.isSetSentData();
+    boolean that_present_sentData = true && that.isSetSentData();
+    if (this_present_sentData || that_present_sentData) {
+      if (!(this_present_sentData && that_present_sentData))
         return false;
-      if (!this.internetUsage.equals(that.internetUsage))
+      if (!this.sentData.equals(that.sentData))
+        return false;
+    }
+
+    boolean this_present_receiveData = true && this.isSetReceiveData();
+    boolean that_present_receiveData = true && that.isSetReceiveData();
+    if (this_present_receiveData || that_present_receiveData) {
+      if (!(this_present_receiveData && that_present_receiveData))
+        return false;
+      if (!this.receiveData.equals(that.receiveData))
         return false;
     }
 
@@ -515,6 +674,24 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       if (!(this_present_privateRAMUsage && that_present_privateRAMUsage))
         return false;
       if (!this.privateRAMUsage.equals(that.privateRAMUsage))
+        return false;
+    }
+
+    boolean this_present_pid = true && this.isSetPid();
+    boolean that_present_pid = true && that.isSetPid();
+    if (this_present_pid || that_present_pid) {
+      if (!(this_present_pid && that_present_pid))
+        return false;
+      if (!this.pid.equals(that.pid))
+        return false;
+    }
+
+    boolean this_present_type = true && this.isSetType();
+    boolean that_present_type = true && that.isSetType();
+    if (this_present_type || that_present_type) {
+      if (!(this_present_type && that_present_type))
+        return false;
+      if (!this.type.equals(that.type))
         return false;
     }
 
@@ -545,15 +722,30 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     if (present_processCPUUsage)
       list.add(processCPUUsage);
 
-    boolean present_internetUsage = true && (isSetInternetUsage());
-    list.add(present_internetUsage);
-    if (present_internetUsage)
-      list.add(internetUsage);
+    boolean present_sentData = true && (isSetSentData());
+    list.add(present_sentData);
+    if (present_sentData)
+      list.add(sentData);
+
+    boolean present_receiveData = true && (isSetReceiveData());
+    list.add(present_receiveData);
+    if (present_receiveData)
+      list.add(receiveData);
 
     boolean present_privateRAMUsage = true && (isSetPrivateRAMUsage());
     list.add(present_privateRAMUsage);
     if (present_privateRAMUsage)
       list.add(privateRAMUsage);
+
+    boolean present_pid = true && (isSetPid());
+    list.add(present_pid);
+    if (present_pid)
+      list.add(pid);
+
+    boolean present_type = true && (isSetType());
+    list.add(present_type);
+    if (present_type)
+      list.add(type);
 
     return list.hashCode();
   }
@@ -606,12 +798,22 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetInternetUsage()).compareTo(other.isSetInternetUsage());
+    lastComparison = Boolean.valueOf(isSetSentData()).compareTo(other.isSetSentData());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetInternetUsage()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.internetUsage, other.internetUsage);
+    if (isSetSentData()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sentData, other.sentData);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetReceiveData()).compareTo(other.isSetReceiveData());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetReceiveData()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.receiveData, other.receiveData);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -622,6 +824,26 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     }
     if (isSetPrivateRAMUsage()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.privateRAMUsage, other.privateRAMUsage);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetPid()).compareTo(other.isSetPid());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPid()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.pid, other.pid);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetType()).compareTo(other.isSetType());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetType()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.type, other.type);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -678,11 +900,19 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("internetUsage:");
-    if (this.internetUsage == null) {
+    sb.append("sentData:");
+    if (this.sentData == null) {
       sb.append("null");
     } else {
-      sb.append(this.internetUsage);
+      sb.append(this.sentData);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("receiveData:");
+    if (this.receiveData == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.receiveData);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -691,6 +921,22 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       sb.append("null");
     } else {
       sb.append(this.privateRAMUsage);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("pid:");
+    if (this.pid == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.pid);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("type:");
+    if (this.type == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.type);
     }
     first = false;
     sb.append(")");
@@ -768,18 +1014,42 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 5: // INTERNET_USAGE
+          case 5: // SENT_DATA
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.internetUsage = iprot.readString();
-              struct.setInternetUsageIsSet(true);
+              struct.sentData = iprot.readString();
+              struct.setSentDataIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 6: // PRIVATE_RAMUSAGE
+          case 6: // RECEIVE_DATA
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.receiveData = iprot.readString();
+              struct.setReceiveDataIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 7: // PRIVATE_RAMUSAGE
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.privateRAMUsage = iprot.readString();
               struct.setPrivateRAMUsageIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 8: // PID
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.pid = iprot.readString();
+              struct.setPidIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 9: // TYPE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.type = iprot.readString();
+              struct.setTypeIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -819,14 +1089,29 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         oprot.writeString(struct.processCPUUsage);
         oprot.writeFieldEnd();
       }
-      if (struct.internetUsage != null) {
-        oprot.writeFieldBegin(INTERNET_USAGE_FIELD_DESC);
-        oprot.writeString(struct.internetUsage);
+      if (struct.sentData != null) {
+        oprot.writeFieldBegin(SENT_DATA_FIELD_DESC);
+        oprot.writeString(struct.sentData);
+        oprot.writeFieldEnd();
+      }
+      if (struct.receiveData != null) {
+        oprot.writeFieldBegin(RECEIVE_DATA_FIELD_DESC);
+        oprot.writeString(struct.receiveData);
         oprot.writeFieldEnd();
       }
       if (struct.privateRAMUsage != null) {
         oprot.writeFieldBegin(PRIVATE_RAMUSAGE_FIELD_DESC);
         oprot.writeString(struct.privateRAMUsage);
+        oprot.writeFieldEnd();
+      }
+      if (struct.pid != null) {
+        oprot.writeFieldBegin(PID_FIELD_DESC);
+        oprot.writeString(struct.pid);
+        oprot.writeFieldEnd();
+      }
+      if (struct.type != null) {
+        oprot.writeFieldBegin(TYPE_FIELD_DESC);
+        oprot.writeString(struct.type);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -859,13 +1144,22 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       if (struct.isSetProcessCPUUsage()) {
         optionals.set(3);
       }
-      if (struct.isSetInternetUsage()) {
+      if (struct.isSetSentData()) {
         optionals.set(4);
       }
-      if (struct.isSetPrivateRAMUsage()) {
+      if (struct.isSetReceiveData()) {
         optionals.set(5);
       }
-      oprot.writeBitSet(optionals, 6);
+      if (struct.isSetPrivateRAMUsage()) {
+        optionals.set(6);
+      }
+      if (struct.isSetPid()) {
+        optionals.set(7);
+      }
+      if (struct.isSetType()) {
+        optionals.set(8);
+      }
+      oprot.writeBitSet(optionals, 9);
       if (struct.isSetName()) {
         oprot.writeString(struct.name);
       }
@@ -878,18 +1172,27 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
       if (struct.isSetProcessCPUUsage()) {
         oprot.writeString(struct.processCPUUsage);
       }
-      if (struct.isSetInternetUsage()) {
-        oprot.writeString(struct.internetUsage);
+      if (struct.isSetSentData()) {
+        oprot.writeString(struct.sentData);
+      }
+      if (struct.isSetReceiveData()) {
+        oprot.writeString(struct.receiveData);
       }
       if (struct.isSetPrivateRAMUsage()) {
         oprot.writeString(struct.privateRAMUsage);
+      }
+      if (struct.isSetPid()) {
+        oprot.writeString(struct.pid);
+      }
+      if (struct.isSetType()) {
+        oprot.writeString(struct.type);
       }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, TProcessInfo struct) throws TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(6);
+      BitSet incoming = iprot.readBitSet(9);
       if (incoming.get(0)) {
         struct.name = iprot.readString();
         struct.setNameIsSet(true);
@@ -907,12 +1210,24 @@ public class TProcessInfo implements org.apache.thrift.TBase<TProcessInfo, TProc
         struct.setProcessCPUUsageIsSet(true);
       }
       if (incoming.get(4)) {
-        struct.internetUsage = iprot.readString();
-        struct.setInternetUsageIsSet(true);
+        struct.sentData = iprot.readString();
+        struct.setSentDataIsSet(true);
       }
       if (incoming.get(5)) {
+        struct.receiveData = iprot.readString();
+        struct.setReceiveDataIsSet(true);
+      }
+      if (incoming.get(6)) {
         struct.privateRAMUsage = iprot.readString();
         struct.setPrivateRAMUsageIsSet(true);
+      }
+      if (incoming.get(7)) {
+        struct.pid = iprot.readString();
+        struct.setPidIsSet(true);
+      }
+      if (incoming.get(8)) {
+        struct.type = iprot.readString();
+        struct.setTypeIsSet(true);
       }
     }
   }

@@ -5,6 +5,7 @@ import android.os.Message;
 
 import com.uom.cse.androidagent.MainActivity;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
+import com.uom.cse.androidagent.info.Processinfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
 import com.uom.cse.androidagent.info.UsageInfoManager;
 import com.uom.cse.androidagent.thriftGeneratedCode.AndroidAgentService;
@@ -135,5 +136,26 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
     @Override
     public String getBattery() throws TException {
         return this.infoManager.getBatteryLevel();
+    }
+
+    @Override
+    public List<TProcessInfo> getAllRunningProcessesWithInfo() throws TException {
+        List<TProcessInfo> processInfoCollection = new ArrayList<>();
+        List<Processinfo> processInfoList = infoManager.getprocessinfo();
+
+        for(Processinfo processinfo : processInfoList){
+            TProcessInfo tempProcessInfo = new TProcessInfo();
+            tempProcessInfo.setName(processinfo.getProcessName());
+            tempProcessInfo.setPackageName(processinfo.getPackageName());
+            tempProcessInfo.setSharedRAMUsage(processinfo.getSharedMemoryUsage());
+            tempProcessInfo.setProcessCPUUsage(processinfo.getCpuUsage());
+            tempProcessInfo.setSentData(processinfo.getSentData());
+            tempProcessInfo.setReceiveData(processinfo.getReceivedData());
+            tempProcessInfo.setPrivateRAMUsage(processinfo.getPrivateMemoryUsage());
+            tempProcessInfo.setPid(processinfo.getPid());
+            tempProcessInfo.setType(processinfo.getType());
+            processInfoCollection.add(tempProcessInfo);
+        }
+        return processInfoCollection;
     }
 }
