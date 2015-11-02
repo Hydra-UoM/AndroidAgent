@@ -2,6 +2,7 @@ package com.uom.cse.androidagent;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.uom.cse.androidagent.eventAdapters.RAMUsageInfoEventAdapter;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
 import com.uom.cse.androidagent.info.UsageInfoManager;
+import com.uom.cse.androidagent.popups.RegisterDevicePop;
 import com.uom.cse.androidagent.thriftServer.AndroidAgentServer;
 
 import java.util.ArrayList;
@@ -128,8 +130,16 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         context = this;
 
-        registerMe();
+        //registerMe();
+        startActivity(new Intent(MainActivity.this, RegisterDevicePop.class));
 
+        startEsper();
+
+        AndroidAgentServer server = new AndroidAgentServer(infoManager);
+        server.start();
+    }
+
+    private void startEsper(){
         //initiate the asper environment
         initiateAsper();
         // get the event collection
@@ -241,8 +251,6 @@ public class MainActivity extends Activity {
 
         feedingThread2.start();
 
-        AndroidAgentServer server = new AndroidAgentServer(infoManager);
-        server.start();
     }
 
     @Override
