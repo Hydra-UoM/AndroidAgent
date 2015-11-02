@@ -110,7 +110,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
         DeviceOverallInfo overallInfo = new DeviceOverallInfo();
 
         overallInfo.battery = infoManager.getBatteryLevel();
-        overallInfo.cpuUsage = infoManager.getCPUUsageInfo() + "";
+        overallInfo.cpuUsage = infoManager.getCPUUsage() + "";
         overallInfo.ramFreeMemory = infoManager.getRamFreeSpace();
         overallInfo.ramUsedMemory = infoManager.getRamUsedSpace();
 

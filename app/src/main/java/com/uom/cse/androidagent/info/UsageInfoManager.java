@@ -350,7 +350,7 @@ public class UsageInfoManager {
         return getTotalMemorySize().totalMem / 1048576L + "MB";
     }
 
-    private float getCPUUsage() {
+    public float getCPUUsage() {
 
         try {
             RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
@@ -386,7 +386,7 @@ public class UsageInfoManager {
 
     }
 
-    private List<Processinfo> getprocessinfo(){
+    public List<Processinfo> getprocessinfo(){
 
         List<CPUUsageInfo> processCPUdetails = getCPUUsageInfo();
 
