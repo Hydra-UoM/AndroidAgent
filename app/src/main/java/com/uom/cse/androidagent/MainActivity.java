@@ -107,22 +107,10 @@ public class MainActivity extends Activity {
     }
 
     private void registerMe(){
-        RegisterDeviceClient.registerMeAsync(getMACAddress(), getIPAddress(), "Android");
+
     }
 
-    private String getMACAddress(){
-        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wInfo = wifiManager.getConnectionInfo();
-        String macAddress = wInfo.getMacAddress();
-        return macAddress;
-    }
 
-    private String getIPAddress(){
-        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wInfo = wifiManager.getConnectionInfo();
-        String ipAddress = Formatter.formatIpAddress(wInfo.getIpAddress());
-        return ipAddress;
-    }
 
     UsageInfoManager infoManager;
     @Override

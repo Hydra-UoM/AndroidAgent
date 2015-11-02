@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -468,5 +471,4 @@ public class UsageInfoManager {
         }
         return processinfoList;
     }
-
 }

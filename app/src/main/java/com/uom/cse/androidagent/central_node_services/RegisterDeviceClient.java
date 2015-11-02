@@ -1,5 +1,7 @@
 package com.uom.cse.androidagent.central_node_services;
 
+import com.uom.cse.androidagent.popups.RegisterDevicePop;
+
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -29,14 +31,15 @@ public class RegisterDeviceClient {
         }
     }
 
-    public static void registerMeAsync(final String deviceId, final String IPAddress, final String type){
+    public static void registerMeAsync(final String deviceId, final String IPAddress, final String type, final String centralNodeIP, final int centralNodePort){
+
         Thread thread = new Thread(){
             @Override
             public void run() {
                 try {
                     TTransport transport;
 
-                    transport = new TSocket("192.168.1.2", 9091);
+                    transport = new TSocket(centralNodeIP, centralNodePort);
                     transport.open();
 
                     TProtocol protocol = new TBinaryProtocol(transport);
@@ -45,7 +48,9 @@ public class RegisterDeviceClient {
                     perform(client, deviceId, IPAddress, type);
 
                     transport.close();
+                    RegisterDevicePop.showRegistrationStatus(true);
                 } catch (TException x) {
+                    RegisterDevicePop.showRegistrationStatus(false);
                     x.printStackTrace();
                 }
             }
