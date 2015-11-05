@@ -92,7 +92,7 @@ public class RegisterDevicePop extends Activity{
             @Override
             public void handleMessage(Message msg) {
                 String aResponse = msg.getData().getString("message");
-                registerStatus.setText(registerStatus.getText() + aResponse);
+                registerStatus.setText(aResponse);
             }
         };
 

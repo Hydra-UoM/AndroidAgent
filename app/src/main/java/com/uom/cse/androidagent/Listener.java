@@ -48,7 +48,7 @@ public class Listener implements UpdateListener
         Log.i("Asper Alert", "******************Desired event detected" + access);
         Message msgObj = MainActivity.handler.obtainMessage();
         Bundle b = new Bundle();
-        String msg = "Summary of facebook last 1 min"+"\n";
+        String msg = "Summary of Android system last 1 min"+"\n";
         msg +=       "  Avg RAM usage - "+ event.get("avg_ram")+ "kB Avg CPU usage - " + event.get("avg_cpu") + "%\n";
 
         b.putString("message", msg);

@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
         queries.add("insert into combinedEvent(avg_ram,avg_cpu) select avg( A." + RAMUsageInfo.VARIABLE_SHARED_MEMORY_USAGE + "), " +
                 " avg(B." + CPUUsageInfo.VARIABLE_CPU_USAGE + ") from "
                 + RAMUsageInfoEventAdapter.EVENT_NAME + ".win:time_batch(60) A, " + CPUUsageInfoEventAdapter.EVENT_NAME + ".win:time_batch(60) B " +
-                "where A." + RAMUsageInfo.VARIABLE_APPLICATION_LABEL +" = 'Facebook' and B." + CPUUsageInfo.VARIABLE_APPLICATION_LABEL +" = 'Facebook'");
+                "where A." + RAMUsageInfo.VARIABLE_APPLICATION_LABEL +" = 'Android System' and B." + CPUUsageInfo.VARIABLE_APPLICATION_LABEL +" = 'Android System'");
 
         return queries;
     }
@@ -157,7 +157,7 @@ public class MainActivity extends Activity {
             public void handleMessage(Message msg) {
 
                 String aResponse = msg.getData().getString("message");
-                textView2.setText(textView2.getText() + aResponse);
+                textView2.setText(aResponse);
 
             }
         };
