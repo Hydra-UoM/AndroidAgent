@@ -490,8 +490,18 @@ public class UsageInfoManager {
         List<Processinfo> processinfoList = new ArrayList<>();
         outerloop:
         for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+            String applicationName;
+            try {
+                // get application name
+                CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(runningAppProcessInfo.processName, PackageManager.GET_META_DATA));
+                applicationName = c.toString();
+            } catch (Exception e) {
+                //Name Not FOund Exception
+                applicationName = runningAppProcessInfo.processName;
+            }
+
             if(!("".equals(processNameParam))){
-                if(!(runningAppProcessInfo.processName.equals(processNameParam))){
+                if(!(applicationName.equals(processNameParam))){
                     continue;
                 }
             }
