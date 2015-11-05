@@ -10,6 +10,7 @@ import com.uom.cse.androidagent.info.RAMUsageInfo;
 import com.uom.cse.androidagent.info.UsageInfoManager;
 import com.uom.cse.androidagent.thriftGeneratedCode.AndroidAgentService;
 import com.uom.cse.androidagent.thriftGeneratedCode.DeviceOverallInfo;
+import com.uom.cse.androidagent.thriftGeneratedCode.SensorDetails;
 import com.uom.cse.androidagent.thriftGeneratedCode.TProcessInfo;
 
 import org.apache.thrift.TException;
@@ -157,5 +158,15 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
             processInfoCollection.add(tempProcessInfo);
         }
         return processInfoCollection;
+    }
+
+    @Override
+    public List<SensorDetails> getSensorDetails() throws TException {
+        return null;
+    }
+
+    @Override
+    public List<TProcessInfo> getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName) throws TException {
+        return null;
     }
 }

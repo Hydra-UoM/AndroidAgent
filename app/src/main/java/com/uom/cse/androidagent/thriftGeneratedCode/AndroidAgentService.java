@@ -57,6 +57,10 @@ public class AndroidAgentService {
 
     public List<TProcessInfo> getAllRunningProcessesWithInfo() throws TException;
 
+    public List<SensorDetails> getSensorDetails() throws TException;
+
+    public List<TProcessInfo> getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName) throws TException;
+
   }
 
   public interface AsyncIface {
@@ -80,6 +84,10 @@ public class AndroidAgentService {
     public void getBattery(AsyncMethodCallback resultHandler) throws TException;
 
     public void getAllRunningProcessesWithInfo(AsyncMethodCallback resultHandler) throws TException;
+
+    public void getSensorDetails(AsyncMethodCallback resultHandler) throws TException;
+
+    public void getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName, AsyncMethodCallback resultHandler) throws TException;
 
   }
 
@@ -321,6 +329,53 @@ public class AndroidAgentService {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getAllRunningProcessesWithInfo failed: unknown result");
+    }
+
+    public List<SensorDetails> getSensorDetails() throws TException
+    {
+      send_getSensorDetails();
+      return recv_getSensorDetails();
+    }
+
+    public void send_getSensorDetails() throws TException
+    {
+      getSensorDetails_args args = new getSensorDetails_args();
+      sendBase("getSensorDetails", args);
+    }
+
+    public List<SensorDetails> recv_getSensorDetails() throws TException
+    {
+      getSensorDetails_result result = new getSensorDetails_result();
+      receiveBase(result, "getSensorDetails");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getSensorDetails failed: unknown result");
+    }
+
+    public List<TProcessInfo> getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName) throws TException
+    {
+      send_getFilteredProcessInfo(cpuUsage, ramUsage, processName);
+      return recv_getFilteredProcessInfo();
+    }
+
+    public void send_getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName) throws TException
+    {
+      getFilteredProcessInfo_args args = new getFilteredProcessInfo_args();
+      args.setCpuUsage(cpuUsage);
+      args.setRamUsage(ramUsage);
+      args.setProcessName(processName);
+      sendBase("getFilteredProcessInfo", args);
+    }
+
+    public List<TProcessInfo> recv_getFilteredProcessInfo() throws TException
+    {
+      getFilteredProcessInfo_result result = new getFilteredProcessInfo_result();
+      receiveBase(result, "getFilteredProcessInfo");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getFilteredProcessInfo failed: unknown result");
     }
 
   }
@@ -631,6 +686,73 @@ public class AndroidAgentService {
       }
     }
 
+    public void getSensorDetails(AsyncMethodCallback resultHandler) throws TException {
+      checkReady();
+      getSensorDetails_call method_call = new getSensorDetails_call(resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class getSensorDetails_call extends org.apache.thrift.async.TAsyncMethodCall {
+      public getSensorDetails_call(AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getSensorDetails", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getSensorDetails_args args = new getSensorDetails_args();
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public List<SensorDetails> getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getSensorDetails();
+      }
+    }
+
+    public void getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName, AsyncMethodCallback resultHandler) throws TException {
+      checkReady();
+      getFilteredProcessInfo_call method_call = new getFilteredProcessInfo_call(cpuUsage, ramUsage, processName, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class getFilteredProcessInfo_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String cpuUsage;
+      private String ramUsage;
+      private String processName;
+      public getFilteredProcessInfo_call(String cpuUsage, String ramUsage, String processName, AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.cpuUsage = cpuUsage;
+        this.ramUsage = ramUsage;
+        this.processName = processName;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getFilteredProcessInfo", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getFilteredProcessInfo_args args = new getFilteredProcessInfo_args();
+        args.setCpuUsage(cpuUsage);
+        args.setRamUsage(ramUsage);
+        args.setProcessName(processName);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public List<TProcessInfo> getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getFilteredProcessInfo();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements org.apache.thrift.TProcessor {
@@ -654,6 +776,8 @@ public class AndroidAgentService {
       processMap.put("getOverallRamUsedMemoryInfo", new getOverallRamUsedMemoryInfo());
       processMap.put("getBattery", new getBattery());
       processMap.put("getAllRunningProcessesWithInfo", new getAllRunningProcessesWithInfo());
+      processMap.put("getSensorDetails", new getSensorDetails());
+      processMap.put("getFilteredProcessInfo", new getFilteredProcessInfo());
       return processMap;
     }
 
@@ -857,6 +981,46 @@ public class AndroidAgentService {
       }
     }
 
+    public static class getSensorDetails<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getSensorDetails_args> {
+      public getSensorDetails() {
+        super("getSensorDetails");
+      }
+
+      public getSensorDetails_args getEmptyArgsInstance() {
+        return new getSensorDetails_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public getSensorDetails_result getResult(I iface, getSensorDetails_args args) throws TException {
+        getSensorDetails_result result = new getSensorDetails_result();
+        result.success = iface.getSensorDetails();
+        return result;
+      }
+    }
+
+    public static class getFilteredProcessInfo<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getFilteredProcessInfo_args> {
+      public getFilteredProcessInfo() {
+        super("getFilteredProcessInfo");
+      }
+
+      public getFilteredProcessInfo_args getEmptyArgsInstance() {
+        return new getFilteredProcessInfo_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public getFilteredProcessInfo_result getResult(I iface, getFilteredProcessInfo_args args) throws TException {
+        getFilteredProcessInfo_result result = new getFilteredProcessInfo_result();
+        result.success = iface.getFilteredProcessInfo(args.cpuUsage, args.ramUsage, args.processName);
+        return result;
+      }
+    }
+
   }
 
   public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
@@ -880,6 +1044,8 @@ public class AndroidAgentService {
       processMap.put("getOverallRamUsedMemoryInfo", new getOverallRamUsedMemoryInfo());
       processMap.put("getBattery", new getBattery());
       processMap.put("getAllRunningProcessesWithInfo", new getAllRunningProcessesWithInfo());
+      processMap.put("getSensorDetails", new getSensorDetails());
+      processMap.put("getFilteredProcessInfo", new getFilteredProcessInfo());
       return processMap;
     }
 
@@ -1390,6 +1556,108 @@ public class AndroidAgentService {
 
       public void start(I iface, getAllRunningProcessesWithInfo_args args, AsyncMethodCallback<List<TProcessInfo>> resultHandler) throws TException {
         iface.getAllRunningProcessesWithInfo(resultHandler);
+      }
+    }
+
+    public static class getSensorDetails<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getSensorDetails_args, List<SensorDetails>> {
+      public getSensorDetails() {
+        super("getSensorDetails");
+      }
+
+      public getSensorDetails_args getEmptyArgsInstance() {
+        return new getSensorDetails_args();
+      }
+
+      public AsyncMethodCallback<List<SensorDetails>> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+        final org.apache.thrift.AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<List<SensorDetails>>() { 
+          public void onComplete(List<SensorDetails> o) {
+            getSensorDetails_result result = new getSensorDetails_result();
+            result.success = o;
+            try {
+              fcall.sendResponse(fb,result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
+              return;
+            } catch (Exception e) {
+              LOGGER.error("Exception writing to internal frame buffer", e);
+            }
+            fb.close();
+          }
+          public void onError(Exception e) {
+            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
+            org.apache.thrift.TBase msg;
+            getSensorDetails_result result = new getSensorDetails_result();
+            {
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = (org.apache.thrift.TBase)new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+            }
+            try {
+              fcall.sendResponse(fb,msg,msgType,seqid);
+              return;
+            } catch (Exception ex) {
+              LOGGER.error("Exception writing to internal frame buffer", ex);
+            }
+            fb.close();
+          }
+        };
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public void start(I iface, getSensorDetails_args args, AsyncMethodCallback<List<SensorDetails>> resultHandler) throws TException {
+        iface.getSensorDetails(resultHandler);
+      }
+    }
+
+    public static class getFilteredProcessInfo<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getFilteredProcessInfo_args, List<TProcessInfo>> {
+      public getFilteredProcessInfo() {
+        super("getFilteredProcessInfo");
+      }
+
+      public getFilteredProcessInfo_args getEmptyArgsInstance() {
+        return new getFilteredProcessInfo_args();
+      }
+
+      public AsyncMethodCallback<List<TProcessInfo>> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+        final org.apache.thrift.AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<List<TProcessInfo>>() { 
+          public void onComplete(List<TProcessInfo> o) {
+            getFilteredProcessInfo_result result = new getFilteredProcessInfo_result();
+            result.success = o;
+            try {
+              fcall.sendResponse(fb,result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
+              return;
+            } catch (Exception e) {
+              LOGGER.error("Exception writing to internal frame buffer", e);
+            }
+            fb.close();
+          }
+          public void onError(Exception e) {
+            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
+            org.apache.thrift.TBase msg;
+            getFilteredProcessInfo_result result = new getFilteredProcessInfo_result();
+            {
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = (org.apache.thrift.TBase)new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+            }
+            try {
+              fcall.sendResponse(fb,msg,msgType,seqid);
+              return;
+            } catch (Exception ex) {
+              LOGGER.error("Exception writing to internal frame buffer", ex);
+            }
+            fb.close();
+          }
+        };
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public void start(I iface, getFilteredProcessInfo_args args, AsyncMethodCallback<List<TProcessInfo>> resultHandler) throws TException {
+        iface.getFilteredProcessInfo(args.cpuUsage, args.ramUsage, args.processName,resultHandler);
       }
     }
 
@@ -7751,6 +8019,1655 @@ public class AndroidAgentService {
               _elem38 = new TProcessInfo();
               _elem38.read(iprot);
               struct.success.add(_elem38);
+            }
+          }
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class getSensorDetails_args implements org.apache.thrift.TBase<getSensorDetails_args, getSensorDetails_args._Fields>, java.io.Serializable, Cloneable, Comparable<getSensorDetails_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getSensorDetails_args");
+
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getSensorDetails_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getSensorDetails_argsTupleSchemeFactory());
+    }
+
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+;
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getSensorDetails_args.class, metaDataMap);
+    }
+
+    public getSensorDetails_args() {
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getSensorDetails_args(getSensorDetails_args other) {
+    }
+
+    public getSensorDetails_args deepCopy() {
+      return new getSensorDetails_args(this);
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getSensorDetails_args)
+        return this.equals((getSensorDetails_args)that);
+      return false;
+    }
+
+    public boolean equals(getSensorDetails_args that) {
+      if (that == null)
+        return false;
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      List<Object> list = new ArrayList<Object>();
+
+      return list.hashCode();
+    }
+
+    @Override
+    public int compareTo(getSensorDetails_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getSensorDetails_args(");
+      boolean first = true;
+
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getSensorDetails_argsStandardSchemeFactory implements SchemeFactory {
+      public getSensorDetails_argsStandardScheme getScheme() {
+        return new getSensorDetails_argsStandardScheme();
+      }
+    }
+
+    private static class getSensorDetails_argsStandardScheme extends StandardScheme<getSensorDetails_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getSensorDetails_args struct) throws TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getSensorDetails_args struct) throws TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getSensorDetails_argsTupleSchemeFactory implements SchemeFactory {
+      public getSensorDetails_argsTupleScheme getScheme() {
+        return new getSensorDetails_argsTupleScheme();
+      }
+    }
+
+    private static class getSensorDetails_argsTupleScheme extends TupleScheme<getSensorDetails_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getSensorDetails_args struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getSensorDetails_args struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+      }
+    }
+
+  }
+
+  public static class getSensorDetails_result implements org.apache.thrift.TBase<getSensorDetails_result, getSensorDetails_result._Fields>, java.io.Serializable, Cloneable, Comparable<getSensorDetails_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getSensorDetails_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getSensorDetails_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getSensorDetails_resultTupleSchemeFactory());
+    }
+
+    public List<SensorDetails> success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, SensorDetails.class))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getSensorDetails_result.class, metaDataMap);
+    }
+
+    public getSensorDetails_result() {
+    }
+
+    public getSensorDetails_result(
+      List<SensorDetails> success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getSensorDetails_result(getSensorDetails_result other) {
+      if (other.isSetSuccess()) {
+        List<SensorDetails> __this__success = new ArrayList<SensorDetails>(other.success.size());
+        for (SensorDetails other_element : other.success) {
+          __this__success.add(new SensorDetails(other_element));
+        }
+        this.success = __this__success;
+      }
+    }
+
+    public getSensorDetails_result deepCopy() {
+      return new getSensorDetails_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public java.util.Iterator<SensorDetails> getSuccessIterator() {
+      return (this.success == null) ? null : this.success.iterator();
+    }
+
+    public void addToSuccess(SensorDetails elem) {
+      if (this.success == null) {
+        this.success = new ArrayList<SensorDetails>();
+      }
+      this.success.add(elem);
+    }
+
+    public List<SensorDetails> getSuccess() {
+      return this.success;
+    }
+
+    public getSensorDetails_result setSuccess(List<SensorDetails> success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((List<SensorDetails>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getSensorDetails_result)
+        return this.equals((getSensorDetails_result)that);
+      return false;
+    }
+
+    public boolean equals(getSensorDetails_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      List<Object> list = new ArrayList<Object>();
+
+      boolean present_success = true && (isSetSuccess());
+      list.add(present_success);
+      if (present_success)
+        list.add(success);
+
+      return list.hashCode();
+    }
+
+    @Override
+    public int compareTo(getSensorDetails_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(other.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getSensorDetails_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getSensorDetails_resultStandardSchemeFactory implements SchemeFactory {
+      public getSensorDetails_resultStandardScheme getScheme() {
+        return new getSensorDetails_resultStandardScheme();
+      }
+    }
+
+    private static class getSensorDetails_resultStandardScheme extends StandardScheme<getSensorDetails_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getSensorDetails_result struct) throws TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list40 = iprot.readListBegin();
+                  struct.success = new ArrayList<SensorDetails>(_list40.size);
+                  SensorDetails _elem41;
+                  for (int _i42 = 0; _i42 < _list40.size; ++_i42)
+                  {
+                    _elem41 = new SensorDetails();
+                    _elem41.read(iprot);
+                    struct.success.add(_elem41);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getSensorDetails_result struct) throws TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
+            for (SensorDetails _iter43 : struct.success)
+            {
+              _iter43.write(oprot);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getSensorDetails_resultTupleSchemeFactory implements SchemeFactory {
+      public getSensorDetails_resultTupleScheme getScheme() {
+        return new getSensorDetails_resultTupleScheme();
+      }
+    }
+
+    private static class getSensorDetails_resultTupleScheme extends TupleScheme<getSensorDetails_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getSensorDetails_result struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          {
+            oprot.writeI32(struct.success.size());
+            for (SensorDetails _iter44 : struct.success)
+            {
+              _iter44.write(oprot);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getSensorDetails_result struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          {
+            org.apache.thrift.protocol.TList _list45 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new ArrayList<SensorDetails>(_list45.size);
+            SensorDetails _elem46;
+            for (int _i47 = 0; _i47 < _list45.size; ++_i47)
+            {
+              _elem46 = new SensorDetails();
+              _elem46.read(iprot);
+              struct.success.add(_elem46);
+            }
+          }
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class getFilteredProcessInfo_args implements org.apache.thrift.TBase<getFilteredProcessInfo_args, getFilteredProcessInfo_args._Fields>, java.io.Serializable, Cloneable, Comparable<getFilteredProcessInfo_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getFilteredProcessInfo_args");
+
+    private static final org.apache.thrift.protocol.TField CPU_USAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("cpuUsage", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField RAM_USAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("ramUsage", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField PROCESS_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("processName", org.apache.thrift.protocol.TType.STRING, (short)3);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getFilteredProcessInfo_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getFilteredProcessInfo_argsTupleSchemeFactory());
+    }
+
+    public String cpuUsage; // required
+    public String ramUsage; // required
+    public String processName; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      CPU_USAGE((short)1, "cpuUsage"),
+      RAM_USAGE((short)2, "ramUsage"),
+      PROCESS_NAME((short)3, "processName");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // CPU_USAGE
+            return CPU_USAGE;
+          case 2: // RAM_USAGE
+            return RAM_USAGE;
+          case 3: // PROCESS_NAME
+            return PROCESS_NAME;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.CPU_USAGE, new org.apache.thrift.meta_data.FieldMetaData("cpuUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.RAM_USAGE, new org.apache.thrift.meta_data.FieldMetaData("ramUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.PROCESS_NAME, new org.apache.thrift.meta_data.FieldMetaData("processName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getFilteredProcessInfo_args.class, metaDataMap);
+    }
+
+    public getFilteredProcessInfo_args() {
+    }
+
+    public getFilteredProcessInfo_args(
+      String cpuUsage,
+      String ramUsage,
+      String processName)
+    {
+      this();
+      this.cpuUsage = cpuUsage;
+      this.ramUsage = ramUsage;
+      this.processName = processName;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getFilteredProcessInfo_args(getFilteredProcessInfo_args other) {
+      if (other.isSetCpuUsage()) {
+        this.cpuUsage = other.cpuUsage;
+      }
+      if (other.isSetRamUsage()) {
+        this.ramUsage = other.ramUsage;
+      }
+      if (other.isSetProcessName()) {
+        this.processName = other.processName;
+      }
+    }
+
+    public getFilteredProcessInfo_args deepCopy() {
+      return new getFilteredProcessInfo_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.cpuUsage = null;
+      this.ramUsage = null;
+      this.processName = null;
+    }
+
+    public String getCpuUsage() {
+      return this.cpuUsage;
+    }
+
+    public getFilteredProcessInfo_args setCpuUsage(String cpuUsage) {
+      this.cpuUsage = cpuUsage;
+      return this;
+    }
+
+    public void unsetCpuUsage() {
+      this.cpuUsage = null;
+    }
+
+    /** Returns true if field cpuUsage is set (has been assigned a value) and false otherwise */
+    public boolean isSetCpuUsage() {
+      return this.cpuUsage != null;
+    }
+
+    public void setCpuUsageIsSet(boolean value) {
+      if (!value) {
+        this.cpuUsage = null;
+      }
+    }
+
+    public String getRamUsage() {
+      return this.ramUsage;
+    }
+
+    public getFilteredProcessInfo_args setRamUsage(String ramUsage) {
+      this.ramUsage = ramUsage;
+      return this;
+    }
+
+    public void unsetRamUsage() {
+      this.ramUsage = null;
+    }
+
+    /** Returns true if field ramUsage is set (has been assigned a value) and false otherwise */
+    public boolean isSetRamUsage() {
+      return this.ramUsage != null;
+    }
+
+    public void setRamUsageIsSet(boolean value) {
+      if (!value) {
+        this.ramUsage = null;
+      }
+    }
+
+    public String getProcessName() {
+      return this.processName;
+    }
+
+    public getFilteredProcessInfo_args setProcessName(String processName) {
+      this.processName = processName;
+      return this;
+    }
+
+    public void unsetProcessName() {
+      this.processName = null;
+    }
+
+    /** Returns true if field processName is set (has been assigned a value) and false otherwise */
+    public boolean isSetProcessName() {
+      return this.processName != null;
+    }
+
+    public void setProcessNameIsSet(boolean value) {
+      if (!value) {
+        this.processName = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case CPU_USAGE:
+        if (value == null) {
+          unsetCpuUsage();
+        } else {
+          setCpuUsage((String)value);
+        }
+        break;
+
+      case RAM_USAGE:
+        if (value == null) {
+          unsetRamUsage();
+        } else {
+          setRamUsage((String)value);
+        }
+        break;
+
+      case PROCESS_NAME:
+        if (value == null) {
+          unsetProcessName();
+        } else {
+          setProcessName((String)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case CPU_USAGE:
+        return getCpuUsage();
+
+      case RAM_USAGE:
+        return getRamUsage();
+
+      case PROCESS_NAME:
+        return getProcessName();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case CPU_USAGE:
+        return isSetCpuUsage();
+      case RAM_USAGE:
+        return isSetRamUsage();
+      case PROCESS_NAME:
+        return isSetProcessName();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getFilteredProcessInfo_args)
+        return this.equals((getFilteredProcessInfo_args)that);
+      return false;
+    }
+
+    public boolean equals(getFilteredProcessInfo_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_cpuUsage = true && this.isSetCpuUsage();
+      boolean that_present_cpuUsage = true && that.isSetCpuUsage();
+      if (this_present_cpuUsage || that_present_cpuUsage) {
+        if (!(this_present_cpuUsage && that_present_cpuUsage))
+          return false;
+        if (!this.cpuUsage.equals(that.cpuUsage))
+          return false;
+      }
+
+      boolean this_present_ramUsage = true && this.isSetRamUsage();
+      boolean that_present_ramUsage = true && that.isSetRamUsage();
+      if (this_present_ramUsage || that_present_ramUsage) {
+        if (!(this_present_ramUsage && that_present_ramUsage))
+          return false;
+        if (!this.ramUsage.equals(that.ramUsage))
+          return false;
+      }
+
+      boolean this_present_processName = true && this.isSetProcessName();
+      boolean that_present_processName = true && that.isSetProcessName();
+      if (this_present_processName || that_present_processName) {
+        if (!(this_present_processName && that_present_processName))
+          return false;
+        if (!this.processName.equals(that.processName))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      List<Object> list = new ArrayList<Object>();
+
+      boolean present_cpuUsage = true && (isSetCpuUsage());
+      list.add(present_cpuUsage);
+      if (present_cpuUsage)
+        list.add(cpuUsage);
+
+      boolean present_ramUsage = true && (isSetRamUsage());
+      list.add(present_ramUsage);
+      if (present_ramUsage)
+        list.add(ramUsage);
+
+      boolean present_processName = true && (isSetProcessName());
+      list.add(present_processName);
+      if (present_processName)
+        list.add(processName);
+
+      return list.hashCode();
+    }
+
+    @Override
+    public int compareTo(getFilteredProcessInfo_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = Boolean.valueOf(isSetCpuUsage()).compareTo(other.isSetCpuUsage());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetCpuUsage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.cpuUsage, other.cpuUsage);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetRamUsage()).compareTo(other.isSetRamUsage());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetRamUsage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ramUsage, other.ramUsage);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetProcessName()).compareTo(other.isSetProcessName());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetProcessName()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.processName, other.processName);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getFilteredProcessInfo_args(");
+      boolean first = true;
+
+      sb.append("cpuUsage:");
+      if (this.cpuUsage == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.cpuUsage);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ramUsage:");
+      if (this.ramUsage == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ramUsage);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("processName:");
+      if (this.processName == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.processName);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getFilteredProcessInfo_argsStandardSchemeFactory implements SchemeFactory {
+      public getFilteredProcessInfo_argsStandardScheme getScheme() {
+        return new getFilteredProcessInfo_argsStandardScheme();
+      }
+    }
+
+    private static class getFilteredProcessInfo_argsStandardScheme extends StandardScheme<getFilteredProcessInfo_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getFilteredProcessInfo_args struct) throws TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // CPU_USAGE
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.cpuUsage = iprot.readString();
+                struct.setCpuUsageIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // RAM_USAGE
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.ramUsage = iprot.readString();
+                struct.setRamUsageIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 3: // PROCESS_NAME
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.processName = iprot.readString();
+                struct.setProcessNameIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getFilteredProcessInfo_args struct) throws TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.cpuUsage != null) {
+          oprot.writeFieldBegin(CPU_USAGE_FIELD_DESC);
+          oprot.writeString(struct.cpuUsage);
+          oprot.writeFieldEnd();
+        }
+        if (struct.ramUsage != null) {
+          oprot.writeFieldBegin(RAM_USAGE_FIELD_DESC);
+          oprot.writeString(struct.ramUsage);
+          oprot.writeFieldEnd();
+        }
+        if (struct.processName != null) {
+          oprot.writeFieldBegin(PROCESS_NAME_FIELD_DESC);
+          oprot.writeString(struct.processName);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getFilteredProcessInfo_argsTupleSchemeFactory implements SchemeFactory {
+      public getFilteredProcessInfo_argsTupleScheme getScheme() {
+        return new getFilteredProcessInfo_argsTupleScheme();
+      }
+    }
+
+    private static class getFilteredProcessInfo_argsTupleScheme extends TupleScheme<getFilteredProcessInfo_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getFilteredProcessInfo_args struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetCpuUsage()) {
+          optionals.set(0);
+        }
+        if (struct.isSetRamUsage()) {
+          optionals.set(1);
+        }
+        if (struct.isSetProcessName()) {
+          optionals.set(2);
+        }
+        oprot.writeBitSet(optionals, 3);
+        if (struct.isSetCpuUsage()) {
+          oprot.writeString(struct.cpuUsage);
+        }
+        if (struct.isSetRamUsage()) {
+          oprot.writeString(struct.ramUsage);
+        }
+        if (struct.isSetProcessName()) {
+          oprot.writeString(struct.processName);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getFilteredProcessInfo_args struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(3);
+        if (incoming.get(0)) {
+          struct.cpuUsage = iprot.readString();
+          struct.setCpuUsageIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ramUsage = iprot.readString();
+          struct.setRamUsageIsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.processName = iprot.readString();
+          struct.setProcessNameIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class getFilteredProcessInfo_result implements org.apache.thrift.TBase<getFilteredProcessInfo_result, getFilteredProcessInfo_result._Fields>, java.io.Serializable, Cloneable, Comparable<getFilteredProcessInfo_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getFilteredProcessInfo_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new getFilteredProcessInfo_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getFilteredProcessInfo_resultTupleSchemeFactory());
+    }
+
+    public List<TProcessInfo> success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, TProcessInfo.class))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getFilteredProcessInfo_result.class, metaDataMap);
+    }
+
+    public getFilteredProcessInfo_result() {
+    }
+
+    public getFilteredProcessInfo_result(
+      List<TProcessInfo> success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getFilteredProcessInfo_result(getFilteredProcessInfo_result other) {
+      if (other.isSetSuccess()) {
+        List<TProcessInfo> __this__success = new ArrayList<TProcessInfo>(other.success.size());
+        for (TProcessInfo other_element : other.success) {
+          __this__success.add(new TProcessInfo(other_element));
+        }
+        this.success = __this__success;
+      }
+    }
+
+    public getFilteredProcessInfo_result deepCopy() {
+      return new getFilteredProcessInfo_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public java.util.Iterator<TProcessInfo> getSuccessIterator() {
+      return (this.success == null) ? null : this.success.iterator();
+    }
+
+    public void addToSuccess(TProcessInfo elem) {
+      if (this.success == null) {
+        this.success = new ArrayList<TProcessInfo>();
+      }
+      this.success.add(elem);
+    }
+
+    public List<TProcessInfo> getSuccess() {
+      return this.success;
+    }
+
+    public getFilteredProcessInfo_result setSuccess(List<TProcessInfo> success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((List<TProcessInfo>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getFilteredProcessInfo_result)
+        return this.equals((getFilteredProcessInfo_result)that);
+      return false;
+    }
+
+    public boolean equals(getFilteredProcessInfo_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      List<Object> list = new ArrayList<Object>();
+
+      boolean present_success = true && (isSetSuccess());
+      list.add(present_success);
+      if (present_success)
+        list.add(success);
+
+      return list.hashCode();
+    }
+
+    @Override
+    public int compareTo(getFilteredProcessInfo_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(other.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getFilteredProcessInfo_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getFilteredProcessInfo_resultStandardSchemeFactory implements SchemeFactory {
+      public getFilteredProcessInfo_resultStandardScheme getScheme() {
+        return new getFilteredProcessInfo_resultStandardScheme();
+      }
+    }
+
+    private static class getFilteredProcessInfo_resultStandardScheme extends StandardScheme<getFilteredProcessInfo_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getFilteredProcessInfo_result struct) throws TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list48 = iprot.readListBegin();
+                  struct.success = new ArrayList<TProcessInfo>(_list48.size);
+                  TProcessInfo _elem49;
+                  for (int _i50 = 0; _i50 < _list48.size; ++_i50)
+                  {
+                    _elem49 = new TProcessInfo();
+                    _elem49.read(iprot);
+                    struct.success.add(_elem49);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getFilteredProcessInfo_result struct) throws TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
+            for (TProcessInfo _iter51 : struct.success)
+            {
+              _iter51.write(oprot);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getFilteredProcessInfo_resultTupleSchemeFactory implements SchemeFactory {
+      public getFilteredProcessInfo_resultTupleScheme getScheme() {
+        return new getFilteredProcessInfo_resultTupleScheme();
+      }
+    }
+
+    private static class getFilteredProcessInfo_resultTupleScheme extends TupleScheme<getFilteredProcessInfo_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getFilteredProcessInfo_result struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          {
+            oprot.writeI32(struct.success.size());
+            for (TProcessInfo _iter52 : struct.success)
+            {
+              _iter52.write(oprot);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getFilteredProcessInfo_result struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          {
+            org.apache.thrift.protocol.TList _list53 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new ArrayList<TProcessInfo>(_list53.size);
+            TProcessInfo _elem54;
+            for (int _i55 = 0; _i55 < _list53.size; ++_i55)
+            {
+              _elem54 = new TProcessInfo();
+              _elem54.read(iprot);
+              struct.success.add(_elem54);
             }
           }
           struct.setSuccessIsSet(true);
