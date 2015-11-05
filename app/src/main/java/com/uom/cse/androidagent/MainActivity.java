@@ -141,12 +141,14 @@ public class MainActivity extends Activity {
 
 
         handler = new Handler() {
-
+            int count = 0;
             public void handleMessage(Message msg) {
-
+                if( count % 10 == 0 ) {
+                    textView.setText("");
+                }
                 String aResponse = msg.getData().getString("message");
                 textView.setText(textView.getText() + aResponse);
-
+                count++;
             }
         };
 

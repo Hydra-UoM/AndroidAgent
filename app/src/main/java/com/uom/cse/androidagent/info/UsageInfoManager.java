@@ -9,6 +9,8 @@ import android.net.TrafficStats;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
 
@@ -471,4 +473,204 @@ public class UsageInfoManager {
         }
         return processinfoList;
     }
+
+    public List<Processinfo> getFilteredProcessinfo(String cpuUsage,String ramUsage,String processNameParam){
+
+        List<CPUUsageInfo> processCPUdetails = getCPUUsageInfo();
+
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        PackageManager pm = context.getPackageManager();
+        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+        activityManager.getMemoryInfo(memoryInfo);
+
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+
+        String value="";
+        Map<Integer, String> pidMap = new TreeMap<Integer, String>();
+        List<Processinfo> processinfoList = new ArrayList<>();
+        outerloop:
+        for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+            if(!("".equals(processNameParam))){
+                if(!(runningAppProcessInfo.processName.equals(processNameParam))){
+                    continue;
+                }
+            }
+            String processName = "";
+            String packageName = runningAppProcessInfo.processName;
+
+            try {
+                // get application name
+                CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(runningAppProcessInfo.processName, PackageManager.GET_META_DATA));
+                processName = c.toString();
+            } catch (Exception e) {
+                //Name Not FOund Exception
+                processName = runningAppProcessInfo.processName;
+            }
+
+            String type = "None";
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND){
+                type = "Background process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE){
+                type = "Service";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE){
+                type = "Perceptible";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE){
+                type = "Visible process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+                type = "Foreground process";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_EMPTY){
+                type = "Empty";
+            }
+
+            if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE){
+                type = "Gone";
+            }
+
+
+            int pids[] = new int[1];
+            pids[0] = runningAppProcessInfo.pid;
+            android.os.Debug.MemoryInfo[] memoryInfoArray = activityManager.getProcessMemoryInfo(pids);
+
+            Processinfo processinfo = new Processinfo();
+
+            for(android.os.Debug.MemoryInfo pidMemoryInfo: memoryInfoArray)
+            {
+                if(!("0".equals(ramUsage))){
+                    if( pidMemoryInfo.getTotalPrivateDirty()<Integer.parseInt(ramUsage)){
+                        continue outerloop;
+                    }
+                }
+                processinfo.setProcessName(processName);
+                processinfo.setPrivateMemoryUsage(pidMemoryInfo.getTotalPrivateDirty() + "kB");
+                processinfo.setSharedMemoryUsage(pidMemoryInfo.getTotalSharedDirty() + "kB");
+                processinfo.setType(type);
+                processinfo.setPackageName(packageName);
+                processinfo.setPid(String.valueOf(runningAppProcessInfo.pid));
+            }
+            for(CPUUsageInfo cpuUsageInfo : processCPUdetails){
+
+                if(cpuUsageInfo.getPid() == runningAppProcessInfo.pid){
+                    if(!("0".equals(cpuUsage))){
+                        if(cpuUsageInfo.getCpuUsage()<Integer.parseInt(cpuUsage)){
+                            continue outerloop;
+                        }
+                    }
+                    processinfo.setCpuUsage(String.valueOf(cpuUsageInfo.getCpuUsage())+"%");
+                }
+            }
+            long received = TrafficStats.getUidRxBytes(runningAppProcessInfo.uid)/ 1048576L;
+            long send   = TrafficStats.getUidTxBytes(runningAppProcessInfo.uid)/ 1048576L;
+            processinfo.setReceivedData(String.valueOf(received)+"MB");
+            processinfo.setSentData(String.valueOf(send)+"MB");
+            processinfoList.add(processinfo);
+        }
+        return processinfoList;
+    }
+
+    public boolean isCameraAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    }
+
+    public boolean isTelephonyAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+    }
+
+    public boolean isFrontCameraAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
+    }
+
+    public boolean isBluetoothAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
+    }
+
+    public boolean isAudioOutputAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT);
+    }
+
+    //The camera device can be manually controlled (3A algorithms such as auto-exposure, and auto-focus can be bypassed)
+    public boolean isCameraCapabilityManualSensorAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_CAPABILITY_MANUAL_SENSOR);
+    }
+
+    public boolean isIRSensorAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_CONSUMER_IR);
+    }
+
+    public boolean isTVSupportAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_LIVE_TV);
+    }
+
+    public boolean isWifiAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_WIFI);
+    }
+
+    public boolean isLocationServiceAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_LOCATION);
+    }
+
+    public boolean isGPSLocationAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+    }
+
+    public boolean isLocationNetworkAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_NETWORK);
+    }
+
+    public boolean isPrintingAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_PRINTING);
+    }
+
+    public boolean isLightSensorAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_LIGHT);
+    }
+
+    public boolean isAccelerometerAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
+    }
+
+    public boolean isTempratureSensorAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_AMBIENT_TEMPERATURE);
+    }
+
+    public boolean isBarometerAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER);
+    }
+
+    public boolean isGyroscopeSensorAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE);
+    }
+
+    public boolean isProximitySensorAvailable(){
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_PROXIMITY);
+    }
+
 }
