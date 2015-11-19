@@ -73,6 +73,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         ApplicationData applicationData = new ApplicationData(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(5),cursor.getString(4),cursor.getString(6),cursor.getString(7));
+        db.close();
+        cursor.close();
         return applicationData;
     }
 
@@ -85,9 +87,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public int getAppInfoCount(){
         SQLiteDatabase db =getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM" + TABLE_APPINFO, null);
+        int count = cursor.getCount();
         cursor.close();
-
-        return cursor.getCount();
+        db.close();
+        return count;
     }
 
     public int updateAppInfo(ApplicationData appData){
