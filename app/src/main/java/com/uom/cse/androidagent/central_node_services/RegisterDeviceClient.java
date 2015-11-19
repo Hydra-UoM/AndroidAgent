@@ -62,6 +62,7 @@ public class RegisterDeviceClient {
                                 String deviceId, String IPAddress, String type) throws TException
     {
         Device device = new Device(deviceId, IPAddress, type);
+
         client.registerDevice(device);
     }
 }

@@ -15,6 +15,7 @@ import com.uom.cse.androidagent.thriftGeneratedCode.TProcessInfo;
 
 import org.apache.thrift.TException;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -258,5 +259,10 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
             processInfoCollection.add(tempProcessInfo);
         }
         return processInfoCollection;
+    }
+
+    @Override
+    public boolean testNetwork(ByteBuffer data) throws TException {
+        return true;
     }
 }
