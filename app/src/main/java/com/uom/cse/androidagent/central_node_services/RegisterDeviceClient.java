@@ -8,6 +8,8 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 
+import java.util.List;
+
 /**
  * Created by Nirushan on 11/1/2015.
  */
@@ -65,4 +67,27 @@ public class RegisterDeviceClient {
 
         client.registerDevice(device);
     }
+
+    public static void pushEvents(final String centralNodeIP, final int centralNodePort, List<ThriftAgentProcessInfo> thriftAgentProcessInfo){
+        try {
+            TTransport transport;
+
+            transport = new TSocket(centralNodeIP, centralNodePort);
+            transport.open();
+
+            TProtocol protocol = new TBinaryProtocol(transport);
+            RegisterDeviceService.Client client = new RegisterDeviceService.Client(protocol);
+
+            performPush(client,thriftAgentProcessInfo);
+
+            transport.close();
+        } catch (TException x) {
+            x.printStackTrace();
+        }
+    }
+
+    private static void performPush(RegisterDeviceService.Client client, List<ThriftAgentProcessInfo> thriftAgentProcessInfos){
+
+    }
+
 }
