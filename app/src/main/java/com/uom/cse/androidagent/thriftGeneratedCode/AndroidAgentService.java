@@ -63,6 +63,8 @@ public class AndroidAgentService {
 
     public boolean testNetwork(ByteBuffer data) throws TException;
 
+    public boolean deployCommand(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process) throws TException;
+
   }
 
   public interface AsyncIface {
@@ -92,6 +94,8 @@ public class AndroidAgentService {
     public void getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName, AsyncMethodCallback resultHandler) throws TException;
 
     public void testNetwork(ByteBuffer data, AsyncMethodCallback resultHandler) throws TException;
+
+    public void deployCommand(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process, AsyncMethodCallback resultHandler) throws TException;
 
   }
 
@@ -403,6 +407,34 @@ public class AndroidAgentService {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "testNetwork failed: unknown result");
+    }
+
+    public boolean deployCommand(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process) throws TException
+    {
+      send_deployCommand(cpuUsage, ramUsage, receiveData, sentData, timeInterval, process);
+      return recv_deployCommand();
+    }
+
+    public void send_deployCommand(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process) throws TException
+    {
+      deployCommand_args args = new deployCommand_args();
+      args.setCpuUsage(cpuUsage);
+      args.setRamUsage(ramUsage);
+      args.setReceiveData(receiveData);
+      args.setSentData(sentData);
+      args.setTimeInterval(timeInterval);
+      args.setProcess(process);
+      sendBase("deployCommand", args);
+    }
+
+    public boolean recv_deployCommand() throws TException
+    {
+      deployCommand_result result = new deployCommand_result();
+      receiveBase(result, "deployCommand");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "deployCommand failed: unknown result");
     }
 
   }
@@ -812,6 +844,53 @@ public class AndroidAgentService {
       }
     }
 
+    public void deployCommand(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process, AsyncMethodCallback resultHandler) throws TException {
+      checkReady();
+      deployCommand_call method_call = new deployCommand_call(cpuUsage, ramUsage, receiveData, sentData, timeInterval, process, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class deployCommand_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private short cpuUsage;
+      private short ramUsage;
+      private short receiveData;
+      private short sentData;
+      private short timeInterval;
+      private String process;
+      public deployCommand_call(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process, AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.cpuUsage = cpuUsage;
+        this.ramUsage = ramUsage;
+        this.receiveData = receiveData;
+        this.sentData = sentData;
+        this.timeInterval = timeInterval;
+        this.process = process;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("deployCommand", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        deployCommand_args args = new deployCommand_args();
+        args.setCpuUsage(cpuUsage);
+        args.setRamUsage(ramUsage);
+        args.setReceiveData(receiveData);
+        args.setSentData(sentData);
+        args.setTimeInterval(timeInterval);
+        args.setProcess(process);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public boolean getResult() throws TException {
+        if (getState() != State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_deployCommand();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements org.apache.thrift.TProcessor {
@@ -838,6 +917,7 @@ public class AndroidAgentService {
       processMap.put("getSensorDetails", new getSensorDetails());
       processMap.put("getFilteredProcessInfo", new getFilteredProcessInfo());
       processMap.put("testNetwork", new testNetwork());
+      processMap.put("deployCommand", new deployCommand());
       return processMap;
     }
 
@@ -1102,6 +1182,27 @@ public class AndroidAgentService {
       }
     }
 
+    public static class deployCommand<I extends Iface> extends org.apache.thrift.ProcessFunction<I, deployCommand_args> {
+      public deployCommand() {
+        super("deployCommand");
+      }
+
+      public deployCommand_args getEmptyArgsInstance() {
+        return new deployCommand_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public deployCommand_result getResult(I iface, deployCommand_args args) throws TException {
+        deployCommand_result result = new deployCommand_result();
+        result.success = iface.deployCommand(args.cpuUsage, args.ramUsage, args.receiveData, args.sentData, args.timeInterval, args.process);
+        result.setSuccessIsSet(true);
+        return result;
+      }
+    }
+
   }
 
   public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
@@ -1128,6 +1229,7 @@ public class AndroidAgentService {
       processMap.put("getSensorDetails", new getSensorDetails());
       processMap.put("getFilteredProcessInfo", new getFilteredProcessInfo());
       processMap.put("testNetwork", new testNetwork());
+      processMap.put("deployCommand", new deployCommand());
       return processMap;
     }
 
@@ -1792,6 +1894,58 @@ public class AndroidAgentService {
 
       public void start(I iface, testNetwork_args args, AsyncMethodCallback<Boolean> resultHandler) throws TException {
         iface.testNetwork(args.data,resultHandler);
+      }
+    }
+
+    public static class deployCommand<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, deployCommand_args, Boolean> {
+      public deployCommand() {
+        super("deployCommand");
+      }
+
+      public deployCommand_args getEmptyArgsInstance() {
+        return new deployCommand_args();
+      }
+
+      public AsyncMethodCallback<Boolean> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+        final org.apache.thrift.AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<Boolean>() { 
+          public void onComplete(Boolean o) {
+            deployCommand_result result = new deployCommand_result();
+            result.success = o;
+            result.setSuccessIsSet(true);
+            try {
+              fcall.sendResponse(fb,result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
+              return;
+            } catch (Exception e) {
+              LOGGER.error("Exception writing to internal frame buffer", e);
+            }
+            fb.close();
+          }
+          public void onError(Exception e) {
+            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
+            org.apache.thrift.TBase msg;
+            deployCommand_result result = new deployCommand_result();
+            {
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = (org.apache.thrift.TBase)new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+            }
+            try {
+              fcall.sendResponse(fb,msg,msgType,seqid);
+              return;
+            } catch (Exception ex) {
+              LOGGER.error("Exception writing to internal frame buffer", ex);
+            }
+            fb.close();
+          }
+        };
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public void start(I iface, deployCommand_args args, AsyncMethodCallback<Boolean> resultHandler) throws TException {
+        iface.deployCommand(args.cpuUsage, args.ramUsage, args.receiveData, args.sentData, args.timeInterval, args.process,resultHandler);
       }
     }
 
@@ -10532,6 +10686,1227 @@ public class AndroidAgentService {
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, testNetwork_result struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.success = iprot.readBool();
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class deployCommand_args implements org.apache.thrift.TBase<deployCommand_args, deployCommand_args._Fields>, java.io.Serializable, Cloneable, Comparable<deployCommand_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("deployCommand_args");
+
+    private static final org.apache.thrift.protocol.TField CPU_USAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("cpuUsage", org.apache.thrift.protocol.TType.I16, (short)1);
+    private static final org.apache.thrift.protocol.TField RAM_USAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("ramUsage", org.apache.thrift.protocol.TType.I16, (short)2);
+    private static final org.apache.thrift.protocol.TField RECEIVE_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("receiveData", org.apache.thrift.protocol.TType.I16, (short)3);
+    private static final org.apache.thrift.protocol.TField SENT_DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("sentData", org.apache.thrift.protocol.TType.I16, (short)4);
+    private static final org.apache.thrift.protocol.TField TIME_INTERVAL_FIELD_DESC = new org.apache.thrift.protocol.TField("timeInterval", org.apache.thrift.protocol.TType.I16, (short)5);
+    private static final org.apache.thrift.protocol.TField PROCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("process", org.apache.thrift.protocol.TType.STRING, (short)6);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new deployCommand_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new deployCommand_argsTupleSchemeFactory());
+    }
+
+    public short cpuUsage; // required
+    public short ramUsage; // required
+    public short receiveData; // required
+    public short sentData; // required
+    public short timeInterval; // required
+    public String process; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      CPU_USAGE((short)1, "cpuUsage"),
+      RAM_USAGE((short)2, "ramUsage"),
+      RECEIVE_DATA((short)3, "receiveData"),
+      SENT_DATA((short)4, "sentData"),
+      TIME_INTERVAL((short)5, "timeInterval"),
+      PROCESS((short)6, "process");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // CPU_USAGE
+            return CPU_USAGE;
+          case 2: // RAM_USAGE
+            return RAM_USAGE;
+          case 3: // RECEIVE_DATA
+            return RECEIVE_DATA;
+          case 4: // SENT_DATA
+            return SENT_DATA;
+          case 5: // TIME_INTERVAL
+            return TIME_INTERVAL;
+          case 6: // PROCESS
+            return PROCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __CPUUSAGE_ISSET_ID = 0;
+    private static final int __RAMUSAGE_ISSET_ID = 1;
+    private static final int __RECEIVEDATA_ISSET_ID = 2;
+    private static final int __SENTDATA_ISSET_ID = 3;
+    private static final int __TIMEINTERVAL_ISSET_ID = 4;
+    private byte __isset_bitfield = 0;
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.CPU_USAGE, new org.apache.thrift.meta_data.FieldMetaData("cpuUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
+      tmpMap.put(_Fields.RAM_USAGE, new org.apache.thrift.meta_data.FieldMetaData("ramUsage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
+      tmpMap.put(_Fields.RECEIVE_DATA, new org.apache.thrift.meta_data.FieldMetaData("receiveData", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
+      tmpMap.put(_Fields.SENT_DATA, new org.apache.thrift.meta_data.FieldMetaData("sentData", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
+      tmpMap.put(_Fields.TIME_INTERVAL, new org.apache.thrift.meta_data.FieldMetaData("timeInterval", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
+      tmpMap.put(_Fields.PROCESS, new org.apache.thrift.meta_data.FieldMetaData("process", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(deployCommand_args.class, metaDataMap);
+    }
+
+    public deployCommand_args() {
+    }
+
+    public deployCommand_args(
+      short cpuUsage,
+      short ramUsage,
+      short receiveData,
+      short sentData,
+      short timeInterval,
+      String process)
+    {
+      this();
+      this.cpuUsage = cpuUsage;
+      setCpuUsageIsSet(true);
+      this.ramUsage = ramUsage;
+      setRamUsageIsSet(true);
+      this.receiveData = receiveData;
+      setReceiveDataIsSet(true);
+      this.sentData = sentData;
+      setSentDataIsSet(true);
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+      this.process = process;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public deployCommand_args(deployCommand_args other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.cpuUsage = other.cpuUsage;
+      this.ramUsage = other.ramUsage;
+      this.receiveData = other.receiveData;
+      this.sentData = other.sentData;
+      this.timeInterval = other.timeInterval;
+      if (other.isSetProcess()) {
+        this.process = other.process;
+      }
+    }
+
+    public deployCommand_args deepCopy() {
+      return new deployCommand_args(this);
+    }
+
+    @Override
+    public void clear() {
+      setCpuUsageIsSet(false);
+      this.cpuUsage = 0;
+      setRamUsageIsSet(false);
+      this.ramUsage = 0;
+      setReceiveDataIsSet(false);
+      this.receiveData = 0;
+      setSentDataIsSet(false);
+      this.sentData = 0;
+      setTimeIntervalIsSet(false);
+      this.timeInterval = 0;
+      this.process = null;
+    }
+
+    public short getCpuUsage() {
+      return this.cpuUsage;
+    }
+
+    public deployCommand_args setCpuUsage(short cpuUsage) {
+      this.cpuUsage = cpuUsage;
+      setCpuUsageIsSet(true);
+      return this;
+    }
+
+    public void unsetCpuUsage() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __CPUUSAGE_ISSET_ID);
+    }
+
+    /** Returns true if field cpuUsage is set (has been assigned a value) and false otherwise */
+    public boolean isSetCpuUsage() {
+      return EncodingUtils.testBit(__isset_bitfield, __CPUUSAGE_ISSET_ID);
+    }
+
+    public void setCpuUsageIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __CPUUSAGE_ISSET_ID, value);
+    }
+
+    public short getRamUsage() {
+      return this.ramUsage;
+    }
+
+    public deployCommand_args setRamUsage(short ramUsage) {
+      this.ramUsage = ramUsage;
+      setRamUsageIsSet(true);
+      return this;
+    }
+
+    public void unsetRamUsage() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __RAMUSAGE_ISSET_ID);
+    }
+
+    /** Returns true if field ramUsage is set (has been assigned a value) and false otherwise */
+    public boolean isSetRamUsage() {
+      return EncodingUtils.testBit(__isset_bitfield, __RAMUSAGE_ISSET_ID);
+    }
+
+    public void setRamUsageIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __RAMUSAGE_ISSET_ID, value);
+    }
+
+    public short getReceiveData() {
+      return this.receiveData;
+    }
+
+    public deployCommand_args setReceiveData(short receiveData) {
+      this.receiveData = receiveData;
+      setReceiveDataIsSet(true);
+      return this;
+    }
+
+    public void unsetReceiveData() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __RECEIVEDATA_ISSET_ID);
+    }
+
+    /** Returns true if field receiveData is set (has been assigned a value) and false otherwise */
+    public boolean isSetReceiveData() {
+      return EncodingUtils.testBit(__isset_bitfield, __RECEIVEDATA_ISSET_ID);
+    }
+
+    public void setReceiveDataIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __RECEIVEDATA_ISSET_ID, value);
+    }
+
+    public short getSentData() {
+      return this.sentData;
+    }
+
+    public deployCommand_args setSentData(short sentData) {
+      this.sentData = sentData;
+      setSentDataIsSet(true);
+      return this;
+    }
+
+    public void unsetSentData() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SENTDATA_ISSET_ID);
+    }
+
+    /** Returns true if field sentData is set (has been assigned a value) and false otherwise */
+    public boolean isSetSentData() {
+      return EncodingUtils.testBit(__isset_bitfield, __SENTDATA_ISSET_ID);
+    }
+
+    public void setSentDataIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SENTDATA_ISSET_ID, value);
+    }
+
+    public short getTimeInterval() {
+      return this.timeInterval;
+    }
+
+    public deployCommand_args setTimeInterval(short timeInterval) {
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+      return this;
+    }
+
+    public void unsetTimeInterval() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    /** Returns true if field timeInterval is set (has been assigned a value) and false otherwise */
+    public boolean isSetTimeInterval() {
+      return EncodingUtils.testBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    public void setTimeIntervalIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID, value);
+    }
+
+    public String getProcess() {
+      return this.process;
+    }
+
+    public deployCommand_args setProcess(String process) {
+      this.process = process;
+      return this;
+    }
+
+    public void unsetProcess() {
+      this.process = null;
+    }
+
+    /** Returns true if field process is set (has been assigned a value) and false otherwise */
+    public boolean isSetProcess() {
+      return this.process != null;
+    }
+
+    public void setProcessIsSet(boolean value) {
+      if (!value) {
+        this.process = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case CPU_USAGE:
+        if (value == null) {
+          unsetCpuUsage();
+        } else {
+          setCpuUsage((Short)value);
+        }
+        break;
+
+      case RAM_USAGE:
+        if (value == null) {
+          unsetRamUsage();
+        } else {
+          setRamUsage((Short)value);
+        }
+        break;
+
+      case RECEIVE_DATA:
+        if (value == null) {
+          unsetReceiveData();
+        } else {
+          setReceiveData((Short)value);
+        }
+        break;
+
+      case SENT_DATA:
+        if (value == null) {
+          unsetSentData();
+        } else {
+          setSentData((Short)value);
+        }
+        break;
+
+      case TIME_INTERVAL:
+        if (value == null) {
+          unsetTimeInterval();
+        } else {
+          setTimeInterval((Short)value);
+        }
+        break;
+
+      case PROCESS:
+        if (value == null) {
+          unsetProcess();
+        } else {
+          setProcess((String)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case CPU_USAGE:
+        return Short.valueOf(getCpuUsage());
+
+      case RAM_USAGE:
+        return Short.valueOf(getRamUsage());
+
+      case RECEIVE_DATA:
+        return Short.valueOf(getReceiveData());
+
+      case SENT_DATA:
+        return Short.valueOf(getSentData());
+
+      case TIME_INTERVAL:
+        return Short.valueOf(getTimeInterval());
+
+      case PROCESS:
+        return getProcess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case CPU_USAGE:
+        return isSetCpuUsage();
+      case RAM_USAGE:
+        return isSetRamUsage();
+      case RECEIVE_DATA:
+        return isSetReceiveData();
+      case SENT_DATA:
+        return isSetSentData();
+      case TIME_INTERVAL:
+        return isSetTimeInterval();
+      case PROCESS:
+        return isSetProcess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof deployCommand_args)
+        return this.equals((deployCommand_args)that);
+      return false;
+    }
+
+    public boolean equals(deployCommand_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_cpuUsage = true;
+      boolean that_present_cpuUsage = true;
+      if (this_present_cpuUsage || that_present_cpuUsage) {
+        if (!(this_present_cpuUsage && that_present_cpuUsage))
+          return false;
+        if (this.cpuUsage != that.cpuUsage)
+          return false;
+      }
+
+      boolean this_present_ramUsage = true;
+      boolean that_present_ramUsage = true;
+      if (this_present_ramUsage || that_present_ramUsage) {
+        if (!(this_present_ramUsage && that_present_ramUsage))
+          return false;
+        if (this.ramUsage != that.ramUsage)
+          return false;
+      }
+
+      boolean this_present_receiveData = true;
+      boolean that_present_receiveData = true;
+      if (this_present_receiveData || that_present_receiveData) {
+        if (!(this_present_receiveData && that_present_receiveData))
+          return false;
+        if (this.receiveData != that.receiveData)
+          return false;
+      }
+
+      boolean this_present_sentData = true;
+      boolean that_present_sentData = true;
+      if (this_present_sentData || that_present_sentData) {
+        if (!(this_present_sentData && that_present_sentData))
+          return false;
+        if (this.sentData != that.sentData)
+          return false;
+      }
+
+      boolean this_present_timeInterval = true;
+      boolean that_present_timeInterval = true;
+      if (this_present_timeInterval || that_present_timeInterval) {
+        if (!(this_present_timeInterval && that_present_timeInterval))
+          return false;
+        if (this.timeInterval != that.timeInterval)
+          return false;
+      }
+
+      boolean this_present_process = true && this.isSetProcess();
+      boolean that_present_process = true && that.isSetProcess();
+      if (this_present_process || that_present_process) {
+        if (!(this_present_process && that_present_process))
+          return false;
+        if (!this.process.equals(that.process))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      List<Object> list = new ArrayList<Object>();
+
+      boolean present_cpuUsage = true;
+      list.add(present_cpuUsage);
+      if (present_cpuUsage)
+        list.add(cpuUsage);
+
+      boolean present_ramUsage = true;
+      list.add(present_ramUsage);
+      if (present_ramUsage)
+        list.add(ramUsage);
+
+      boolean present_receiveData = true;
+      list.add(present_receiveData);
+      if (present_receiveData)
+        list.add(receiveData);
+
+      boolean present_sentData = true;
+      list.add(present_sentData);
+      if (present_sentData)
+        list.add(sentData);
+
+      boolean present_timeInterval = true;
+      list.add(present_timeInterval);
+      if (present_timeInterval)
+        list.add(timeInterval);
+
+      boolean present_process = true && (isSetProcess());
+      list.add(present_process);
+      if (present_process)
+        list.add(process);
+
+      return list.hashCode();
+    }
+
+    @Override
+    public int compareTo(deployCommand_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = Boolean.valueOf(isSetCpuUsage()).compareTo(other.isSetCpuUsage());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetCpuUsage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.cpuUsage, other.cpuUsage);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetRamUsage()).compareTo(other.isSetRamUsage());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetRamUsage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ramUsage, other.ramUsage);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetReceiveData()).compareTo(other.isSetReceiveData());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetReceiveData()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.receiveData, other.receiveData);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetSentData()).compareTo(other.isSetSentData());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSentData()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sentData, other.sentData);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetTimeInterval()).compareTo(other.isSetTimeInterval());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTimeInterval()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.timeInterval, other.timeInterval);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetProcess()).compareTo(other.isSetProcess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetProcess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.process, other.process);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("deployCommand_args(");
+      boolean first = true;
+
+      sb.append("cpuUsage:");
+      sb.append(this.cpuUsage);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("ramUsage:");
+      sb.append(this.ramUsage);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("receiveData:");
+      sb.append(this.receiveData);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("sentData:");
+      sb.append(this.sentData);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("timeInterval:");
+      sb.append(this.timeInterval);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("process:");
+      if (this.process == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.process);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class deployCommand_argsStandardSchemeFactory implements SchemeFactory {
+      public deployCommand_argsStandardScheme getScheme() {
+        return new deployCommand_argsStandardScheme();
+      }
+    }
+
+    private static class deployCommand_argsStandardScheme extends StandardScheme<deployCommand_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, deployCommand_args struct) throws TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // CPU_USAGE
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.cpuUsage = iprot.readI16();
+                struct.setCpuUsageIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // RAM_USAGE
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.ramUsage = iprot.readI16();
+                struct.setRamUsageIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 3: // RECEIVE_DATA
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.receiveData = iprot.readI16();
+                struct.setReceiveDataIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 4: // SENT_DATA
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.sentData = iprot.readI16();
+                struct.setSentDataIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 5: // TIME_INTERVAL
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.timeInterval = iprot.readI16();
+                struct.setTimeIntervalIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 6: // PROCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.process = iprot.readString();
+                struct.setProcessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, deployCommand_args struct) throws TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldBegin(CPU_USAGE_FIELD_DESC);
+        oprot.writeI16(struct.cpuUsage);
+        oprot.writeFieldEnd();
+        oprot.writeFieldBegin(RAM_USAGE_FIELD_DESC);
+        oprot.writeI16(struct.ramUsage);
+        oprot.writeFieldEnd();
+        oprot.writeFieldBegin(RECEIVE_DATA_FIELD_DESC);
+        oprot.writeI16(struct.receiveData);
+        oprot.writeFieldEnd();
+        oprot.writeFieldBegin(SENT_DATA_FIELD_DESC);
+        oprot.writeI16(struct.sentData);
+        oprot.writeFieldEnd();
+        oprot.writeFieldBegin(TIME_INTERVAL_FIELD_DESC);
+        oprot.writeI16(struct.timeInterval);
+        oprot.writeFieldEnd();
+        if (struct.process != null) {
+          oprot.writeFieldBegin(PROCESS_FIELD_DESC);
+          oprot.writeString(struct.process);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class deployCommand_argsTupleSchemeFactory implements SchemeFactory {
+      public deployCommand_argsTupleScheme getScheme() {
+        return new deployCommand_argsTupleScheme();
+      }
+    }
+
+    private static class deployCommand_argsTupleScheme extends TupleScheme<deployCommand_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, deployCommand_args struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetCpuUsage()) {
+          optionals.set(0);
+        }
+        if (struct.isSetRamUsage()) {
+          optionals.set(1);
+        }
+        if (struct.isSetReceiveData()) {
+          optionals.set(2);
+        }
+        if (struct.isSetSentData()) {
+          optionals.set(3);
+        }
+        if (struct.isSetTimeInterval()) {
+          optionals.set(4);
+        }
+        if (struct.isSetProcess()) {
+          optionals.set(5);
+        }
+        oprot.writeBitSet(optionals, 6);
+        if (struct.isSetCpuUsage()) {
+          oprot.writeI16(struct.cpuUsage);
+        }
+        if (struct.isSetRamUsage()) {
+          oprot.writeI16(struct.ramUsage);
+        }
+        if (struct.isSetReceiveData()) {
+          oprot.writeI16(struct.receiveData);
+        }
+        if (struct.isSetSentData()) {
+          oprot.writeI16(struct.sentData);
+        }
+        if (struct.isSetTimeInterval()) {
+          oprot.writeI16(struct.timeInterval);
+        }
+        if (struct.isSetProcess()) {
+          oprot.writeString(struct.process);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, deployCommand_args struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(6);
+        if (incoming.get(0)) {
+          struct.cpuUsage = iprot.readI16();
+          struct.setCpuUsageIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.ramUsage = iprot.readI16();
+          struct.setRamUsageIsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.receiveData = iprot.readI16();
+          struct.setReceiveDataIsSet(true);
+        }
+        if (incoming.get(3)) {
+          struct.sentData = iprot.readI16();
+          struct.setSentDataIsSet(true);
+        }
+        if (incoming.get(4)) {
+          struct.timeInterval = iprot.readI16();
+          struct.setTimeIntervalIsSet(true);
+        }
+        if (incoming.get(5)) {
+          struct.process = iprot.readString();
+          struct.setProcessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class deployCommand_result implements org.apache.thrift.TBase<deployCommand_result, deployCommand_result._Fields>, java.io.Serializable, Cloneable, Comparable<deployCommand_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("deployCommand_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new deployCommand_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new deployCommand_resultTupleSchemeFactory());
+    }
+
+    public boolean success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(deployCommand_result.class, metaDataMap);
+    }
+
+    public deployCommand_result() {
+    }
+
+    public deployCommand_result(
+      boolean success)
+    {
+      this();
+      this.success = success;
+      setSuccessIsSet(true);
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public deployCommand_result(deployCommand_result other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.success = other.success;
+    }
+
+    public deployCommand_result deepCopy() {
+      return new deployCommand_result(this);
+    }
+
+    @Override
+    public void clear() {
+      setSuccessIsSet(false);
+      this.success = false;
+    }
+
+    public boolean isSuccess() {
+      return this.success;
+    }
+
+    public deployCommand_result setSuccess(boolean success) {
+      this.success = success;
+      setSuccessIsSet(true);
+      return this;
+    }
+
+    public void unsetSuccess() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((Boolean)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return Boolean.valueOf(isSuccess());
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof deployCommand_result)
+        return this.equals((deployCommand_result)that);
+      return false;
+    }
+
+    public boolean equals(deployCommand_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true;
+      boolean that_present_success = true;
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (this.success != that.success)
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      List<Object> list = new ArrayList<Object>();
+
+      boolean present_success = true;
+      list.add(present_success);
+      if (present_success)
+        list.add(success);
+
+      return list.hashCode();
+    }
+
+    @Override
+    public int compareTo(deployCommand_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(other.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("deployCommand_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      sb.append(this.success);
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class deployCommand_resultStandardSchemeFactory implements SchemeFactory {
+      public deployCommand_resultStandardScheme getScheme() {
+        return new deployCommand_resultStandardScheme();
+      }
+    }
+
+    private static class deployCommand_resultStandardScheme extends StandardScheme<deployCommand_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, deployCommand_result struct) throws TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, deployCommand_result struct) throws TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.isSetSuccess()) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          oprot.writeBool(struct.success);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class deployCommand_resultTupleSchemeFactory implements SchemeFactory {
+      public deployCommand_resultTupleScheme getScheme() {
+        return new deployCommand_resultTupleScheme();
+      }
+    }
+
+    private static class deployCommand_resultTupleScheme extends TupleScheme<deployCommand_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, deployCommand_result struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          oprot.writeBool(struct.success);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, deployCommand_result struct) throws TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {

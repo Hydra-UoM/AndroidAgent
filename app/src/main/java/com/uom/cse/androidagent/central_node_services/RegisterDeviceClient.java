@@ -70,6 +70,7 @@ public class RegisterDeviceClient {
 
     public static void pushEvents(final String centralNodeIP, final int centralNodePort, List<ThriftAgentProcessInfo> thriftAgentProcessInfo){
         try {
+
             TTransport transport;
 
             transport = new TSocket(centralNodeIP, centralNodePort);
@@ -81,12 +82,15 @@ public class RegisterDeviceClient {
             performPush(client,thriftAgentProcessInfo);
 
             transport.close();
+
         } catch (TException x) {
             x.printStackTrace();
         }
     }
 
     private static void performPush(RegisterDeviceService.Client client, List<ThriftAgentProcessInfo> thriftAgentProcessInfos){
+
+        
 
     }
 

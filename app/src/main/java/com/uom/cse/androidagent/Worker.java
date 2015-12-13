@@ -24,7 +24,7 @@ public class Worker extends Thread
     private volatile boolean keepWorking = true;
     // Local refrence to the CEP - engine
     private EPRuntime engine;
-private TextView textView;
+    private TextView textView;
     private Context context;
     public Handler handler;
     /**

@@ -3,6 +3,7 @@ package com.uom.cse.androidagent.thriftServer;
 import android.os.Bundle;
 import android.os.Message;
 
+import com.uom.cse.androidagent.AsperConfig;
 import com.uom.cse.androidagent.MainActivity;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.Processinfo;
@@ -265,4 +266,12 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
     public boolean testNetwork(ByteBuffer data) throws TException {
         return true;
     }
+
+    @Override
+    public boolean deployCommand(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process) throws TException {
+        AsperConfig.AsperQueryBuilder(cpuUsage,ramUsage,receiveData,sentData,timeInterval,process,infoManager);
+        return false;
+    }
+
+
 }
