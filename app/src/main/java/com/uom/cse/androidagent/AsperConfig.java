@@ -32,18 +32,18 @@ public class AsperConfig {
 
     public static void AsperQueryBuilder(short cpuUsage,short ramUsage,short receiveData,short sentData,short timeInterval,String process,UsageInfoManager infoManager){
 
-        String statement = "select processName,mac,avg(cpuUsage),avg(ramUsage),avg(sentData),avg(receiveData) from " + ProcessInfoEventAdapter.EVENT_NAME;
+        String statement = "select processName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
 
         if(timeInterval != 0){
-            statement += ".win:time_batch(" + timeInterval * 60 +"sec)";
+            statement += ".win:time_batch(" + timeInterval * 60 +"sec) group by processName";
             //statement += ".win:time_batch(10sec)";
         }
         if(process != ""){
-            statement += " where name in (" + getProcessesToQuery(process) +") and";
+            statement += " where processName in (" + getProcessesToQuery(process) +") and";
             //statement += " where name in ('nameone','name')";
         }
 
-        statement += " having avg(cpuUsage) > " + cpuUsage + " and avg(ramUsage) > " + ramUsage + " and avg(sentData) > " + sentData + " and avg(receiveData) >" + receiveData + " group by processName";
+        statement += " having avg(cpuUsage) > " + cpuUsage + " and avg(ramUsage) > " + ramUsage + " and avg(sentData) > " + sentData + " and avg(receiveData) >" + receiveData;
         //statement += " cpuUsage > " + filter.getCpuUsage() + " and ramUsage > " + filter.getRamUsage() + " and sentData > " + filter.getSentData() + " and receiveData >" + filter.getReceivedData();
 
 
@@ -88,6 +88,8 @@ public class AsperConfig {
                 }
             }
         };
+
+        feedingThread.start();
 
     }
 

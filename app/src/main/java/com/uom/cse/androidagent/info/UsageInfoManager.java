@@ -28,6 +28,7 @@ import java.util.TreeMap;
  * Created by Nirushan on 7/22/2015.
  */
 public class UsageInfoManager {
+
     private Context context;
     private long RAMThreadInterval = 200;
     private boolean RAMThreadFlag = true;
@@ -454,21 +455,21 @@ public class UsageInfoManager {
             for(android.os.Debug.MemoryInfo pidMemoryInfo: memoryInfoArray)
             {
                 processinfo.setProcessName(processName);
-                processinfo.setPrivateMemoryUsage(pidMemoryInfo.getTotalPrivateDirty() + "kB");
-                processinfo.setSharedMemoryUsage(pidMemoryInfo.getTotalSharedDirty() + "kB");
+                processinfo.setPrivateMemoryUsage(pidMemoryInfo.getTotalPrivateDirty());
+                processinfo.setSharedMemoryUsage(pidMemoryInfo.getTotalSharedDirty());
                 processinfo.setType(type);
                 processinfo.setPackageName(packageName);
                 processinfo.setPid(String.valueOf(runningAppProcessInfo.pid));
             }
             for(CPUUsageInfo cpuUsageInfo : processCPUdetails){
                 if(cpuUsageInfo.getPid() == runningAppProcessInfo.pid){
-                    processinfo.setCpuUsage(String.valueOf(cpuUsageInfo.getCpuUsage())+"%");
+                    processinfo.setCpuUsage(cpuUsageInfo.getCpuUsage());
                 }
             }
             long received = TrafficStats.getUidRxBytes(runningAppProcessInfo.uid)/ 1048576L;
             long send   = TrafficStats.getUidTxBytes(runningAppProcessInfo.uid)/ 1048576L;
-            processinfo.setReceivedData(String.valueOf(received)+"MB");
-            processinfo.setSentData(String.valueOf(send)+"MB");
+            processinfo.setReceivedData(received);
+            processinfo.setSentData(send);
             processinfoList.add(processinfo);
         }
         return processinfoList;
@@ -561,8 +562,8 @@ public class UsageInfoManager {
                     }
                 }
                 processinfo.setProcessName(processName);
-                processinfo.setPrivateMemoryUsage(pidMemoryInfo.getTotalPrivateDirty() + "kB");
-                processinfo.setSharedMemoryUsage(pidMemoryInfo.getTotalSharedDirty() + "kB");
+                processinfo.setPrivateMemoryUsage(pidMemoryInfo.getTotalPrivateDirty());
+                processinfo.setSharedMemoryUsage(pidMemoryInfo.getTotalSharedDirty());
                 processinfo.setType(type);
                 processinfo.setPackageName(packageName);
                 processinfo.setPid(String.valueOf(runningAppProcessInfo.pid));
@@ -575,13 +576,13 @@ public class UsageInfoManager {
                             continue outerloop;
                         }
                     }
-                    processinfo.setCpuUsage(String.valueOf(cpuUsageInfo.getCpuUsage())+"%");
+                    processinfo.setCpuUsage(cpuUsageInfo.getCpuUsage());
                 }
             }
             long received = TrafficStats.getUidRxBytes(runningAppProcessInfo.uid)/ 1048576L;
             long send   = TrafficStats.getUidTxBytes(runningAppProcessInfo.uid)/ 1048576L;
-            processinfo.setReceivedData(String.valueOf(received)+"MB");
-            processinfo.setSentData(String.valueOf(send)+"MB");
+            processinfo.setReceivedData(received);
+            processinfo.setSentData(send);
             processinfoList.add(processinfo);
         }
         return processinfoList;
@@ -682,8 +683,4 @@ public class UsageInfoManager {
         PackageManager pm = context.getPackageManager();
         return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_PROXIMITY);
     }
-
-
-
-
 }

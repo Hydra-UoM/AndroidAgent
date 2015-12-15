@@ -116,8 +116,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+        textView = (TextView)findViewById(R.id.myText);
+        textView2 = (TextView)findViewById(R.id.myText2);
+        textView3 = (TextView)findViewById(R.id.myText3);
         context = this;
 
+        infoManager = new UsageInfoManager(context);
         //registerMe();
         startActivity(new Intent(MainActivity.this, RegisterDevicePop.class));
 
@@ -125,6 +131,8 @@ public class MainActivity extends Activity {
 
         AndroidAgentServer server = new AndroidAgentServer(infoManager);
         server.start();
+
+        AsperConfig.AsperQueryBuilder((short)1, (short)10, (short)1, (short)1,(short)1,"",infoManager );
     }
 
     private void startEsper(){
@@ -133,11 +141,7 @@ public class MainActivity extends Activity {
         // get the event collection
         ArrayList<Data> eventCollection = generateData();
         //start the worker to feed the event the Asper
-        setContentView(R.layout.activity_main);
-        textView = (TextView)findViewById(R.id.myText);
-        textView2 = (TextView)findViewById(R.id.myText2);
-        textView3 = (TextView)findViewById(R.id.myText3);
-        context = this;
+
 
 
         handler = new Handler() {
@@ -193,7 +197,7 @@ public class MainActivity extends Activity {
 //        Worker worker1 =new Worker("Worker 1",eventCollection,getContext(),textView, handler);
 //        worker1.start();
 
-        infoManager = new UsageInfoManager(context);
+        /*
 
         Thread feedingThread = new Thread(){
             @Override
@@ -241,6 +245,7 @@ public class MainActivity extends Activity {
 
         feedingThread2.start();
 
+        */
     }
 
     @Override

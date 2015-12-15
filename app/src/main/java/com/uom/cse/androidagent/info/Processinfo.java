@@ -9,15 +9,15 @@ public class Processinfo {
 
     private String packageName;
 
-    private String cpuUsage;
+    private double cpuUsage;
 
-    private String privateMemoryUsage;
+    private double privateMemoryUsage;
 
-    private String sharedMemoryUsage;
+    private double sharedMemoryUsage;
 
-    private String sentData;
+    private double sentData;
     
-    private String receivedData;
+    private double receivedData;
 
     private String type;
 
@@ -34,19 +34,19 @@ public class Processinfo {
 
 
 
-    public String getSentData() {
+    public double getSentData() {
         return sentData;
     }
 
-    public void setSentData(String sentData) {
+    public void setSentData(double sentData) {
         this.sentData = sentData;
     }
 
-    public String getReceivedData() {
+    public double getReceivedData() {
         return receivedData;
     }
 
-    public void setReceivedData(String receivedData) {
+    public void setReceivedData(double receivedData) {
         this.receivedData = receivedData;
     }
 
@@ -66,27 +66,27 @@ public class Processinfo {
         this.pid = pid;
     }
 
-    public String getCpuUsage() {
+    public double getCpuUsage() {
         return cpuUsage;
     }
 
-    public void setCpuUsage(String cpuUsage) {
+    public void setCpuUsage(double cpuUsage) {
         this.cpuUsage = cpuUsage;
     }
 
-    public String getPrivateMemoryUsage() {
+    public double getPrivateMemoryUsage() {
         return privateMemoryUsage;
     }
 
-    public void setPrivateMemoryUsage(String privateMemoryUsage) {
+    public void setPrivateMemoryUsage(double privateMemoryUsage) {
         this.privateMemoryUsage = privateMemoryUsage;
     }
 
-    public String getSharedMemoryUsage() {
+    public double getSharedMemoryUsage() {
         return sharedMemoryUsage;
     }
 
-    public void setSharedMemoryUsage(String sharedMemoryUsage) {
+    public void setSharedMemoryUsage(double sharedMemoryUsage) {
         this.sharedMemoryUsage = sharedMemoryUsage;
     }
 

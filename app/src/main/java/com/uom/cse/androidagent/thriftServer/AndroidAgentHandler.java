@@ -150,13 +150,13 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
             TProcessInfo tempProcessInfo = new TProcessInfo();
             tempProcessInfo.setName(processinfo.getProcessName());
             tempProcessInfo.setPackageName(processinfo.getPackageName());
-            tempProcessInfo.setSharedRAMUsage(processinfo.getSharedMemoryUsage());
-            tempProcessInfo.setProcessCPUUsage(processinfo.getCpuUsage());
-            tempProcessInfo.setSentData(processinfo.getSentData());
-            tempProcessInfo.setReceiveData(processinfo.getReceivedData());
-            tempProcessInfo.setPrivateRAMUsage(processinfo.getPrivateMemoryUsage());
-            tempProcessInfo.setPid(processinfo.getPid());
-            tempProcessInfo.setType(processinfo.getType());
+            tempProcessInfo.setSharedRAMUsage(String.valueOf(processinfo.getSharedMemoryUsage()));
+            tempProcessInfo.setProcessCPUUsage(String.valueOf(processinfo.getCpuUsage()));
+            tempProcessInfo.setSentData(String.valueOf(processinfo.getSentData()));
+            tempProcessInfo.setReceiveData(String.valueOf(processinfo.getReceivedData()));
+            tempProcessInfo.setPrivateRAMUsage(String.valueOf(processinfo.getPrivateMemoryUsage()));
+            tempProcessInfo.setPid(String.valueOf(processinfo.getPid()));
+            tempProcessInfo.setType(String.valueOf(processinfo.getType()));
             processInfoCollection.add(tempProcessInfo);
         }
         return processInfoCollection;
@@ -250,13 +250,13 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
             TProcessInfo tempProcessInfo = new TProcessInfo();
             tempProcessInfo.setName(processinfo.getProcessName());
             tempProcessInfo.setPackageName(processinfo.getPackageName());
-            tempProcessInfo.setSharedRAMUsage(processinfo.getSharedMemoryUsage());
-            tempProcessInfo.setProcessCPUUsage(processinfo.getCpuUsage());
-            tempProcessInfo.setSentData(processinfo.getSentData());
-            tempProcessInfo.setReceiveData(processinfo.getReceivedData());
-            tempProcessInfo.setPrivateRAMUsage(processinfo.getPrivateMemoryUsage());
-            tempProcessInfo.setPid(processinfo.getPid());
-            tempProcessInfo.setType(processinfo.getType());
+            tempProcessInfo.setSharedRAMUsage(String.valueOf(processinfo.getSharedMemoryUsage()));
+            tempProcessInfo.setProcessCPUUsage(String.valueOf(processinfo.getCpuUsage()));
+            tempProcessInfo.setSentData(String.valueOf(processinfo.getSentData()));
+            tempProcessInfo.setReceiveData(String.valueOf(processinfo.getReceivedData()));
+            tempProcessInfo.setPrivateRAMUsage(String.valueOf(processinfo.getPrivateMemoryUsage()));
+            tempProcessInfo.setPid(String.valueOf(processinfo.getPid()));
+            tempProcessInfo.setType(String.valueOf(processinfo.getType()));
             processInfoCollection.add(tempProcessInfo);
         }
         return processInfoCollection;
