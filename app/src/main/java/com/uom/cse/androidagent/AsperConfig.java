@@ -32,6 +32,8 @@ public class AsperConfig {
 
     public static void AsperQueryBuilder(short cpuUsage,short ramUsage,short receiveData,short sentData,short timeInterval,String process,UsageInfoManager infoManager){
 
+        Asper.reset();
+
         String statement = "select processName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
 
         if(timeInterval != 0){
@@ -55,7 +57,7 @@ public class AsperConfig {
 
     public static void feedEvent(final UsageInfoManager infoManager){
         //to reset the previous queries and listeners
-        Asper.reset();
+
 
         Thread feedingThread = new Thread(){
             @Override

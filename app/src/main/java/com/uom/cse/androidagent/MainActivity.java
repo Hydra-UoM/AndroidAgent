@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
         AndroidAgentServer server = new AndroidAgentServer(infoManager);
         server.start();
 
-        AsperConfig.AsperQueryBuilder((short)1, (short)10, (short)1, (short)1,(short)1,"",infoManager );
+        AsperConfig.AsperQueryBuilder((short)0, (short)0, (short)0, (short)0,(short)0,"",infoManager );
     }
 
     private void startEsper(){
@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
             public void handleMessage(Message msg) {
 
                 String aResponse = msg.getData().getString("message");
-                textView2.setText(aResponse);
+                textView2.setText( textView2.getText() + aResponse);
 
             }
         };
