@@ -30,7 +30,7 @@ public class Generator
     public static Data make(Event event)
     {
         List<Variable> variables = event.getVariables();
-        variables.get(variables.size() - 1).setValue(sequence++);
+      //  variables.get(variables.size() - 1).setValue(sequence++);
         event.setVariables(variables);
 
         return create(event);
