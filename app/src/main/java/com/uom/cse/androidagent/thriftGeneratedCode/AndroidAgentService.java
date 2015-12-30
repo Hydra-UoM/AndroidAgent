@@ -67,11 +67,11 @@ public class AndroidAgentService {
 
     public boolean removeAllCommands() throws TException;
 
-    public boolean getFullInfoWithoutProcessing() throws TException;
+    public boolean getFullInfoWithoutProcessing(short timeInterval) throws TException;
 
-    public boolean getCriticalInfoWithoutProcessing() throws TException;
+    public boolean getCriticalInfoWithoutProcessing(short timeInterval) throws TException;
 
-    public boolean getCriticalWithProcessing() throws TException;
+    public boolean getCriticalWithProcessing(short timeInterval) throws TException;
 
   }
 
@@ -107,11 +107,11 @@ public class AndroidAgentService {
 
     public void removeAllCommands(AsyncMethodCallback resultHandler) throws TException;
 
-    public void getFullInfoWithoutProcessing(AsyncMethodCallback resultHandler) throws TException;
+    public void getFullInfoWithoutProcessing(short timeInterval, AsyncMethodCallback resultHandler) throws TException;
 
-    public void getCriticalInfoWithoutProcessing(AsyncMethodCallback resultHandler) throws TException;
+    public void getCriticalInfoWithoutProcessing(short timeInterval, AsyncMethodCallback resultHandler) throws TException;
 
-    public void getCriticalWithProcessing(AsyncMethodCallback resultHandler) throws TException;
+    public void getCriticalWithProcessing(short timeInterval, AsyncMethodCallback resultHandler) throws TException;
 
   }
 
@@ -475,15 +475,16 @@ public class AndroidAgentService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "removeAllCommands failed: unknown result");
     }
 
-    public boolean getFullInfoWithoutProcessing() throws TException
+    public boolean getFullInfoWithoutProcessing(short timeInterval) throws TException
     {
-      send_getFullInfoWithoutProcessing();
+      send_getFullInfoWithoutProcessing(timeInterval);
       return recv_getFullInfoWithoutProcessing();
     }
 
-    public void send_getFullInfoWithoutProcessing() throws TException
+    public void send_getFullInfoWithoutProcessing(short timeInterval) throws TException
     {
       getFullInfoWithoutProcessing_args args = new getFullInfoWithoutProcessing_args();
+      args.setTimeInterval(timeInterval);
       sendBase("getFullInfoWithoutProcessing", args);
     }
 
@@ -497,15 +498,16 @@ public class AndroidAgentService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getFullInfoWithoutProcessing failed: unknown result");
     }
 
-    public boolean getCriticalInfoWithoutProcessing() throws TException
+    public boolean getCriticalInfoWithoutProcessing(short timeInterval) throws TException
     {
-      send_getCriticalInfoWithoutProcessing();
+      send_getCriticalInfoWithoutProcessing(timeInterval);
       return recv_getCriticalInfoWithoutProcessing();
     }
 
-    public void send_getCriticalInfoWithoutProcessing() throws TException
+    public void send_getCriticalInfoWithoutProcessing(short timeInterval) throws TException
     {
       getCriticalInfoWithoutProcessing_args args = new getCriticalInfoWithoutProcessing_args();
+      args.setTimeInterval(timeInterval);
       sendBase("getCriticalInfoWithoutProcessing", args);
     }
 
@@ -519,15 +521,16 @@ public class AndroidAgentService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getCriticalInfoWithoutProcessing failed: unknown result");
     }
 
-    public boolean getCriticalWithProcessing() throws TException
+    public boolean getCriticalWithProcessing(short timeInterval) throws TException
     {
-      send_getCriticalWithProcessing();
+      send_getCriticalWithProcessing(timeInterval);
       return recv_getCriticalWithProcessing();
     }
 
-    public void send_getCriticalWithProcessing() throws TException
+    public void send_getCriticalWithProcessing(short timeInterval) throws TException
     {
       getCriticalWithProcessing_args args = new getCriticalWithProcessing_args();
+      args.setTimeInterval(timeInterval);
       sendBase("getCriticalWithProcessing", args);
     }
 
@@ -1024,21 +1027,24 @@ public class AndroidAgentService {
       }
     }
 
-    public void getFullInfoWithoutProcessing(AsyncMethodCallback resultHandler) throws TException {
+    public void getFullInfoWithoutProcessing(short timeInterval, AsyncMethodCallback resultHandler) throws TException {
       checkReady();
-      getFullInfoWithoutProcessing_call method_call = new getFullInfoWithoutProcessing_call(resultHandler, this, ___protocolFactory, ___transport);
+      getFullInfoWithoutProcessing_call method_call = new getFullInfoWithoutProcessing_call(timeInterval, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getFullInfoWithoutProcessing_call extends org.apache.thrift.async.TAsyncMethodCall {
-      public getFullInfoWithoutProcessing_call(AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
+      private short timeInterval;
+      public getFullInfoWithoutProcessing_call(short timeInterval, AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.timeInterval = timeInterval;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getFullInfoWithoutProcessing", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getFullInfoWithoutProcessing_args args = new getFullInfoWithoutProcessing_args();
+        args.setTimeInterval(timeInterval);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1053,21 +1059,24 @@ public class AndroidAgentService {
       }
     }
 
-    public void getCriticalInfoWithoutProcessing(AsyncMethodCallback resultHandler) throws TException {
+    public void getCriticalInfoWithoutProcessing(short timeInterval, AsyncMethodCallback resultHandler) throws TException {
       checkReady();
-      getCriticalInfoWithoutProcessing_call method_call = new getCriticalInfoWithoutProcessing_call(resultHandler, this, ___protocolFactory, ___transport);
+      getCriticalInfoWithoutProcessing_call method_call = new getCriticalInfoWithoutProcessing_call(timeInterval, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getCriticalInfoWithoutProcessing_call extends org.apache.thrift.async.TAsyncMethodCall {
-      public getCriticalInfoWithoutProcessing_call(AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
+      private short timeInterval;
+      public getCriticalInfoWithoutProcessing_call(short timeInterval, AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.timeInterval = timeInterval;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getCriticalInfoWithoutProcessing", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getCriticalInfoWithoutProcessing_args args = new getCriticalInfoWithoutProcessing_args();
+        args.setTimeInterval(timeInterval);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1082,21 +1091,24 @@ public class AndroidAgentService {
       }
     }
 
-    public void getCriticalWithProcessing(AsyncMethodCallback resultHandler) throws TException {
+    public void getCriticalWithProcessing(short timeInterval, AsyncMethodCallback resultHandler) throws TException {
       checkReady();
-      getCriticalWithProcessing_call method_call = new getCriticalWithProcessing_call(resultHandler, this, ___protocolFactory, ___transport);
+      getCriticalWithProcessing_call method_call = new getCriticalWithProcessing_call(timeInterval, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getCriticalWithProcessing_call extends org.apache.thrift.async.TAsyncMethodCall {
-      public getCriticalWithProcessing_call(AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
+      private short timeInterval;
+      public getCriticalWithProcessing_call(short timeInterval, AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.timeInterval = timeInterval;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getCriticalWithProcessing", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getCriticalWithProcessing_args args = new getCriticalWithProcessing_args();
+        args.setTimeInterval(timeInterval);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1463,7 +1475,7 @@ public class AndroidAgentService {
 
       public getFullInfoWithoutProcessing_result getResult(I iface, getFullInfoWithoutProcessing_args args) throws TException {
         getFullInfoWithoutProcessing_result result = new getFullInfoWithoutProcessing_result();
-        result.success = iface.getFullInfoWithoutProcessing();
+        result.success = iface.getFullInfoWithoutProcessing(args.timeInterval);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -1484,7 +1496,7 @@ public class AndroidAgentService {
 
       public getCriticalInfoWithoutProcessing_result getResult(I iface, getCriticalInfoWithoutProcessing_args args) throws TException {
         getCriticalInfoWithoutProcessing_result result = new getCriticalInfoWithoutProcessing_result();
-        result.success = iface.getCriticalInfoWithoutProcessing();
+        result.success = iface.getCriticalInfoWithoutProcessing(args.timeInterval);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -1505,7 +1517,7 @@ public class AndroidAgentService {
 
       public getCriticalWithProcessing_result getResult(I iface, getCriticalWithProcessing_args args) throws TException {
         getCriticalWithProcessing_result result = new getCriticalWithProcessing_result();
-        result.success = iface.getCriticalWithProcessing();
+        result.success = iface.getCriticalWithProcessing(args.timeInterval);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -2361,7 +2373,7 @@ public class AndroidAgentService {
       }
 
       public void start(I iface, getFullInfoWithoutProcessing_args args, AsyncMethodCallback<Boolean> resultHandler) throws TException {
-        iface.getFullInfoWithoutProcessing(resultHandler);
+        iface.getFullInfoWithoutProcessing(args.timeInterval,resultHandler);
       }
     }
 
@@ -2413,7 +2425,7 @@ public class AndroidAgentService {
       }
 
       public void start(I iface, getCriticalInfoWithoutProcessing_args args, AsyncMethodCallback<Boolean> resultHandler) throws TException {
-        iface.getCriticalInfoWithoutProcessing(resultHandler);
+        iface.getCriticalInfoWithoutProcessing(args.timeInterval,resultHandler);
       }
     }
 
@@ -2465,7 +2477,7 @@ public class AndroidAgentService {
       }
 
       public void start(I iface, getCriticalWithProcessing_args args, AsyncMethodCallback<Boolean> resultHandler) throws TException {
-        iface.getCriticalWithProcessing(resultHandler);
+        iface.getCriticalWithProcessing(args.timeInterval,resultHandler);
       }
     }
 
@@ -13050,6 +13062,7 @@ public class AndroidAgentService {
   public static class getFullInfoWithoutProcessing_args implements org.apache.thrift.TBase<getFullInfoWithoutProcessing_args, getFullInfoWithoutProcessing_args._Fields>, java.io.Serializable, Cloneable, Comparable<getFullInfoWithoutProcessing_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getFullInfoWithoutProcessing_args");
 
+    private static final org.apache.thrift.protocol.TField TIME_INTERVAL_FIELD_DESC = new org.apache.thrift.protocol.TField("timeInterval", org.apache.thrift.protocol.TType.I16, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -13057,10 +13070,11 @@ public class AndroidAgentService {
       schemes.put(TupleScheme.class, new getFullInfoWithoutProcessing_argsTupleSchemeFactory());
     }
 
+    public short timeInterval; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      TIME_INTERVAL((short)1, "timeInterval");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -13075,6 +13089,8 @@ public class AndroidAgentService {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 1: // TIME_INTERVAL
+            return TIME_INTERVAL;
           default:
             return null;
         }
@@ -13113,9 +13129,15 @@ public class AndroidAgentService {
         return _fieldName;
       }
     }
+
+    // isset id assignments
+    private static final int __TIMEINTERVAL_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.TIME_INTERVAL, new org.apache.thrift.meta_data.FieldMetaData("timeInterval", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getFullInfoWithoutProcessing_args.class, metaDataMap);
     }
@@ -13123,10 +13145,20 @@ public class AndroidAgentService {
     public getFullInfoWithoutProcessing_args() {
     }
 
+    public getFullInfoWithoutProcessing_args(
+      short timeInterval)
+    {
+      this();
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+    }
+
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public getFullInfoWithoutProcessing_args(getFullInfoWithoutProcessing_args other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.timeInterval = other.timeInterval;
     }
 
     public getFullInfoWithoutProcessing_args deepCopy() {
@@ -13135,15 +13167,51 @@ public class AndroidAgentService {
 
     @Override
     public void clear() {
+      setTimeIntervalIsSet(false);
+      this.timeInterval = 0;
+    }
+
+    public short getTimeInterval() {
+      return this.timeInterval;
+    }
+
+    public getFullInfoWithoutProcessing_args setTimeInterval(short timeInterval) {
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+      return this;
+    }
+
+    public void unsetTimeInterval() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    /** Returns true if field timeInterval is set (has been assigned a value) and false otherwise */
+    public boolean isSetTimeInterval() {
+      return EncodingUtils.testBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    public void setTimeIntervalIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case TIME_INTERVAL:
+        if (value == null) {
+          unsetTimeInterval();
+        } else {
+          setTimeInterval((Short)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case TIME_INTERVAL:
+        return Short.valueOf(getTimeInterval());
+
       }
       throw new IllegalStateException();
     }
@@ -13155,6 +13223,8 @@ public class AndroidAgentService {
       }
 
       switch (field) {
+      case TIME_INTERVAL:
+        return isSetTimeInterval();
       }
       throw new IllegalStateException();
     }
@@ -13172,12 +13242,26 @@ public class AndroidAgentService {
       if (that == null)
         return false;
 
+      boolean this_present_timeInterval = true;
+      boolean that_present_timeInterval = true;
+      if (this_present_timeInterval || that_present_timeInterval) {
+        if (!(this_present_timeInterval && that_present_timeInterval))
+          return false;
+        if (this.timeInterval != that.timeInterval)
+          return false;
+      }
+
       return true;
     }
 
     @Override
     public int hashCode() {
       List<Object> list = new ArrayList<Object>();
+
+      boolean present_timeInterval = true;
+      list.add(present_timeInterval);
+      if (present_timeInterval)
+        list.add(timeInterval);
 
       return list.hashCode();
     }
@@ -13190,6 +13274,16 @@ public class AndroidAgentService {
 
       int lastComparison = 0;
 
+      lastComparison = Boolean.valueOf(isSetTimeInterval()).compareTo(other.isSetTimeInterval());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTimeInterval()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.timeInterval, other.timeInterval);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -13210,6 +13304,9 @@ public class AndroidAgentService {
       StringBuilder sb = new StringBuilder("getFullInfoWithoutProcessing_args(");
       boolean first = true;
 
+      sb.append("timeInterval:");
+      sb.append(this.timeInterval);
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -13229,6 +13326,8 @@ public class AndroidAgentService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (TException te) {
         throw new java.io.IOException(te);
@@ -13253,6 +13352,14 @@ public class AndroidAgentService {
             break;
           }
           switch (schemeField.id) {
+            case 1: // TIME_INTERVAL
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.timeInterval = iprot.readI16();
+                struct.setTimeIntervalIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -13268,6 +13375,9 @@ public class AndroidAgentService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldBegin(TIME_INTERVAL_FIELD_DESC);
+        oprot.writeI16(struct.timeInterval);
+        oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -13285,11 +13395,24 @@ public class AndroidAgentService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, getFullInfoWithoutProcessing_args struct) throws TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetTimeInterval()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetTimeInterval()) {
+          oprot.writeI16(struct.timeInterval);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, getFullInfoWithoutProcessing_args struct) throws TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.timeInterval = iprot.readI16();
+          struct.setTimeIntervalIsSet(true);
+        }
       }
     }
 
@@ -13659,6 +13782,7 @@ public class AndroidAgentService {
   public static class getCriticalInfoWithoutProcessing_args implements org.apache.thrift.TBase<getCriticalInfoWithoutProcessing_args, getCriticalInfoWithoutProcessing_args._Fields>, java.io.Serializable, Cloneable, Comparable<getCriticalInfoWithoutProcessing_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getCriticalInfoWithoutProcessing_args");
 
+    private static final org.apache.thrift.protocol.TField TIME_INTERVAL_FIELD_DESC = new org.apache.thrift.protocol.TField("timeInterval", org.apache.thrift.protocol.TType.I16, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -13666,10 +13790,11 @@ public class AndroidAgentService {
       schemes.put(TupleScheme.class, new getCriticalInfoWithoutProcessing_argsTupleSchemeFactory());
     }
 
+    public short timeInterval; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      TIME_INTERVAL((short)1, "timeInterval");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -13684,6 +13809,8 @@ public class AndroidAgentService {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 1: // TIME_INTERVAL
+            return TIME_INTERVAL;
           default:
             return null;
         }
@@ -13722,9 +13849,15 @@ public class AndroidAgentService {
         return _fieldName;
       }
     }
+
+    // isset id assignments
+    private static final int __TIMEINTERVAL_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.TIME_INTERVAL, new org.apache.thrift.meta_data.FieldMetaData("timeInterval", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getCriticalInfoWithoutProcessing_args.class, metaDataMap);
     }
@@ -13732,10 +13865,20 @@ public class AndroidAgentService {
     public getCriticalInfoWithoutProcessing_args() {
     }
 
+    public getCriticalInfoWithoutProcessing_args(
+      short timeInterval)
+    {
+      this();
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+    }
+
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public getCriticalInfoWithoutProcessing_args(getCriticalInfoWithoutProcessing_args other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.timeInterval = other.timeInterval;
     }
 
     public getCriticalInfoWithoutProcessing_args deepCopy() {
@@ -13744,15 +13887,51 @@ public class AndroidAgentService {
 
     @Override
     public void clear() {
+      setTimeIntervalIsSet(false);
+      this.timeInterval = 0;
+    }
+
+    public short getTimeInterval() {
+      return this.timeInterval;
+    }
+
+    public getCriticalInfoWithoutProcessing_args setTimeInterval(short timeInterval) {
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+      return this;
+    }
+
+    public void unsetTimeInterval() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    /** Returns true if field timeInterval is set (has been assigned a value) and false otherwise */
+    public boolean isSetTimeInterval() {
+      return EncodingUtils.testBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    public void setTimeIntervalIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case TIME_INTERVAL:
+        if (value == null) {
+          unsetTimeInterval();
+        } else {
+          setTimeInterval((Short)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case TIME_INTERVAL:
+        return Short.valueOf(getTimeInterval());
+
       }
       throw new IllegalStateException();
     }
@@ -13764,6 +13943,8 @@ public class AndroidAgentService {
       }
 
       switch (field) {
+      case TIME_INTERVAL:
+        return isSetTimeInterval();
       }
       throw new IllegalStateException();
     }
@@ -13781,12 +13962,26 @@ public class AndroidAgentService {
       if (that == null)
         return false;
 
+      boolean this_present_timeInterval = true;
+      boolean that_present_timeInterval = true;
+      if (this_present_timeInterval || that_present_timeInterval) {
+        if (!(this_present_timeInterval && that_present_timeInterval))
+          return false;
+        if (this.timeInterval != that.timeInterval)
+          return false;
+      }
+
       return true;
     }
 
     @Override
     public int hashCode() {
       List<Object> list = new ArrayList<Object>();
+
+      boolean present_timeInterval = true;
+      list.add(present_timeInterval);
+      if (present_timeInterval)
+        list.add(timeInterval);
 
       return list.hashCode();
     }
@@ -13799,6 +13994,16 @@ public class AndroidAgentService {
 
       int lastComparison = 0;
 
+      lastComparison = Boolean.valueOf(isSetTimeInterval()).compareTo(other.isSetTimeInterval());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTimeInterval()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.timeInterval, other.timeInterval);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -13819,6 +14024,9 @@ public class AndroidAgentService {
       StringBuilder sb = new StringBuilder("getCriticalInfoWithoutProcessing_args(");
       boolean first = true;
 
+      sb.append("timeInterval:");
+      sb.append(this.timeInterval);
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -13838,6 +14046,8 @@ public class AndroidAgentService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (TException te) {
         throw new java.io.IOException(te);
@@ -13862,6 +14072,14 @@ public class AndroidAgentService {
             break;
           }
           switch (schemeField.id) {
+            case 1: // TIME_INTERVAL
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.timeInterval = iprot.readI16();
+                struct.setTimeIntervalIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -13877,6 +14095,9 @@ public class AndroidAgentService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldBegin(TIME_INTERVAL_FIELD_DESC);
+        oprot.writeI16(struct.timeInterval);
+        oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -13894,11 +14115,24 @@ public class AndroidAgentService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, getCriticalInfoWithoutProcessing_args struct) throws TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetTimeInterval()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetTimeInterval()) {
+          oprot.writeI16(struct.timeInterval);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, getCriticalInfoWithoutProcessing_args struct) throws TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.timeInterval = iprot.readI16();
+          struct.setTimeIntervalIsSet(true);
+        }
       }
     }
 
@@ -14268,6 +14502,7 @@ public class AndroidAgentService {
   public static class getCriticalWithProcessing_args implements org.apache.thrift.TBase<getCriticalWithProcessing_args, getCriticalWithProcessing_args._Fields>, java.io.Serializable, Cloneable, Comparable<getCriticalWithProcessing_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getCriticalWithProcessing_args");
 
+    private static final org.apache.thrift.protocol.TField TIME_INTERVAL_FIELD_DESC = new org.apache.thrift.protocol.TField("timeInterval", org.apache.thrift.protocol.TType.I16, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -14275,10 +14510,11 @@ public class AndroidAgentService {
       schemes.put(TupleScheme.class, new getCriticalWithProcessing_argsTupleSchemeFactory());
     }
 
+    public short timeInterval; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      TIME_INTERVAL((short)1, "timeInterval");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -14293,6 +14529,8 @@ public class AndroidAgentService {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 1: // TIME_INTERVAL
+            return TIME_INTERVAL;
           default:
             return null;
         }
@@ -14331,9 +14569,15 @@ public class AndroidAgentService {
         return _fieldName;
       }
     }
+
+    // isset id assignments
+    private static final int __TIMEINTERVAL_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.TIME_INTERVAL, new org.apache.thrift.meta_data.FieldMetaData("timeInterval", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I16)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getCriticalWithProcessing_args.class, metaDataMap);
     }
@@ -14341,10 +14585,20 @@ public class AndroidAgentService {
     public getCriticalWithProcessing_args() {
     }
 
+    public getCriticalWithProcessing_args(
+      short timeInterval)
+    {
+      this();
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+    }
+
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public getCriticalWithProcessing_args(getCriticalWithProcessing_args other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.timeInterval = other.timeInterval;
     }
 
     public getCriticalWithProcessing_args deepCopy() {
@@ -14353,15 +14607,51 @@ public class AndroidAgentService {
 
     @Override
     public void clear() {
+      setTimeIntervalIsSet(false);
+      this.timeInterval = 0;
+    }
+
+    public short getTimeInterval() {
+      return this.timeInterval;
+    }
+
+    public getCriticalWithProcessing_args setTimeInterval(short timeInterval) {
+      this.timeInterval = timeInterval;
+      setTimeIntervalIsSet(true);
+      return this;
+    }
+
+    public void unsetTimeInterval() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    /** Returns true if field timeInterval is set (has been assigned a value) and false otherwise */
+    public boolean isSetTimeInterval() {
+      return EncodingUtils.testBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID);
+    }
+
+    public void setTimeIntervalIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __TIMEINTERVAL_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case TIME_INTERVAL:
+        if (value == null) {
+          unsetTimeInterval();
+        } else {
+          setTimeInterval((Short)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case TIME_INTERVAL:
+        return Short.valueOf(getTimeInterval());
+
       }
       throw new IllegalStateException();
     }
@@ -14373,6 +14663,8 @@ public class AndroidAgentService {
       }
 
       switch (field) {
+      case TIME_INTERVAL:
+        return isSetTimeInterval();
       }
       throw new IllegalStateException();
     }
@@ -14390,12 +14682,26 @@ public class AndroidAgentService {
       if (that == null)
         return false;
 
+      boolean this_present_timeInterval = true;
+      boolean that_present_timeInterval = true;
+      if (this_present_timeInterval || that_present_timeInterval) {
+        if (!(this_present_timeInterval && that_present_timeInterval))
+          return false;
+        if (this.timeInterval != that.timeInterval)
+          return false;
+      }
+
       return true;
     }
 
     @Override
     public int hashCode() {
       List<Object> list = new ArrayList<Object>();
+
+      boolean present_timeInterval = true;
+      list.add(present_timeInterval);
+      if (present_timeInterval)
+        list.add(timeInterval);
 
       return list.hashCode();
     }
@@ -14408,6 +14714,16 @@ public class AndroidAgentService {
 
       int lastComparison = 0;
 
+      lastComparison = Boolean.valueOf(isSetTimeInterval()).compareTo(other.isSetTimeInterval());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTimeInterval()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.timeInterval, other.timeInterval);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -14428,6 +14744,9 @@ public class AndroidAgentService {
       StringBuilder sb = new StringBuilder("getCriticalWithProcessing_args(");
       boolean first = true;
 
+      sb.append("timeInterval:");
+      sb.append(this.timeInterval);
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -14447,6 +14766,8 @@ public class AndroidAgentService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (TException te) {
         throw new java.io.IOException(te);
@@ -14471,6 +14792,14 @@ public class AndroidAgentService {
             break;
           }
           switch (schemeField.id) {
+            case 1: // TIME_INTERVAL
+              if (schemeField.type == org.apache.thrift.protocol.TType.I16) {
+                struct.timeInterval = iprot.readI16();
+                struct.setTimeIntervalIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -14486,6 +14815,9 @@ public class AndroidAgentService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldBegin(TIME_INTERVAL_FIELD_DESC);
+        oprot.writeI16(struct.timeInterval);
+        oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -14503,11 +14835,24 @@ public class AndroidAgentService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, getCriticalWithProcessing_args struct) throws TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetTimeInterval()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetTimeInterval()) {
+          oprot.writeI16(struct.timeInterval);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, getCriticalWithProcessing_args struct) throws TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.timeInterval = iprot.readI16();
+          struct.setTimeIntervalIsSet(true);
+        }
       }
     }
 

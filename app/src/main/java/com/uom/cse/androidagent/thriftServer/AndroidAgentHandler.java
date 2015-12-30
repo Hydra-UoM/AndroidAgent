@@ -23,30 +23,35 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class AndroidAgentHandler implements AndroidAgentService.Iface {
-    @Override
-    public boolean removeAllCommands() throws TException {
-        return false;
-    }
-
-    @Override
-    public boolean getFullInfoWithoutProcessing() throws TException {
-        return false;
-    }
-
-    @Override
-    public boolean getCriticalInfoWithoutProcessing() throws TException {
-        return false;
-    }
-
-    @Override
-    public boolean getCriticalWithProcessing() throws TException {
-        return false;
-    }
 
     UsageInfoManager infoManager;
 
     public AndroidAgentHandler(UsageInfoManager infoManager) {
         this.infoManager = infoManager;
+    }
+
+    @Override
+    public boolean removeAllCommands() throws TException {
+        AsperConfig.stopFeed();
+        return true;
+    }
+
+    @Override
+    public boolean getFullInfoWithoutProcessing(short timeInterval) throws TException {
+        AsperConfig.sendFullInfoWithoutProcessing(timeInterval, infoManager);
+        return true;
+    }
+
+    @Override
+    public boolean getCriticalInfoWithoutProcessing(short timeInterval) throws TException {
+        AsperConfig.sendCriticalInfoWithoutProcessing(timeInterval, infoManager);
+        return true;
+    }
+
+    @Override
+    public boolean getCriticalWithProcessing(short timeInterval) throws TException {
+        AsperConfig.sendCriticalWithProcessing(timeInterval,infoManager);
+        return true;
     }
 
     @Override
