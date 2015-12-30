@@ -21,8 +21,8 @@ import com.uom.cse.androidagent.central_node_services.RegisterDeviceClient;
  * Created by Nirushan on 11/2/2015.
  */
 public class RegisterDevicePop extends Activity{
-    EditText centralNodeIP;
-    EditText centralNodeport;
+    public static EditText centralNodeIP;
+    public static EditText centralNodeport;
     Button registerButton;
     static TextView registerStatus;
 

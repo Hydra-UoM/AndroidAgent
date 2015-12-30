@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
         AndroidAgentServer server = new AndroidAgentServer(infoManager);
         server.start();
 
-        AsperConfig.AsperQueryBuilder((short)0, (short)0, (short)0, (short)0,(short)1,"Android Agent",infoManager );
+        // AsperConfig.AsperQueryBuilder((short)0, (short)0, (short)0, (short)0,(short)1,"Android Agent",infoManager );
     }
 
     private void startEsper(){

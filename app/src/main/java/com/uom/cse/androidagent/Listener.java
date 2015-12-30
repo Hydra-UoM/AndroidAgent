@@ -7,7 +7,13 @@ import android.util.Log;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
+import com.uom.cse.androidagent.central_node_services.RegisterDeviceClient;
+import com.uom.cse.androidagent.central_node_services.ThriftAgentProcessInfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
+import com.uom.cse.androidagent.popups.RegisterDevicePop;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Asper compatible listener
@@ -42,6 +48,22 @@ public class Listener implements UpdateListener
     @Override
     public void update(EventBean[] fresh, EventBean[] old)
     {
+        List<ThriftAgentProcessInfo> processedEventList = new ArrayList<>();
+        for(EventBean eventBean:fresh){
+            ThriftAgentProcessInfo processedEvents = new ThriftAgentProcessInfo();
+            processedEvents.setName(eventBean.get("processName").toString());
+            processedEvents.setPackageName(eventBean.get("packageName").toString());
+            processedEvents.setCpuUsage(Double.parseDouble(eventBean.get("avgCPU").toString()));
+            processedEvents.setRamUsage(Double.parseDouble(eventBean.get("avgRAM").toString()));
+            processedEvents.setSentData(Double.parseDouble(eventBean.get("avgSent").toString()));
+            processedEvents.setSentData(Double.parseDouble(eventBean.get("avgReceive").toString()));
+            processedEvents.setMac(eventBean.get("mac").toString());
+            processedEvents.setType("Android");
+            processedEvents.setPid("pid");
+            processedEventList.add(processedEvents);
+        }
+        RegisterDeviceClient.pushEvents(RegisterDevicePop.centralNodeIP.getText().toString(),
+                Integer.parseInt(RegisterDevicePop.centralNodeport.getText().toString()),processedEventList);
         EventBean event = fresh[0];
 
         access++;

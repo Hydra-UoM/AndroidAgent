@@ -90,7 +90,11 @@ public class RegisterDeviceClient {
 
     private static void performPush(RegisterDeviceService.Client client, List<ThriftAgentProcessInfo> thriftAgentProcessInfos){
 
-        
+        try {
+            client.pushProcessesInfo(thriftAgentProcessInfos);
+        } catch (TException e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -34,13 +34,13 @@ public class AsperConfig {
 
         Asper.reset();
 
-        String statement = "select distinct processName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
+        String statement = "select distinct pid,processName,packageName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
 
         if(timeInterval != 0){
             statement += ".win:time_batch(" + timeInterval * 60 +")";
             //statement += ".win:time_batch(60) group by processName";
         }
-        if(process != ""){
+        if(!"".equals(process)){
             statement += " where processName in (" + getProcessesToQuery(process) +")";
             //statement += " where name in ('nameone','name')";
         }

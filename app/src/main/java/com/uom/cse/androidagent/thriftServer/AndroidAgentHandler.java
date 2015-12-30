@@ -19,11 +19,33 @@ import org.apache.thrift.TException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class AndroidAgentHandler implements AndroidAgentService.Iface {
+    @Override
+    public boolean removeAllCommands() throws TException {
+        return false;
+    }
+
+    @Override
+    public boolean getFullInfoWithoutProcessing() throws TException {
+        return false;
+    }
+
+    @Override
+    public boolean getCriticalInfoWithoutProcessing() throws TException {
+        return false;
+    }
+
+    @Override
+    public boolean getCriticalWithProcessing() throws TException {
+        return false;
+    }
+
     UsageInfoManager infoManager;
 
-    public AndroidAgentHandler(UsageInfoManager infoManager){
+    public AndroidAgentHandler(UsageInfoManager infoManager) {
         this.infoManager = infoManager;
     }
 
@@ -34,7 +56,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
 
         List<TProcessInfo> result = new ArrayList<TProcessInfo>();
 
-        for (String process : runningProcesses){
+        for (String process : runningProcesses) {
             TProcessInfo processInfo = new TProcessInfo();
             processInfo.setPackageName(process);
 
@@ -43,7 +65,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
 
         Message msgObj = MainActivity.handler.obtainMessage();
         Bundle b = new Bundle();
-        String msg = "COMMAND : SEND ALL RUNNING PROCESSES"+"\n";
+        String msg = "COMMAND : SEND ALL RUNNING PROCESSES" + "\n";
 
         b.putString("message", msg);
         msgObj.setData(b);
@@ -59,7 +81,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
 
         List<RAMUsageInfo> ramUsage = infoManager.getRAMUsageInfo();
 
-        for(RAMUsageInfo tempRAMUsage : ramUsage){
+        for (RAMUsageInfo tempRAMUsage : ramUsage) {
             TProcessInfo tempProcessInfo = new TProcessInfo();
             tempProcessInfo.setPackageName(tempRAMUsage.getApplicationLabel());
             tempProcessInfo.setPrivateRAMUsage(tempRAMUsage.getPrivateMemoryUsage() + "");
@@ -69,7 +91,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
 
         Message msgObj = MainActivity.handler.obtainMessage();
         Bundle b = new Bundle();
-        String msg = "COMMAND : SEND ALL RAM USAGE"+"\n";
+        String msg = "COMMAND : SEND ALL RAM USAGE" + "\n";
 
         b.putString("message", msg);
         msgObj.setData(b);
@@ -85,7 +107,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
 
         List<CPUUsageInfo> cpuUsage = infoManager.getCPUUsageInfo();
 
-        for(CPUUsageInfo tempCPUUsage : cpuUsage){
+        for (CPUUsageInfo tempCPUUsage : cpuUsage) {
             TProcessInfo tempProcessInfo = new TProcessInfo();
             tempProcessInfo.setPackageName(tempCPUUsage.getApplicationLabel());
             tempProcessInfo.setProcessCPUUsage(tempCPUUsage.getCpuUsage() + "");
@@ -94,7 +116,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
 
         Message msgObj = MainActivity.handler.obtainMessage();
         Bundle b = new Bundle();
-        String msg = "COMMAND : SEND ALL CPU USAGE"+"\n";
+        String msg = "COMMAND : SEND ALL CPU USAGE" + "\n";
 
         b.putString("message", msg);
         msgObj.setData(b);
@@ -146,7 +168,7 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
         List<TProcessInfo> processInfoCollection = new ArrayList<>();
         List<Processinfo> processInfoList = infoManager.getprocessinfo();
 
-        for(Processinfo processinfo : processInfoList){
+        for (Processinfo processinfo : processInfoList) {
             TProcessInfo tempProcessInfo = new TProcessInfo();
             tempProcessInfo.setName(processinfo.getProcessName());
             tempProcessInfo.setPackageName(processinfo.getPackageName());
@@ -244,9 +266,9 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
     @Override
     public List<TProcessInfo> getFilteredProcessInfo(String cpuUsage, String ramUsage, String processName) throws TException {
         List<TProcessInfo> processInfoCollection = new ArrayList<>();
-        List<Processinfo> processInfoList = infoManager.getFilteredProcessinfo(cpuUsage,ramUsage,processName);
+        List<Processinfo> processInfoList = infoManager.getFilteredProcessinfo(cpuUsage, ramUsage, processName);
 
-        for(Processinfo processinfo : processInfoList){
+        for (Processinfo processinfo : processInfoList) {
             TProcessInfo tempProcessInfo = new TProcessInfo();
             tempProcessInfo.setName(processinfo.getProcessName());
             tempProcessInfo.setPackageName(processinfo.getPackageName());
@@ -268,9 +290,16 @@ public class AndroidAgentHandler implements AndroidAgentService.Iface {
     }
 
     @Override
-    public boolean deployCommand(short cpuUsage, short ramUsage, short receiveData, short sentData, short timeInterval, String process) throws TException {
-        AsperConfig.AsperQueryBuilder(cpuUsage,ramUsage,receiveData,sentData,timeInterval,process,infoManager);
-        return false;
+    public boolean deployCommand(final short cpuUsage,final short ramUsage,final short receiveData,final short sentData,final short timeInterval,final String process) throws TException {
+        Executor eventFeedExecutor = Executors.newSingleThreadExecutor();
+        // run the task using a thread from the thread pool:
+        eventFeedExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                AsperConfig.AsperQueryBuilder(cpuUsage, ramUsage, receiveData, sentData, timeInterval, process, infoManager);
+            }
+        });
+        return true;
     }
 
 
