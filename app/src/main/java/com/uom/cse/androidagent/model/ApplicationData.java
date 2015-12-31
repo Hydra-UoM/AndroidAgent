@@ -23,8 +23,10 @@ public class ApplicationData {
 
     private String _timestamp;
 
-    public ApplicationData(int id,String applicationName,String packageName,String averageCPU,String averagePrivateMemoryUsage,String averageSharedMemoryUsage,String averageSentData,String averagereceivedData,String timestamp){
-        _id = id;
+    private String _pid;
+
+    public ApplicationData(String pid,String applicationName,String packageName,String averageCPU,String averagePrivateMemoryUsage,String averageSharedMemoryUsage,String averageSentData,String averagereceivedData,String timestamp){
+        _pid = pid;
         _applicationName = applicationName;
         _packageName = packageName;
         _averageCPU = averageCPU;
@@ -108,5 +110,13 @@ public class ApplicationData {
 
     public void set_timestamp(String _timestamp) {
         this._timestamp = _timestamp;
+    }
+
+    public String get_pid() {
+        return _pid;
+    }
+
+    public void set_pid(String _pid) {
+        this._pid = _pid;
     }
 }

@@ -2,6 +2,9 @@ package com.uom.cse.androidagent.central_node_services;
 
 import android.bluetooth.BluetoothAdapter;
 
+import com.uom.cse.androidagent.eventAdapters.ProcessInfoEventAdapter;
+import com.uom.cse.androidagent.model.ApplicationData;
+import com.uom.cse.androidagent.model.DatabaseHandler;
 import com.uom.cse.androidagent.popups.RegisterDevicePop;
 
 import org.apache.thrift.TException;
@@ -83,11 +86,34 @@ public class RegisterDeviceClient {
             TProtocol protocol = new TBinaryProtocol(transport);
             RegisterDeviceService.Client client = new RegisterDeviceService.Client(protocol);
 
+            List<ApplicationData> eventsFromDB = DatabaseHandler.getInstance().getAllAppInfo();
+
+            if(!eventsFromDB.isEmpty()){
+                for(ApplicationData applicationData:eventsFromDB){
+                    ThriftAgentProcessInfo processInfo = new ThriftAgentProcessInfo();
+                    processInfo.setName(applicationData.get_applicationName());
+                    processInfo.setPackageName(applicationData.get_packageName());
+                    processInfo.setCpuUsage(Double.parseDouble(applicationData.get_averageCPU()));
+                    processInfo.setRamUsage(Double.parseDouble(applicationData.get_averageSharedMemoryUsage()));
+                    processInfo.setSentData(Double.parseDouble(applicationData.get_averageSentData()));
+                    processInfo.setReceiveData(Double.parseDouble(applicationData.get_averagereceivedData()));
+                    processInfo.setTimestamp(applicationData.get_timestamp());
+                    processInfo.setType("Android");
+                    processInfo.setPid(applicationData.get_pid());
+                    processInfo.setMac(ProcessInfoEventAdapter.getMACAddress());
+                    thriftAgentProcessInfo.add(processInfo);
+                }
+            }
+
             performPush(client,thriftAgentProcessInfo);
 
             transport.close();
 
         } catch (TException x) {
+            for(ThriftAgentProcessInfo info : thriftAgentProcessInfo){
+                ApplicationData data = new ApplicationData(info.getName(),info.getPackageName(),String.valueOf(info.getCpuUsage()),"",String.valueOf(info.getRamUsage()), String.valueOf(info.getSentData()), String.valueOf(info.getReceiveData()), info.getTimestamp(),info.getPid());
+                DatabaseHandler.getInstance().createAppInfo(data);
+            }
             x.printStackTrace();
         }
     }
