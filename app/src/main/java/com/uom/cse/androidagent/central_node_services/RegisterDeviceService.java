@@ -35,9 +35,9 @@ public class RegisterDeviceService {
 
   public interface Iface {
 
-    public void registerDevice(Device device) throws TException;
+    public boolean registerDevice(Device device) throws TException;
 
-    public void pushProcessesInfo(List<ThriftAgentProcessInfo> processes) throws TException;
+    public boolean pushProcessesInfo(List<ThriftAgentProcessInfo> processes) throws TException;
 
   }
 
@@ -69,10 +69,10 @@ public class RegisterDeviceService {
       super(iprot, oprot);
     }
 
-    public void registerDevice(Device device) throws TException
+    public boolean registerDevice(Device device) throws TException
     {
       send_registerDevice(device);
-      recv_registerDevice();
+      return recv_registerDevice();
     }
 
     public void send_registerDevice(Device device) throws TException
@@ -82,17 +82,20 @@ public class RegisterDeviceService {
       sendBase("registerDevice", args);
     }
 
-    public void recv_registerDevice() throws TException
+    public boolean recv_registerDevice() throws TException
     {
       registerDevice_result result = new registerDevice_result();
       receiveBase(result, "registerDevice");
-      return;
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "registerDevice failed: unknown result");
     }
 
-    public void pushProcessesInfo(List<ThriftAgentProcessInfo> processes) throws TException
+    public boolean pushProcessesInfo(List<ThriftAgentProcessInfo> processes) throws TException
     {
       send_pushProcessesInfo(processes);
-      recv_pushProcessesInfo();
+      return recv_pushProcessesInfo();
     }
 
     public void send_pushProcessesInfo(List<ThriftAgentProcessInfo> processes) throws TException
@@ -102,11 +105,14 @@ public class RegisterDeviceService {
       sendBase("pushProcessesInfo", args);
     }
 
-    public void recv_pushProcessesInfo() throws TException
+    public boolean recv_pushProcessesInfo() throws TException
     {
       pushProcessesInfo_result result = new pushProcessesInfo_result();
       receiveBase(result, "pushProcessesInfo");
-      return;
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "pushProcessesInfo failed: unknown result");
     }
 
   }
@@ -149,13 +155,13 @@ public class RegisterDeviceService {
         prot.writeMessageEnd();
       }
 
-      public void getResult() throws TException {
+      public boolean getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        (new Client(prot)).recv_registerDevice();
+        return (new Client(prot)).recv_registerDevice();
       }
     }
 
@@ -181,13 +187,13 @@ public class RegisterDeviceService {
         prot.writeMessageEnd();
       }
 
-      public void getResult() throws TException {
+      public boolean getResult() throws TException {
         if (getState() != State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        (new Client(prot)).recv_pushProcessesInfo();
+        return (new Client(prot)).recv_pushProcessesInfo();
       }
     }
 
@@ -224,7 +230,8 @@ public class RegisterDeviceService {
 
       public registerDevice_result getResult(I iface, registerDevice_args args) throws TException {
         registerDevice_result result = new registerDevice_result();
-        iface.registerDevice(args.device);
+        result.success = iface.registerDevice(args.device);
+        result.setSuccessIsSet(true);
         return result;
       }
     }
@@ -244,7 +251,8 @@ public class RegisterDeviceService {
 
       public pushProcessesInfo_result getResult(I iface, pushProcessesInfo_args args) throws TException {
         pushProcessesInfo_result result = new pushProcessesInfo_result();
-        iface.pushProcessesInfo(args.processes);
+        result.success = iface.pushProcessesInfo(args.processes);
+        result.setSuccessIsSet(true);
         return result;
       }
     }
@@ -267,7 +275,7 @@ public class RegisterDeviceService {
       return processMap;
     }
 
-    public static class registerDevice<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, registerDevice_args, Void> {
+    public static class registerDevice<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, registerDevice_args, Boolean> {
       public registerDevice() {
         super("registerDevice");
       }
@@ -276,11 +284,13 @@ public class RegisterDeviceService {
         return new registerDevice_args();
       }
 
-      public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+      public AsyncMethodCallback<Boolean> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new AsyncMethodCallback<Void>() { 
-          public void onComplete(Void o) {
+        return new AsyncMethodCallback<Boolean>() { 
+          public void onComplete(Boolean o) {
             registerDevice_result result = new registerDevice_result();
+            result.success = o;
+            result.setSuccessIsSet(true);
             try {
               fcall.sendResponse(fb,result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
               return;
@@ -312,12 +322,12 @@ public class RegisterDeviceService {
         return false;
       }
 
-      public void start(I iface, registerDevice_args args, AsyncMethodCallback<Void> resultHandler) throws TException {
+      public void start(I iface, registerDevice_args args, AsyncMethodCallback<Boolean> resultHandler) throws TException {
         iface.registerDevice(args.device,resultHandler);
       }
     }
 
-    public static class pushProcessesInfo<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, pushProcessesInfo_args, Void> {
+    public static class pushProcessesInfo<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, pushProcessesInfo_args, Boolean> {
       public pushProcessesInfo() {
         super("pushProcessesInfo");
       }
@@ -326,11 +336,13 @@ public class RegisterDeviceService {
         return new pushProcessesInfo_args();
       }
 
-      public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+      public AsyncMethodCallback<Boolean> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new AsyncMethodCallback<Void>() { 
-          public void onComplete(Void o) {
+        return new AsyncMethodCallback<Boolean>() { 
+          public void onComplete(Boolean o) {
             pushProcessesInfo_result result = new pushProcessesInfo_result();
+            result.success = o;
+            result.setSuccessIsSet(true);
             try {
               fcall.sendResponse(fb,result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
               return;
@@ -362,7 +374,7 @@ public class RegisterDeviceService {
         return false;
       }
 
-      public void start(I iface, pushProcessesInfo_args args, AsyncMethodCallback<Void> resultHandler) throws TException {
+      public void start(I iface, pushProcessesInfo_args args, AsyncMethodCallback<Boolean> resultHandler) throws TException {
         iface.pushProcessesInfo(args.processes,resultHandler);
       }
     }
@@ -738,6 +750,7 @@ public class RegisterDeviceService {
   public static class registerDevice_result implements org.apache.thrift.TBase<registerDevice_result, registerDevice_result._Fields>, java.io.Serializable, Cloneable, Comparable<registerDevice_result>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("registerDevice_result");
 
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -745,10 +758,11 @@ public class RegisterDeviceService {
       schemes.put(TupleScheme.class, new registerDevice_resultTupleSchemeFactory());
     }
 
+    public boolean success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      SUCCESS((short)0, "success");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -763,6 +777,8 @@ public class RegisterDeviceService {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
           default:
             return null;
         }
@@ -801,9 +817,15 @@ public class RegisterDeviceService {
         return _fieldName;
       }
     }
+
+    // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(registerDevice_result.class, metaDataMap);
     }
@@ -811,10 +833,20 @@ public class RegisterDeviceService {
     public registerDevice_result() {
     }
 
+    public registerDevice_result(
+      boolean success)
+    {
+      this();
+      this.success = success;
+      setSuccessIsSet(true);
+    }
+
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public registerDevice_result(registerDevice_result other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.success = other.success;
     }
 
     public registerDevice_result deepCopy() {
@@ -823,15 +855,51 @@ public class RegisterDeviceService {
 
     @Override
     public void clear() {
+      setSuccessIsSet(false);
+      this.success = false;
+    }
+
+    public boolean isSuccess() {
+      return this.success;
+    }
+
+    public registerDevice_result setSuccess(boolean success) {
+      this.success = success;
+      setSuccessIsSet(true);
+      return this;
+    }
+
+    public void unsetSuccess() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((Boolean)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case SUCCESS:
+        return Boolean.valueOf(isSuccess());
+
       }
       throw new IllegalStateException();
     }
@@ -843,6 +911,8 @@ public class RegisterDeviceService {
       }
 
       switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
       }
       throw new IllegalStateException();
     }
@@ -860,12 +930,26 @@ public class RegisterDeviceService {
       if (that == null)
         return false;
 
+      boolean this_present_success = true;
+      boolean that_present_success = true;
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (this.success != that.success)
+          return false;
+      }
+
       return true;
     }
 
     @Override
     public int hashCode() {
       List<Object> list = new ArrayList<Object>();
+
+      boolean present_success = true;
+      list.add(present_success);
+      if (present_success)
+        list.add(success);
 
       return list.hashCode();
     }
@@ -878,6 +962,16 @@ public class RegisterDeviceService {
 
       int lastComparison = 0;
 
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(other.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -898,6 +992,9 @@ public class RegisterDeviceService {
       StringBuilder sb = new StringBuilder("registerDevice_result(");
       boolean first = true;
 
+      sb.append("success:");
+      sb.append(this.success);
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -917,6 +1014,8 @@ public class RegisterDeviceService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (TException te) {
         throw new java.io.IOException(te);
@@ -941,6 +1040,14 @@ public class RegisterDeviceService {
             break;
           }
           switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -956,6 +1063,11 @@ public class RegisterDeviceService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.isSetSuccess()) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          oprot.writeBool(struct.success);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -973,11 +1085,24 @@ public class RegisterDeviceService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, registerDevice_result struct) throws TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          oprot.writeBool(struct.success);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, registerDevice_result struct) throws TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.success = iprot.readBool();
+          struct.setSuccessIsSet(true);
+        }
       }
     }
 
@@ -1401,6 +1526,7 @@ public class RegisterDeviceService {
   public static class pushProcessesInfo_result implements org.apache.thrift.TBase<pushProcessesInfo_result, pushProcessesInfo_result._Fields>, java.io.Serializable, Cloneable, Comparable<pushProcessesInfo_result>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("pushProcessesInfo_result");
 
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -1408,10 +1534,11 @@ public class RegisterDeviceService {
       schemes.put(TupleScheme.class, new pushProcessesInfo_resultTupleSchemeFactory());
     }
 
+    public boolean success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      SUCCESS((short)0, "success");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -1426,6 +1553,8 @@ public class RegisterDeviceService {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
           default:
             return null;
         }
@@ -1464,9 +1593,15 @@ public class RegisterDeviceService {
         return _fieldName;
       }
     }
+
+    // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(pushProcessesInfo_result.class, metaDataMap);
     }
@@ -1474,10 +1609,20 @@ public class RegisterDeviceService {
     public pushProcessesInfo_result() {
     }
 
+    public pushProcessesInfo_result(
+      boolean success)
+    {
+      this();
+      this.success = success;
+      setSuccessIsSet(true);
+    }
+
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public pushProcessesInfo_result(pushProcessesInfo_result other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.success = other.success;
     }
 
     public pushProcessesInfo_result deepCopy() {
@@ -1486,15 +1631,51 @@ public class RegisterDeviceService {
 
     @Override
     public void clear() {
+      setSuccessIsSet(false);
+      this.success = false;
+    }
+
+    public boolean isSuccess() {
+      return this.success;
+    }
+
+    public pushProcessesInfo_result setSuccess(boolean success) {
+      this.success = success;
+      setSuccessIsSet(true);
+      return this;
+    }
+
+    public void unsetSuccess() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((Boolean)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case SUCCESS:
+        return Boolean.valueOf(isSuccess());
+
       }
       throw new IllegalStateException();
     }
@@ -1506,6 +1687,8 @@ public class RegisterDeviceService {
       }
 
       switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
       }
       throw new IllegalStateException();
     }
@@ -1523,12 +1706,26 @@ public class RegisterDeviceService {
       if (that == null)
         return false;
 
+      boolean this_present_success = true;
+      boolean that_present_success = true;
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (this.success != that.success)
+          return false;
+      }
+
       return true;
     }
 
     @Override
     public int hashCode() {
       List<Object> list = new ArrayList<Object>();
+
+      boolean present_success = true;
+      list.add(present_success);
+      if (present_success)
+        list.add(success);
 
       return list.hashCode();
     }
@@ -1541,6 +1738,16 @@ public class RegisterDeviceService {
 
       int lastComparison = 0;
 
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(other.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -1561,6 +1768,9 @@ public class RegisterDeviceService {
       StringBuilder sb = new StringBuilder("pushProcessesInfo_result(");
       boolean first = true;
 
+      sb.append("success:");
+      sb.append(this.success);
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -1580,6 +1790,8 @@ public class RegisterDeviceService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (TException te) {
         throw new java.io.IOException(te);
@@ -1604,6 +1816,14 @@ public class RegisterDeviceService {
             break;
           }
           switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -1619,6 +1839,11 @@ public class RegisterDeviceService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.isSetSuccess()) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          oprot.writeBool(struct.success);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
@@ -1636,11 +1861,24 @@ public class RegisterDeviceService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, pushProcessesInfo_result struct) throws TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          oprot.writeBool(struct.success);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, pushProcessesInfo_result struct) throws TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.success = iprot.readBool();
+          struct.setSuccessIsSet(true);
+        }
       }
     }
 

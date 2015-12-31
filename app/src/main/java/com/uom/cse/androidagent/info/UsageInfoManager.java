@@ -451,6 +451,8 @@ public class UsageInfoManager {
             android.os.Debug.MemoryInfo[] memoryInfoArray = activityManager.getProcessMemoryInfo(pids);
 
             Processinfo processinfo = new Processinfo();
+            Long tsLong = System.currentTimeMillis()/1000;
+            processinfo.setTimestamp(tsLong.toString());
 
             for(android.os.Debug.MemoryInfo pidMemoryInfo: memoryInfoArray)
             {
@@ -553,6 +555,8 @@ public class UsageInfoManager {
             android.os.Debug.MemoryInfo[] memoryInfoArray = activityManager.getProcessMemoryInfo(pids);
 
             Processinfo processinfo = new Processinfo();
+            Long tsLong = System.currentTimeMillis()/1000;
+            processinfo.setTimestamp(tsLong.toString());
 
             for(android.os.Debug.MemoryInfo pidMemoryInfo: memoryInfoArray)
             {

@@ -21,7 +21,9 @@ public class ApplicationData {
 
     private String _averagereceivedData;
 
-    public ApplicationData(int id,String applicationName,String packageName,String averageCPU,String averagePrivateMemoryUsage,String averageSharedMemoryUsage,String averageSentData,String averagereceivedData){
+    private String _timestamp;
+
+    public ApplicationData(int id,String applicationName,String packageName,String averageCPU,String averagePrivateMemoryUsage,String averageSharedMemoryUsage,String averageSentData,String averagereceivedData,String timestamp){
         _id = id;
         _applicationName = applicationName;
         _packageName = packageName;
@@ -30,6 +32,7 @@ public class ApplicationData {
         _averageSharedMemoryUsage = averageSharedMemoryUsage;
         _averageSentData = averageSentData;
         _averagereceivedData = averagereceivedData;
+        set_timestamp(timestamp);
     }
 
 
@@ -97,5 +100,13 @@ public class ApplicationData {
 
     public void setId(int id) {
         this._id = id;
+    }
+
+    public String get_timestamp() {
+        return _timestamp;
+    }
+
+    public void set_timestamp(String _timestamp) {
+        this._timestamp = _timestamp;
     }
 }

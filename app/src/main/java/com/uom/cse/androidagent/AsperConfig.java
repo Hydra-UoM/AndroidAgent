@@ -40,7 +40,7 @@ public class AsperConfig {
 
         Asper.reset();
 
-        String statement = "select distinct pid,processName,packageName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
+        String statement = "select distinct timestamp,pid,processName,packageName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
 
         if(timeInterval != 0){
             statement += ".win:time_batch(" + timeInterval * 60 +")";
@@ -128,6 +128,7 @@ public class AsperConfig {
                         processedEvents.setSentData(info.getSentData());
                         processedEvents.setReceiveData(info.getReceivedData());
                         processedEvents.setMac(ProcessInfoEventAdapter.getMACAddress());
+                        processedEvents.setTimestamp(info.getTimestamp());
                         processedEvents.setType("Android");
                         processedEvents.setPid(info.getPid());
                         processedEventList.add(processedEvents);
@@ -172,6 +173,7 @@ public class AsperConfig {
                         processedEvents.setSentData(info.getSentData());
                         processedEvents.setReceiveData(info.getReceivedData());
                         processedEvents.setMac(ProcessInfoEventAdapter.getMACAddress());
+                        processedEvents.setTimestamp(info.getTimestamp());
                         processedEvents.setType("Android");
                         processedEvents.setPid(info.getPid());
                         processedEventList.add(processedEvents);
@@ -200,7 +202,7 @@ public class AsperConfig {
 
         Asper.reset();
 
-        String statement = "select distinct pid,processName,packageName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
+        String statement = "select distinct timestamp,pid,processName,packageName,mac,avg(cpuUsage) as avgCPU ,avg(ramUsage) as avgRAM ,avg(sentData) as avgSent,avg(receiveData) as avgReceive  from " + ProcessInfoEventAdapter.EVENT_NAME;
 
         if(timeInterval != 0){
             statement += ".win:time_batch(" + timeInterval * 60 +") group by processName";

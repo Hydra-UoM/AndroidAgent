@@ -57,6 +57,7 @@ public class Listener implements UpdateListener
             processedEvents.setRamUsage(Double.parseDouble(eventBean.get("avgRAM").toString()));
             processedEvents.setSentData(Double.parseDouble(eventBean.get("avgSent").toString()));
             processedEvents.setReceiveData(Double.parseDouble(eventBean.get("avgReceive").toString()));
+            processedEvents.setTimestamp(eventBean.get("timestamp").toString());
             processedEvents.setMac(eventBean.get("mac").toString());
             processedEvents.setType("Android");
             processedEvents.setPid("pid");

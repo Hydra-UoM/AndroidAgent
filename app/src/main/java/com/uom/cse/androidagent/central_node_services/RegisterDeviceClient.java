@@ -1,5 +1,7 @@
 package com.uom.cse.androidagent.central_node_services;
 
+import android.bluetooth.BluetoothAdapter;
+
 import com.uom.cse.androidagent.popups.RegisterDevicePop;
 
 import org.apache.thrift.TException;
@@ -63,7 +65,9 @@ public class RegisterDeviceClient {
     private static void perform(RegisterDeviceService.Client client,
                                 String deviceId, String IPAddress, String type) throws TException
     {
-        Device device = new Device(deviceId, IPAddress, type);
+        BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+        String deviceName = myDevice.getName();
+        Device device = new Device(deviceId, IPAddress, "", "Android", "MyGroup", deviceName);
 
         client.registerDevice(device);
     }

@@ -5,6 +5,8 @@ package com.uom.cse.androidagent.info;
  */
 public class Processinfo {
 
+    private String timestamp;
+
     private String processName;
 
     private String packageName;
@@ -96,5 +98,13 @@ public class Processinfo {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }
