@@ -1,7 +1,9 @@
-package com.uom.cse.androidagent;
+package com.uom.cse.androidagent.asper;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.uom.cse.androidagent.main.MainActivity;
 
 /**
  * Relational database

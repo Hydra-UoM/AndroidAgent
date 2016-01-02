@@ -1,4 +1,4 @@
-package com.uom.cse.androidagent;
+package com.uom.cse.androidagent.main;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,8 +11,18 @@ import android.os.Message;
 import android.text.format.Formatter;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.uom.cse.androidagent.R;
+import com.uom.cse.androidagent.asper.Asper;
+import com.uom.cse.androidagent.asper.Data;
+import com.uom.cse.androidagent.asper.Event;
+import com.uom.cse.androidagent.asper.Generator;
+import com.uom.cse.androidagent.asper.Task;
+import com.uom.cse.androidagent.asper.Variable;
 import com.uom.cse.androidagent.central_node_services.RegisterDeviceClient;
 import com.uom.cse.androidagent.eventAdapters.CPUUsageInfoEventAdapter;
 import com.uom.cse.androidagent.eventAdapters.RAMUsageInfoEventAdapter;
@@ -29,10 +39,21 @@ import java.util.List;
 
 public class MainActivity extends Activity {
 
+    public static EditText centralNodeIP;
+    public static EditText centralNodeport;
+    Button registerButton;
+    Button startService;
+    Button stopService;
+
+    static TextView registerStatus;
+
+
+    static Handler messageupdateHandler;
+
     private static Context context;
-    TextView textView;
-    TextView textView2;
-    TextView textView3;
+//    TextView textView;
+//    TextView textView2;
+//    TextView textView3;
     public static Context getContext() {
         return context;
     }
@@ -118,24 +139,55 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        textView = (TextView)findViewById(R.id.myText);
-        textView2 = (TextView)findViewById(R.id.myText2);
-        textView3 = (TextView)findViewById(R.id.myText3);
+
+        centralNodeIP = (EditText)findViewById(R.id.txtIpAddress);
+        centralNodeport = (EditText)findViewById(R.id.txtPort);
+        registerButton = (Button)findViewById(R.id.btnRegister);
+        startService = (Button)findViewById(R.id.btnStartService);
+        stopService = (Button)findViewById(R.id.btnStopService);
+        registerStatus = (TextView)findViewById(R.id.lblMsg);
+
+        registerButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View view) {
+
+                    }
+                }
+        );
+
+        startService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(),AgentService.class);
+                intent.putExtra("ip",centralNodeIP.getText().toString());
+                intent.putExtra("port",centralNodeport.getText().toString());
+                startService(intent);
+
+            }
+        });
+
+//        textView = (TextView)findViewById(R.id.myText);
+//        textView2 = (TextView)findViewById(R.id.myText2);
+//        textView3 = (TextView)findViewById(R.id.myText3);
+
         context = this;
 
-        infoManager = new UsageInfoManager(context);
+        //infoManager = new UsageInfoManager(context);
         //registerMe();
-        startActivity(new Intent(MainActivity.this, RegisterDevicePop.class));
+//        startActivity(new Intent(MainActivity.this, RegisterDevicePop.class));
 
-        startEsper();
+        //startEsper();
 
-        AndroidAgentServer server = new AndroidAgentServer(infoManager);
-        server.start();
+//        AndroidAgentServer server = new AndroidAgentServer(infoManager);
+//        server.start();
 
         //AsperConfig.AsperQueryBuilder((short)0, (short)0, (short)0, (short)0,(short)1,"Android Agent",infoManager );
     }
 
+
+
     private void startEsper(){
+
         //initiate the asper environment
         initiateAsper();
         // get the event collection
@@ -143,7 +195,7 @@ public class MainActivity extends Activity {
         //start the worker to feed the event the Asper
 
 
-
+    /*
         handler = new Handler() {
             int count = 0;
             public void handleMessage(Message msg) {
@@ -175,6 +227,8 @@ public class MainActivity extends Activity {
 
             }
         };
+
+    */
 
 //        UsageInfoManager infoManager = new UsageInfoManager(context){
 //

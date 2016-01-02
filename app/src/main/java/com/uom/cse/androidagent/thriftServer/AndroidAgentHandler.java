@@ -3,8 +3,8 @@ package com.uom.cse.androidagent.thriftServer;
 import android.os.Bundle;
 import android.os.Message;
 
-import com.uom.cse.androidagent.AsperConfig;
-import com.uom.cse.androidagent.MainActivity;
+import com.uom.cse.androidagent.asper.AsperConfig;
+import com.uom.cse.androidagent.main.MainActivity;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.Processinfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;

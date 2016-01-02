@@ -1,15 +1,18 @@
-package com.uom.cse.androidagent;
+package com.uom.cse.androidagent.asper;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 import com.uom.cse.androidagent.central_node_services.RegisterDeviceClient;
 import com.uom.cse.androidagent.central_node_services.ThriftAgentProcessInfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
+import com.uom.cse.androidagent.main.AgentService;
+import com.uom.cse.androidagent.main.MainActivity;
 import com.uom.cse.androidagent.popups.RegisterDevicePop;
 
 import java.util.ArrayList;
@@ -63,20 +66,20 @@ public class Listener implements UpdateListener
             processedEvents.setPid("pid");
             processedEventList.add(processedEvents);
         }
-        RegisterDeviceClient.pushEvents(RegisterDevicePop.centralNodeIP.getText().toString(),
-                Integer.parseInt(RegisterDevicePop.centralNodeport.getText().toString()),processedEventList);
+        RegisterDeviceClient.pushEvents(AgentService.centralNodeIP,
+                AgentService.centralNodePort,processedEventList);
         EventBean event = fresh[0];
 
         access++;
         Log.i("Asper Alert", "******************Desired event detected" + access);
-        Message msgObj = MainActivity.handler.obtainMessage();
+        /*Message msgObj = MainActivity.handler.obtainMessage();
         Bundle b = new Bundle();
         String msg = "Summary of "+event.get("processName") + "\n";
         msg +=       "  Avg RAM usage - "+ event.get("avgRAM")+ "kB Avg CPU usage - " + event.get("avgCPU") + "%\n";
 
         b.putString("message", msg);
         msgObj.setData(b);
-        MainActivity.handler2.sendMessage(msgObj);
+        MainActivity.handler2.sendMessage(msgObj); */
         //Toast.makeText(context, "*****Alert from Asper: Criricla event detected", Toast.LENGTH_LONG).show();
 
     }

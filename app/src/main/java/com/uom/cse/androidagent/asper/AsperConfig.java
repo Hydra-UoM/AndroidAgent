@@ -1,10 +1,10 @@
-package com.uom.cse.androidagent;
+package com.uom.cse.androidagent.asper;
 
+import com.uom.cse.androidagent.main.AgentService;
+import com.uom.cse.androidagent.main.MainActivity;
 import com.uom.cse.androidagent.central_node_services.RegisterDeviceClient;
 import com.uom.cse.androidagent.central_node_services.ThriftAgentProcessInfo;
-import com.uom.cse.androidagent.eventAdapters.CPUUsageInfoEventAdapter;
 import com.uom.cse.androidagent.eventAdapters.ProcessInfoEventAdapter;
-import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.Processinfo;
 import com.uom.cse.androidagent.info.UsageInfoManager;
 import com.uom.cse.androidagent.popups.RegisterDevicePop;
@@ -133,8 +133,8 @@ public class AsperConfig {
                         processedEvents.setPid(info.getPid());
                         processedEventList.add(processedEvents);
                     }
-                    RegisterDeviceClient.pushEvents(RegisterDevicePop.centralNodeIP.getText().toString(),
-                            Integer.parseInt(RegisterDevicePop.centralNodeport.getText().toString()), processedEventList);
+                    RegisterDeviceClient.pushEvents(AgentService.centralNodeIP,
+                            AgentService.centralNodePort, processedEventList);
 
                     try {
                         Thread.sleep(timeInterval * 60000);
@@ -178,8 +178,8 @@ public class AsperConfig {
                         processedEvents.setPid(info.getPid());
                         processedEventList.add(processedEvents);
                     }
-                    RegisterDeviceClient.pushEvents(RegisterDevicePop.centralNodeIP.getText().toString(),
-                            Integer.parseInt(RegisterDevicePop.centralNodeport.getText().toString()), processedEventList);
+                    RegisterDeviceClient.pushEvents(AgentService.centralNodeIP,
+                            AgentService.centralNodePort, processedEventList);
 
                     try {
                         Thread.sleep(timeInterval * 60000);

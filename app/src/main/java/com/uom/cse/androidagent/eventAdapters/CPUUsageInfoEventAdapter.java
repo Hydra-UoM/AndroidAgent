@@ -1,7 +1,7 @@
 package com.uom.cse.androidagent.eventAdapters;
 
-import com.uom.cse.androidagent.Event;
-import com.uom.cse.androidagent.Variable;
+import com.uom.cse.androidagent.asper.Event;
+import com.uom.cse.androidagent.asper.Variable;
 import com.uom.cse.androidagent.info.CPUUsageInfo;
 import com.uom.cse.androidagent.info.RAMUsageInfo;
 

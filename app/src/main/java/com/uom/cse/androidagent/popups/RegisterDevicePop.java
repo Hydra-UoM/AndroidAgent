@@ -25,7 +25,7 @@ public class RegisterDevicePop extends Activity{
     public static EditText centralNodeport;
     Button registerButton;
     static TextView registerStatus;
-
+    /*
     static Handler messageupdateHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,36 +70,36 @@ public class RegisterDevicePop extends Activity{
         String ipAddress = Formatter.formatIpAddress(wInfo.getIpAddress());
         return ipAddress;
     }
+*/
+//    public static void showRegistrationStatus(boolean state){
+//
+//        Message msgObj = messageupdateHandler.obtainMessage();
+//        Bundle b = new Bundle();
+//        String msg;
+//        if(state){
+//            msg = "Device Registered";
+//        }else{
+//            msg = "Error in Registration";
+//        }
+//        b.putString("message", msg);
+//        msgObj.setData(b);
+//        messageupdateHandler.sendMessage(msgObj);
+//    }
 
-    public static void showRegistrationStatus(boolean state){
-
-        Message msgObj = messageupdateHandler.obtainMessage();
-        Bundle b = new Bundle();
-        String msg;
-        if(state){
-            msg = "Device Registered";
-        }else{
-            msg = "Error in Registration";
-        }
-        b.putString("message", msg);
-        msgObj.setData(b);
-        messageupdateHandler.sendMessage(msgObj);
-    }
-
-    public void registerDevice(String cenralnodeIPAddress, int centralnodePort){
-
-        messageupdateHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                String aResponse = msg.getData().getString("message");
-                registerStatus.setText(aResponse);
-            }
-        };
-
-        RegisterDeviceClient.registerMeAsync(getMACAddress(), getIPAddress(), "Android",cenralnodeIPAddress,centralnodePort);
-
-
-    }
+//    public void registerDevice(String cenralnodeIPAddress, int centralnodePort){
+//
+//        messageupdateHandler = new Handler(){
+//            @Override
+//            public void handleMessage(Message msg) {
+//                String aResponse = msg.getData().getString("message");
+//                registerStatus.setText(aResponse);
+//            }
+//        };
+//
+//        RegisterDeviceClient.registerMeAsync(getMACAddress(), getIPAddress(), "Android",cenralnodeIPAddress,centralnodePort);
+//
+//
+//    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.uom.cse.androidagent;
+package com.uom.cse.androidagent.asper;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.espertech.esper.client.EPRuntime;
+import com.uom.cse.androidagent.asper.Asper;
+import com.uom.cse.androidagent.asper.Data;
+import com.uom.cse.androidagent.asper.Settings;
 
 import java.util.ArrayList;
 

@@ -3,6 +3,8 @@ package com.uom.cse.androidagent.central_node_services;
 import android.bluetooth.BluetoothAdapter;
 
 import com.uom.cse.androidagent.eventAdapters.ProcessInfoEventAdapter;
+import com.uom.cse.androidagent.main.AgentService;
+import com.uom.cse.androidagent.main.MainActivity;
 import com.uom.cse.androidagent.model.ApplicationData;
 import com.uom.cse.androidagent.model.DatabaseHandler;
 import com.uom.cse.androidagent.popups.RegisterDevicePop;
@@ -55,9 +57,9 @@ public class RegisterDeviceClient {
                     perform(client, deviceId, IPAddress, type);
 
                     transport.close();
-                    RegisterDevicePop.showRegistrationStatus(true);
+                    AgentService.showRegistrationStatus(true);
                 } catch (TException x) {
-                    RegisterDevicePop.showRegistrationStatus(false);
+                    AgentService.showRegistrationStatus(false);
                     x.printStackTrace();
                 }
             }

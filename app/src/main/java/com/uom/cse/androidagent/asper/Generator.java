@@ -1,4 +1,4 @@
-package com.uom.cse.androidagent;
+package com.uom.cse.androidagent.asper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +18,6 @@ public class Generator
     // Creation sequence.
     private static long sequence;
 
-    /**
-     * Create a collection of data-items.
-     * Each modeleded by an Event.
-     * <p/>
-     *
-     * @param amount No. of data-items one wants to generate
-     * @param event  The event type that should be modeled.
-     * @return Collection of data-items - denoted by abount
-     */
     public static Data make(Event event)
     {
         List<Variable> variables = event.getVariables();
