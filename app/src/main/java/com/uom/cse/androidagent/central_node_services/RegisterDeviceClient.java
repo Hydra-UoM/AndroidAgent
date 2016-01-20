@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class RegisterDeviceClient {
 
+    private static boolean isRegistered = false;
+
     public static void registerMe(String deviceId, String IPAddress, String type){
         try {
             TTransport transport;
@@ -58,6 +60,7 @@ public class RegisterDeviceClient {
 
                     transport.close();
                     AgentService.showRegistrationStatus(true);
+                    isRegistered = true;
                 } catch (TException x) {
                     AgentService.showRegistrationStatus(false);
                     x.printStackTrace();
@@ -75,6 +78,45 @@ public class RegisterDeviceClient {
         Device device = new Device(deviceId, IPAddress, "", "Android", "MyGroup", deviceName);
 
         client.registerDevice(device);
+    }
+
+    public static void getCommand(final String deviceId, final String IPAddress, final String type, final String centralNodeIP, final int centralNodePort){
+
+        while(!isRegistered){
+
+        }
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    TTransport transport;
+
+                    transport = new TSocket(centralNodeIP, centralNodePort);
+                    transport.open();
+
+                    TProtocol protocol = new TBinaryProtocol(transport);
+                    RegisterDeviceService.Client client = new RegisterDeviceService.Client(protocol);
+
+                    performGetCommand(client, deviceId, IPAddress, type);
+
+                    transport.close();
+                    AgentService.showCommandStatus(true);
+                } catch (TException x) {
+                    AgentService.showCommandStatus(false);
+                    x.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+
+    private static void performGetCommand(RegisterDeviceService.Client client,
+                                          String deviceId, String IPAddress, String type) throws TException{
+        BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+        String deviceName = myDevice.getName();
+        Device device = new Device(deviceId, IPAddress, "", "Android", "MyGroup", deviceName);
+
+        client.getCommands(device);
     }
 
     public static void pushEvents(final String centralNodeIP, final int centralNodePort, List<ThriftAgentProcessInfo> thriftAgentProcessInfo){
