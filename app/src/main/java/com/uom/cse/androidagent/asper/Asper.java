@@ -112,10 +112,10 @@ public class Asper
     /**
      * Register a new EPL compliant query.
      */
-    public static void addQuery(String name, String query,Context context)
+    public static void addQuery(String query,Listener listener)
     {
         EPStatement statement = administrator.createEPL(query);
-        Listener listener = new Listener("Listener-" + name,context);
+       // Listener listener = new Listener("Listener-" + name,context);
         statement.addListener(listener);
 
         queries.add(query);

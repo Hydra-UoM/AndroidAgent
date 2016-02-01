@@ -56,7 +56,7 @@ public class AsperConfig {
 
 
         Asper.addEvent(ProcessInfoEventAdapter.getSampleEvent());
-        Asper.addQuery("Selectivity", statement , MainActivity.getContext());
+        Asper.addQuery(statement, new Listener("Listener-Selectivity"));
 
         feedEvent(infoManager);
     }
@@ -210,7 +210,7 @@ public class AsperConfig {
         }
 
         Asper.addEvent(ProcessInfoEventAdapter.getSampleEvent());
-        Asper.addQuery("Selectivity", statement , MainActivity.getContext());
+        Asper.addQuery(statement, new Listener("Listener-Selectivity"));
 
         isFeedAllowed = true;
         Thread feedingThread = new Thread(){

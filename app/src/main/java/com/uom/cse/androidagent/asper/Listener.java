@@ -29,17 +29,14 @@ public class Listener implements UpdateListener
     // Access counter
     private long access;
 
-    private Context context;
-
     /**
      * Constructor
      * @param label
      */
-    public Listener(String label,Context context)
+    public Listener(String label)
     {
 
         this.label = label;
-        this.context = context;
     }
 
     /**
