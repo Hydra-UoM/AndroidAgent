@@ -59,10 +59,10 @@ public class RegisterDeviceClient {
                     perform(client, deviceId, IPAddress, type);
 
                     transport.close();
-                    AgentService.showRegistrationStatus(true);
+                    MainActivity.showRegistrationStatus(true);
                     isRegistered = true;
                 } catch (TException x) {
-                    AgentService.showRegistrationStatus(false);
+                    MainActivity.showRegistrationStatus(false);
                     x.printStackTrace();
                 }
             }
@@ -100,9 +100,9 @@ public class RegisterDeviceClient {
                     performGetCommand(client, deviceId, IPAddress, type);
 
                     transport.close();
-                    AgentService.showCommandStatus(true);
+                    MainActivity.showCommandStatus(true);
                 } catch (TException x) {
-                    AgentService.showCommandStatus(false);
+                    MainActivity.showCommandStatus(false);
                     x.printStackTrace();
                 }
             }

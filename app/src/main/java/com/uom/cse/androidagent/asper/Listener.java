@@ -66,8 +66,8 @@ public class Listener implements UpdateListener
             processedEvents.setPid("pid");
             processedEventList.add(processedEvents);
         }
-        RegisterDeviceClient.pushEvents(AgentService.centralNodeIP,
-                AgentService.centralNodePort,processedEventList);
+        RegisterDeviceClient.pushEvents(MainActivity.centralNodeIP.getText().toString(),
+                Integer.parseInt(MainActivity.centralNodeport.getText().toString()),processedEventList);
         EventBean event = fresh[0];
 
         access++;
