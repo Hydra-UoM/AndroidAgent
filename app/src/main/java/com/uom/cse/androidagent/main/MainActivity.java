@@ -41,58 +41,37 @@ public class MainActivity extends Activity {
 
     public static EditText centralNodeIP;
     public static EditText centralNodeport;
+    static TextView registerStatus;
+    static Handler messageupdateHandler;
+    private static Context context;
     Button registerButton;
     Button startService;
     Button stopService;
-
-    static TextView registerStatus;
-
-
-    static Handler messageupdateHandler;
-
-    private static Context context;
-//    TextView textView;
-//    TextView textView2;
-//    TextView textView3;
-    public static Context getContext() {
-        return context;
-    }
     public static Handler handler;
-    public static Handler handler2;
     public static Handler handler3;
     UsageInfoManager infoManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        centralNodeIP = (EditText)findViewById(R.id.txtIpAddress);
-        centralNodeport = (EditText)findViewById(R.id.txtPort);
-        registerButton = (Button)findViewById(R.id.btnRegister);
-        startService = (Button)findViewById(R.id.btnStartService);
-        stopService = (Button)findViewById(R.id.btnStopService);
-        registerStatus = (TextView)findViewById(R.id.lblMsg);
+        centralNodeIP = (EditText) findViewById(R.id.txtIpAddress);
+        centralNodeport = (EditText) findViewById(R.id.txtPort);
+        registerButton = (Button) findViewById(R.id.btnRegister);
+        startService = (Button) findViewById(R.id.btnStartService);
+        stopService = (Button) findViewById(R.id.btnStopService);
+        registerStatus = (TextView) findViewById(R.id.lblMsg);
 
         context = this;
 
         startService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(getBaseContext(),AgentService.class);
-//                intent.putExtra("ip",centralNodeIP.getText().toString());
-//                intent.putExtra("port",centralNodeport.getText().toString());
-//                startService(intent);
-
                 infoManager = new UsageInfoManager(context);
-                //registerMe();
-                //startActivity(new Intent(MainActivity.this, RegisterDevicePop.class));
-
-                //startEsper();
-
                 AndroidAgentServer server = new AndroidAgentServer(infoManager);
                 server.start();
-
                 registerDevice(centralNodeIP.getText().toString(), Integer.parseInt(centralNodeport.getText().toString()));
                 RegisterDeviceClient.getCommand(getMACAddress(), getIPAddress(), "Android", centralNodeIP.getText().toString(), Integer.parseInt(centralNodeport.getText().toString()));
 
@@ -102,23 +81,31 @@ public class MainActivity extends Activity {
 
     }
 
-    public String getMACAddress(){
+    public String getMACAddress() {
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         WifiInfo wInfo = wifiManager.getConnectionInfo();
         String macAddress = wInfo.getMacAddress();
         return macAddress;
     }
 
-    public String getIPAddress(){
+    public String getIPAddress() {
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         WifiInfo wInfo = wifiManager.getConnectionInfo();
         String ipAddress = Formatter.formatIpAddress(wInfo.getIpAddress());
         return ipAddress;
     }
 
-    public void registerDevice(String cenralnodeIPAddress, int centralnodePort){
+    public static Context getContext() {
+        return context;
+    }
 
-        messageupdateHandler = new Handler(){
+    public static void setContext(Context context) {
+        MainActivity.context = context;
+    }
+
+    public void registerDevice(String cenralnodeIPAddress, int centralnodePort) {
+
+        messageupdateHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 String aResponse = msg.getData().getString("message");
@@ -131,33 +118,36 @@ public class MainActivity extends Activity {
 
     }
 
-    public static void showRegistrationStatus(boolean state){
-
-        Message msgObj = messageupdateHandler.obtainMessage();
-        Bundle b = new Bundle();
-        String msg;
-        if(state){
-            msg = "Device Registered";
-        }else{
-            msg = "Error in Registration";
+    public static void showRegistrationStatus(boolean state) {
+        if (messageupdateHandler != null) {
+            Message msgObj = messageupdateHandler.obtainMessage();
+            Bundle b = new Bundle();
+            String msg;
+            if (state) {
+                msg = "Device Registered";
+            } else {
+                msg = "Error in Registration";
+            }
+            b.putString("message", msg);
+            msgObj.setData(b);
+            messageupdateHandler.sendMessage(msgObj);
         }
-        b.putString("message", msg);
-        msgObj.setData(b);
-        messageupdateHandler.sendMessage(msgObj);
     }
 
-    public static void showCommandStatus(boolean state){
-        Message msgObj = messageupdateHandler.obtainMessage();
-        Bundle b = new Bundle();
-        String msg;
-        if(state){
-            msg = "Command Received";
-        }else{
-            msg = "Error in get Command";
+    public static void showCommandStatus(boolean state) {
+        if (messageupdateHandler != null) {
+            Message msgObj = messageupdateHandler.obtainMessage();
+            Bundle b = new Bundle();
+            String msg;
+            if (state) {
+                msg = "Command Received";
+            } else {
+                msg = "Error in get Command";
+            }
+            b.putString("message", msg);
+            msgObj.setData(b);
+            messageupdateHandler.sendMessage(msgObj);
         }
-        b.putString("message", msg);
-        msgObj.setData(b);
-        messageupdateHandler.sendMessage(msgObj);
     }
 
     @Override

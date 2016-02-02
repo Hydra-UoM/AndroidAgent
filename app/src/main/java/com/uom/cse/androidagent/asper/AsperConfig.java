@@ -134,7 +134,7 @@ public class AsperConfig {
                         processedEventList.add(processedEvents);
                     }
                     RegisterDeviceClient.pushEvents(AgentService.centralNodeIP,
-                            AgentService.centralNodePort, processedEventList);
+                            AgentService.centralNodePort, processedEventList,MainActivity.getContext());
 
                     try {
                         Thread.sleep(timeInterval * 60000);
@@ -179,7 +179,7 @@ public class AsperConfig {
                         processedEventList.add(processedEvents);
                     }
                     RegisterDeviceClient.pushEvents(AgentService.centralNodeIP,
-                            AgentService.centralNodePort, processedEventList);
+                            AgentService.centralNodePort, processedEventList,MainActivity.getContext());
 
                     try {
                         Thread.sleep(timeInterval * 60000);

@@ -18,6 +18,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions { // <-- You need this
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+    android {
+        defaultConfig {
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+    }
     dexOptions {
         javaMaxHeapSize "4g"
     }
@@ -27,4 +37,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile files('libs/asper-4.9.0.jar')
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test:runner:0.3') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 }

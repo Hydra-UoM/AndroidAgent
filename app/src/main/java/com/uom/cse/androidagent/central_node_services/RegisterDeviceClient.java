@@ -1,6 +1,7 @@
 package com.uom.cse.androidagent.central_node_services;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 
 import com.uom.cse.androidagent.eventAdapters.ProcessInfoEventAdapter;
 import com.uom.cse.androidagent.main.AgentService;
@@ -22,25 +23,8 @@ import java.util.List;
  */
 public class RegisterDeviceClient {
 
-    private static boolean isRegistered = false;
+    public static boolean isRegistered = false;
 
-    public static void registerMe(String deviceId, String IPAddress, String type){
-        try {
-            TTransport transport;
-
-            transport = new TSocket("192.168.1.2", 9090);
-            transport.open();
-
-            TProtocol protocol = new TBinaryProtocol(transport);
-            RegisterDeviceService.Client client = new RegisterDeviceService.Client(protocol);
-
-            perform(client, deviceId, IPAddress, type);
-
-            transport.close();
-        } catch (TException x) {
-            x.printStackTrace();
-        }
-    }
 
     public static void registerMeAsync(final String deviceId, final String IPAddress, final String type, final String centralNodeIP, final int centralNodePort){
 
@@ -119,7 +103,7 @@ public class RegisterDeviceClient {
         client.getCommands(device);
     }
 
-    public static void pushEvents(final String centralNodeIP, final int centralNodePort, List<ThriftAgentProcessInfo> thriftAgentProcessInfo){
+    public static void pushEvents(final String centralNodeIP, final int centralNodePort, List<ThriftAgentProcessInfo> thriftAgentProcessInfo, Context context){
         try {
 
             TTransport transport;
@@ -130,7 +114,7 @@ public class RegisterDeviceClient {
             TProtocol protocol = new TBinaryProtocol(transport);
             RegisterDeviceService.Client client = new RegisterDeviceService.Client(protocol);
 
-            List<ApplicationData> eventsFromDB = DatabaseHandler.getInstance().getAllAppInfo();
+            List<ApplicationData> eventsFromDB = DatabaseHandler.getInstance(context).getAllAppInfo();
 
             if(!eventsFromDB.isEmpty()){
                 for(ApplicationData applicationData:eventsFromDB){
@@ -155,8 +139,8 @@ public class RegisterDeviceClient {
 
         } catch (TException x) {
             for(ThriftAgentProcessInfo info : thriftAgentProcessInfo){
-                ApplicationData data = new ApplicationData(info.getName(),info.getPackageName(),String.valueOf(info.getCpuUsage()),"",String.valueOf(info.getRamUsage()), String.valueOf(info.getSentData()), String.valueOf(info.getReceiveData()), info.getTimestamp(),info.getPid());
-                DatabaseHandler.getInstance().createAppInfo(data);
+                ApplicationData data = new ApplicationData(info.getPid(),info.getName(),info.getPackageName(),String.valueOf(info.getCpuUsage()),"",String.valueOf(info.getRamUsage()), String.valueOf(info.getSentData()), String.valueOf(info.getReceiveData()), info.getTimestamp());
+                DatabaseHandler.getInstance(context).createAppInfo(data);
             }
             x.printStackTrace();
         }

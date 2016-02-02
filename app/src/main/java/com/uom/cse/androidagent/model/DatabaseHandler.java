@@ -3,6 +3,7 @@ package com.uom.cse.androidagent.model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -20,7 +21,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static DatabaseHandler dbDatabaseHandler;
 
-    private static final String DATABASE_NAME = "EventStore",
+    public static final String DATABASE_NAME = "EventStore",
     TABLE_APPINFO = "appInfo",
     TABLE_CALLLOGS = "callLogs",
     KEY_ID = "id",
@@ -38,9 +39,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
-    public static DatabaseHandler getInstance(){
+    public static DatabaseHandler getInstance(Context context){
         if(dbDatabaseHandler == null){
-            return new DatabaseHandler(MainActivity.getContext());
+            dbDatabaseHandler = new DatabaseHandler(context);
+            return dbDatabaseHandler;
         }
         return dbDatabaseHandler;
     }
@@ -49,7 +51,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_APPINFO + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_APPLICATIONNAME + " TEXT,"
                 + KEY_PACKAGENAME + " TEXT," + KEY_CPUUSAGE + " TEXT," + KEY_PRIVATEMEMORYUSAGE + " TEXT," + KEY_SHAREDMEMORYUSAGE +
-                " TEXT," + KEY_RECEIVEDDATA + " TEXT" + KEY_SENTDATA + " TEXT," + KEY_TIMESTAMP + " TEXT," + KEY_PID + " TEXT)");
+                " TEXT," + KEY_RECEIVEDDATA + " TEXT," + KEY_SENTDATA + " TEXT," + KEY_TIMESTAMP + " TEXT," + KEY_PID + " TEXT)");
     }
 
     @Override
@@ -64,17 +66,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
 
-        values.put(KEY_APPLICATIONNAME,appData.get_applicationName());
-        values.put(KEY_PACKAGENAME,appData.get_packageName());
-        values.put(KEY_CPUUSAGE,appData.get_averageCPU());
-        values.put(KEY_PRIVATEMEMORYUSAGE,appData.get_averagePrivateMemoryUsage());
-        values.put(KEY_SHAREDMEMORYUSAGE,appData.get_averageSharedMemoryUsage());
-        values.put(KEY_RECEIVEDDATA,appData.get_averagereceivedData());
-        values.put(KEY_SENTDATA,appData.get_averageSentData());
-        values.put(KEY_TIMESTAMP,appData.get_timestamp());
-        values.put(KEY_PID,appData.get_pid());
+        values.put(KEY_APPLICATIONNAME,"\"" + appData.get_applicationName() + "\"");
+        values.put(KEY_PACKAGENAME,"\"" + appData.get_packageName() + "\"");
+        values.put(KEY_CPUUSAGE,"\"" + appData.get_averageCPU() + "\"");
+        values.put(KEY_PRIVATEMEMORYUSAGE,"\"" + appData.get_averagePrivateMemoryUsage() + "\"");
+        values.put(KEY_SHAREDMEMORYUSAGE,"\"" + appData.get_averageSharedMemoryUsage() + "\"");
+        values.put(KEY_RECEIVEDDATA,"\"" + appData.get_averagereceivedData() + "\"");
+        values.put(KEY_SENTDATA,"\"" + appData.get_averageSentData() + "\"");
+        values.put(KEY_TIMESTAMP,"\"" + appData.get_timestamp() + "\"");
+        values.put(KEY_PID, "\"" + appData.get_pid() + "\"");
 
-        db.insert(TABLE_APPINFO, null, values);
+        String queryString = "insert into appInfo (applicationName,packageName,cpuUsage,privateMemoryUsage,sharedMemoryUsage,sentData,receiveddata,timestamp,pid)" +
+                "values (\"" +appData.get_applicationName()+ "\",\"" + appData.get_packageName() + "\",\"" + appData.get_averageCPU() + "\",\"" + appData.get_averagePrivateMemoryUsage() + "\"," +
+                "\"" + appData.get_averageSharedMemoryUsage() + "\",\"" + appData.get_averagereceivedData() + "\",\"" + appData.get_averageSentData() + "\",\"" + appData.get_timestamp() + "\",\"" + appData.get_pid() + "\") ";
+
+        try{
+            db.execSQL(queryString);
+        }catch (SQLException ex){
+            ex.getMessage();
+        }
+
+        //long rowInserted = db.insert(TABLE_APPINFO, null, values);
         db.close();
     }
 
@@ -87,7 +99,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
-        ApplicationData applicationData = new ApplicationData(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(5),cursor.getString(4),cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getString(9));
+        ApplicationData applicationData = new ApplicationData(cursor.getString(0),cursor.getString(2),cursor.getString(3),cursor.getString(5),cursor.getString(4),cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getString(9));
         db.close();
         cursor.close();
         return applicationData;
@@ -141,7 +153,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             do{
-                ApplicationData applicationData = new ApplicationData(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(7),cursor.getString(6),cursor.getString(8),cursor.getString(9));
+                ApplicationData applicationData = new ApplicationData(cursor.getString(9),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
                 appdataList.add(applicationData);
             }
             while (cursor.moveToNext());

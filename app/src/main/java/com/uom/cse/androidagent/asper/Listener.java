@@ -64,7 +64,7 @@ public class Listener implements UpdateListener
             processedEventList.add(processedEvents);
         }
         RegisterDeviceClient.pushEvents(MainActivity.centralNodeIP.getText().toString(),
-                Integer.parseInt(MainActivity.centralNodeport.getText().toString()),processedEventList);
+                Integer.parseInt(MainActivity.centralNodeport.getText().toString()),processedEventList,MainActivity.getContext());
         EventBean event = fresh[0];
 
         access++;
